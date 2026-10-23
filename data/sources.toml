@@ -1,0 +1,24 @@
+# Źródła korpusu M1 (koncept D1, D16): oficjalne teksty jednolite z API Sejmu.
+# Plik PDF jest pobierany do data/raw/ i weryfikowany po sha256 — zmiana pliku po stronie Sejmu
+# ma przerwać ingest, a nie po cichu zmienić korpus (odświeżenie = świadoma decyzja + nowa wersja zestawów).
+
+[[source]]
+key = "vat"
+eli = "DU/2026/1263"
+name = "Ustawa o podatku od towarów i usług"
+url = "https://api.sejm.gov.pl/eli/acts/DU/2026/1263/text.pdf"
+sha256 = "df1e1594382b430c4ae8b03004407249d0abd69678e6e6523fb438f083adaac0"
+
+[[source]]
+key = "pit"
+eli = "DU/2026/592"
+name = "Ustawa o podatku dochodowym od osób fizycznych"
+url = "https://api.sejm.gov.pl/eli/acts/DU/2026/592/text.pdf"
+sha256 = "d26b883de6c8665244be50852d35a3b34400c0fa58606ab03563da0d74dc1dd2"
+
+[[source]]
+key = "op"
+eli = "DU/2026/622"
+name = "Ordynacja podatkowa"
+url = "https://api.sejm.gov.pl/eli/acts/DU/2026/622/text.pdf"
+sha256 = "e0ac56a7478bd0737ed5b0b47528515483efa97fdf94195706fd58c4c5d20280"

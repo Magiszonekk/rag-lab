@@ -1,0 +1,26 @@
+name: raglab
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-raglab}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-raglab}
+    ports:
+      - "127.0.0.1:${RAGLAB_DB_PORT:-5436}:5432"
+    volumes:
+      - raglab_db_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-raglab} -d ${POSTGRES_DB:-raglab}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  raglab_db_data:
