@@ -1,0 +1,305 @@
+{"id": "d158cf3790", "address": "VAT art. 97 ust. 3", "origin": "generated", "refs": 4, "context_ok": false, "note": "Pytanie zbyt szeroko ujmuje usługi świadczone dla unijnego podatnika: chodzi tylko o usługi z art. 28b, świadczone w innym państwie UE, niezwolnione ani nieopodatkowane stawką 0%, gdy podatek rozlicza usługobiorca."}
+{"id": "76dafb4852", "address": "VAT art. 28p ust. 3", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "51559f7194", "address": "VAT art. 52 ust. 2", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy importu towarów w okazjonalnej, nieodpłatnej przesyłce od osoby fizycznej z państwa trzeciego do osoby fizycznej w kraju, a nie towarów przywożonych przez podróżnego."}
+{"id": "d6a07a4c83", "address": "VAT art. 134c ust. 3", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy ewidencji w szczególnej procedurze dla okazjonalnego międzynarodowego przewozu osób autobusami, a nie procedury marży dla biur podróży."}
+{"id": "8089e151c9", "address": "VAT art. 134c ust. 3", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Przepis dotyczy szczególnej procedury dla okazjonalnego międzynarodowego przewozu osób autobusami, a nie usług turystyki rozliczanych metodą marży."}
+{"id": "5dce8873ab", "address": "VAT art. 108d ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "03908d7f1e", "address": "VAT art. 108d ust. 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "13b675c8df", "address": "VAT art. 22 ust. 1 pkt 5", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "0883d437e9", "address": "VAT art. 106m ust. 5", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "7fceff5ce0", "address": "VAT art. 106nda ust. 15", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy oznaczania ponownie wystawionej faktury (duplikatu) po jej zniszczeniu albo zaginięciu przed przesłaniem do KSeF, a nie faktur udostępnianych w okresie awarii."}
+{"id": "c944fdc0dd", "address": "VAT art. 106nda ust. 15", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Przepis dotyczy wyłącznie ponownie wystawionej faktury zniszczonej albo zagubionej przed przesłaniem do KSeF, a nie każdej faktury wystawionej poza KSeF z powodu jego niedziałania."}
+{"id": "e660de7523", "address": "VAT art. 106nh ust. 2", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "b016d3f705", "address": "VAT art. 57 ust. 2", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy zwolnienia z VAT importu konkretnych towarów laboratoryjnych oraz substancji naukowych, a nie ogólnie „sprzętu naukowego” ani przekazania towaru."}
+{"id": "b911263888", "address": "VAT art. 108c ust. 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7946c792e0", "address": "VAT art. 108c ust. 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5ed0b1ecb7", "address": "VAT art. 133a ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "f03510941c", "address": "VAT art. 133a ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "cd87eb1877", "address": "VAT art. 77 ust. 2", "origin": "generated", "refs": 1, "context_ok": false, "note": "Nie zawsze: dla zbiornika gazu wystarczy przystosowanie do bezpośredniego wykorzystania gazu; przepis nie wymaga wtedy montażu przez producenta."}
+{"id": "61bbf6188e", "address": "VAT art. 77 ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy zwolnienia z VAT przy imporcie (do 200 l), nie ogólnego zwolnienia z „opłat”; ponadto dla zbiorników gazu przewidziano odrębną przesłankę bez wymogu montażu przez producenta."}
+{"id": "ef38e20b72", "address": "VAT art. 138c ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "db83382f05", "address": "VAT art. 134a ust. 1", "origin": "generated", "refs": 4, "context_ok": false, "note": "Pytanie nie wskazuje wymaganego przez przepis posiadania siedziby, stałego miejsca prowadzenia działalności albo miejsca zamieszkania/pobytu w innym państwie UE niż Polska; „zagraniczny” nie przesądza tej przesłanki."}
+{"id": "832644320f", "address": "VAT art. 28l", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8fee730338", "address": "VAT art. 110", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "9256d92fa5", "address": "VAT art. 106p", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "3c3f5a70b5", "address": "VAT art. 33b ust. 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "6d89bdfbfb", "address": "VAT art. 99 ust. 4a", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "514cbee562", "address": "VAT art. 99 ust. 4a", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "5caa38798e", "address": "VAT art. 21 ust. 4", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "9ac08a8fb5", "address": "VAT art. 106j ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "99d231f0c8", "address": "VAT art. 106j ust. 1", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "7d6ce37046", "address": "VAT art. 62 ust. 9", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "449792979a", "address": "VAT art. 62 ust. 9", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "d19e1edd02", "address": "VAT art. 31a ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8436bcb8a7", "address": "VAT art. 31a ust. 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c7ba7a06bb", "address": "VAT art. 138g ust. 8", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "30519f730e", "address": "VAT art. 138g ust. 8", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "7f858c65d7", "address": "VAT art. 101", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "0857098371", "address": "VAT art. 101", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8d3b5c949d", "address": "VAT art. 64 ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c468085dd2", "address": "VAT art. 64 ust. 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8a0b0a004f", "address": "VAT art. 30c ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "77eb15b5da", "address": "VAT art. 138h ust. 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c3c9f5ebd2", "address": "VAT art. 138h ust. 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "cdff6837e1", "address": "VAT art. 13j", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "997d98cd74", "address": "VAT art. 13j", "origin": "paraphrased", "refs": 4, "context_ok": true, "note": ""}
+{"id": "ed3efa440d", "address": "VAT art. 130d ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5ae9e29d04", "address": "VAT art. 130d ust. 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "97804ff8d8", "address": "VAT art. 90a ust. 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "303a581567", "address": "VAT art. 37 ust. 1", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy tylko decyzji wskazanych w art. 33 ust. 2–3 oraz art. 34, a pytanie zbyt szeroko obejmuje każdą decyzję dotyczącą importu towarów."}
+{"id": "46dc14779d", "address": "VAT art. 68", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "d7f02e18c6", "address": "VAT art. 68", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "ddfbcb4b54", "address": "VAT art. 14 ust. 9a", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "07b1abaf50", "address": "VAT art. 14 ust. 9a", "origin": "paraphrased", "refs": 4, "context_ok": true, "note": ""}
+{"id": "9447a25fbc", "address": "VAT art. 108g ust. 2", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy podania przy płatności numeru faktury w KSeF albo identyfikatora zbiorczego, a nie przekazywania danych z faktury do STIR."}
+{"id": "62d3b7d962", "address": "VAT art. 108g ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis nie dotyczy przekazywania danych z faktury do systemu STIR, lecz obowiązku podania w płatności numeru KSeF albo identyfikatora zbiorczego; przy poleceniu zapłaty obowiązek ten dotyczy wystawcy faktury."}
+{"id": "cb6e2a29db", "address": "VAT art. 8b ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "e056f938eb", "address": "VAT art. 136 ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "e4f38f018d", "address": "VAT art. 136 ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie ostatniego podmiotu będącego osobą prawną niebędącą podatnikiem VAT; „firma lub instytucja, która nie płaci VAT” jest szersze i nieprecyzyjne."}
+{"id": "d467a1e7dd", "address": "VAT art. 91 ust. 10", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "32c7cc62a7", "address": "VAT art. 91 ust. 10", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy grup podatników, a nie konkretnych firm indywidualnie. Warunki lub zwolnienia mają uwzględniać specyfikę czynności, obrót towarami i usługami oraz prawidłowość odliczenia VAT."}
+{"id": "4ca6f54810", "address": "VAT art. 145g", "origin": "generated", "refs": 3, "context_ok": false, "note": "Art. 145g dotyczy faktur za dostawy gazu, energii elektrycznej lub usług przenoszenia uprawnień do emisji objętych odwrotnym obciążeniem z art. 145e ust. 1, a nie procedury uproszczonej dla fikcyjnego dostawcy w transakcjach łańcuchowych z interfejsem elektronicznym."}
+{"id": "85a8b3436f", "address": "VAT art. 146ed", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "7c0b3565aa", "address": "VAT art. 43 ust. 1 pkt 19a", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7c69d3ff12", "address": "VAT art. 49 ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "c53c448aa8", "address": "VAT art. 100 ust. 12", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie przedstawiciela podatkowego, o którym mowa w art. 18d ust. 1, czyli w szczególnej sytuacji importu i następującej po nim WDT przez podatnika niebędącego czynnym podatnikiem VAT. Pytanie zbyt ogólnie mówi o przedstawicielu rozliczającym WDT."}
+{"id": "f704a78bac", "address": "VAT art. 127 ust. 11b", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "fcce366de3", "address": "VAT art. 127 ust. 11b", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "a71c213f4a", "address": "VAT art. 134 ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "9d2cefd83d", "address": "VAT art. 134 ust. 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "aea3708bb6", "address": "VAT art. 133 ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "270479f743", "address": "VAT art. 106o", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "0ab68b8052", "address": "VAT art. 2 pkt 33", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7adc5c0c9c", "address": "VAT art. 8d ust. 3", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "c9ab92c21d", "address": "VAT art. 8d ust. 3", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "f8936adbfb", "address": "VAT art. 42b ust. 1a", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "9abba2db14", "address": "VAT art. 42b ust. 1a", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "d275e715f7", "address": "VAT art. 106na ust. 4", "origin": "generated", "refs": 1, "context_ok": false, "note": "Art. 106gb ust. 4 nie dotyczy ogólnie nabywcy „nieposiadającego dostępu do KSeF”, lecz ściśle określonych kategorii nabywców i sytuacji wskazanych w jego punktach 1–6."}
+{"id": "f562dc1a07", "address": "VAT art. 112aa ust. 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "03bdeaeab3", "address": "VAT art. 89a ust. 1a", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "2fb1672539", "address": "VAT art. 89a ust. 1a", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "700a66a318", "address": "VAT art. 106ni ust. 4", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "d357029a6a", "address": "VAT art. 106ni ust. 4", "origin": "paraphrased", "refs": 4, "context_ok": true, "note": ""}
+{"id": "c22190ea65", "address": "VAT art. 38 ust. 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "b30da168b0", "address": "VAT art. 38 ust. 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8e5bd799df", "address": "VAT art. 138e ust. 6", "origin": "generated", "refs": 4, "context_ok": false, "note": "Przepis dotyczy wyłącznie procedury importu (IOSS), a nie procedury unijnej (OSS)."}
+{"id": "df783026df", "address": "VAT art. 138e ust. 6", "origin": "paraphrased", "refs": 4, "context_ok": false, "note": "Przepis dotyczy wyłącznie procedury importu (IOSS), a nie unijnego systemu OSS. Ponadto rozróżnia konkretne kategorie podatników korzystających z procedury importu oraz odrębne zgłoszenie samego pośrednika."}
+{"id": "9d1ce340ab", "address": "VAT art. 130ca ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "414db0dd64", "address": "VAT art. 130ca ust. 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "f9cb6f4d6a", "address": "VAT art. 28c ust. 3", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "1df4f5af22", "address": "VAT art. 10 ust. 7", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "422ff83b84", "address": "VAT art. 7a ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5ec55cbd08", "address": "VAT art. 127a ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "45dac61b91", "address": "VAT art. 79", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "53ad0b3561", "address": "VAT art. 106c", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "8f5647b0b0", "address": "VAT art. 3 ust. 6", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "141dc7b033", "address": "VAT art. 13k ust. 4", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "0bb32bcbb7", "address": "VAT art. 13k ust. 4", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "5d37d8ccbd", "address": "VAT art. 28f ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "9874f128d3", "address": "VAT art. 28f ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "06552065a0", "address": "VAT art. 145c", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "d329eb077d", "address": "VAT art. 145c", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "35818ef41d", "address": "VAT art. 39a", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "6c99787878", "address": "VAT art. 39a", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "f64519c8d6", "address": "VAT art. 108e", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c8db65a92f", "address": "VAT art. 76", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "1f88b98dfd", "address": "VAT art. 76", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "0e4fdc1912", "address": "VAT art. 106ga ust. 2", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "37ff7134e3", "address": "VAT art. 106ga ust. 2", "origin": "paraphrased", "refs": 3, "context_ok": true, "note": ""}
+{"id": "244a2a586b", "address": "VAT art. 28j ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "03cac1d17c", "address": "VAT art. 28j ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "b9e6880fb8", "address": "VAT art. 31b ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "3ee72eade9", "address": "VAT art. 113b ust. 7", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "cd3b1d5bf2", "address": "VAT art. 90 ust. 6", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "6cab96170b", "address": "VAT art. 13l ust. 2", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "40c8f6ae49", "address": "VAT art. 104 ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "d7ea1c285c", "address": "VAT art. 110e", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "86b0b12364", "address": "VAT art. 8c ust. 7", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "1ff0209ade", "address": "VAT art. 8e", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "27532561ca", "address": "VAT art. 8e", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "fcadfff58d", "address": "VAT art. 106nha", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "90b8b47c02", "address": "VAT art. 42 ust. 9", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "f89dbc8986", "address": "VAT art. 32 ust. 1", "origin": "generated", "refs": 4, "context_ok": false, "note": "Przy cenie niższej od rynkowej ograniczone prawo do odliczenia po stronie sprzedawcy uzasadnia korektę tylko, gdy dostawa jest zwolniona z VAT; konieczny jest też wpływ powiązań na cenę."}
+{"id": "a0b48f1041", "address": "VAT art. 16", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "27778206fc", "address": "VAT art. 145i ust. 1", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy zawiadomienia przed pierwszymi transakcjami odwrotnego obciążenia gazu, energii lub uprawnień do emisji, a nie dobrowolnego wystawiania faktur ustrukturyzowanych w KSeF."}
+{"id": "845ba014d9", "address": "VAT art. 145i ust. 1", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy zawiadomienia przed transakcjami objętymi odwrotnym obciążeniem gazu, energii lub uprawnień do emisji, a nie dobrowolnego wystawiania faktur w KSeF."}
+{"id": "a2c928ba32", "address": "PIT art. 22g ust. 5", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "089c1c6ab4", "address": "PIT art. 22a ust. 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "50ec8d372c", "address": "PIT art. 42f ust. 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "1f1267723c", "address": "PIT art. 42f ust. 1", "origin": "paraphrased", "refs": 4, "context_ok": true, "note": ""}
+{"id": "8d37206403", "address": "PIT art. 45cf ust. 2", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy wyłącznie podatnika, o którym mowa w art. 45cd ust. 4, który nie wpłacił różnicy i otrzymał informację organu z art. 45cf ust. 1. Pytanie pomija to ograniczenie."}
+{"id": "b3609055d9", "address": "PIT art. 11a ust. 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8454a7c172", "address": "PIT art. 23p ust. 5", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "082b4d1cc8", "address": "PIT art. 23p ust. 5", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "b8c8a09a90", "address": "PIT art. 41b", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "d580fbeec3", "address": "PIT art. 22p ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "9043684aef", "address": "PIT art. 23k ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "c97bbd3f4e", "address": "PIT art. 23c", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "95418e2f49", "address": "PIT art. 23c", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Przepis dotyczy wyłącznie przeniesienia własności przez finansującego na korzystającego po podstawowym okresie leasingu; pytanie nie wskazuje, że nabywcą jest korzystający."}
+{"id": "107b359a28", "address": "PIT art. 23z pkt 1a", "origin": "generated", "refs": 2, "context_ok": false, "note": "Pytanie pomija warunek, aby przychody lub koszty z transakcji były przypisane do zagranicznego zakładu w danym roku podatkowym."}
+{"id": "3ec130378b", "address": "PIT art. 23ze ust. 3", "origin": "generated", "refs": 3, "context_ok": false, "note": "Przepis pozwala żądać dokumentacji dopiero po upływie ustawowych terminów jej sporządzenia, więc pytanie odwraca jego sens."}
+{"id": "8b518a59d9", "address": "PIT art. 23ze ust. 3", "origin": "paraphrased", "refs": 3, "context_ok": true, "note": ""}
+{"id": "d92cf5b78b", "address": "PIT art. 45a", "origin": "generated", "refs": 4, "context_ok": false, "note": "Przepis rozróżnia: zadania naczelnika dotyczą art. 39 ust. 1 i art. 42 ust. 2 pkt 2, natomiast przyjmowanie zeznań z art. 45 ust. 1 wykonuje urząd obsługujący ten organ. Ponadto art. 42 ust. 2 pkt 2 nie dotyczy rocznego obliczenia podatku."}
+{"id": "fcc12e4a0f", "address": "PIT art. 45a", "origin": "paraphrased", "refs": 4, "context_ok": false, "note": "Przepis dotyczy przesyłania informacji przez płatników (np. PIT-11) oraz złożenia zeznania, ale nie rocznego wyliczenia podatku; rozróżnia też organ z art. 13a i obsługujący go urząd."}
+{"id": "9be17a4ec7", "address": "PIT art. 24b ust. 4", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy niestosowania zasad szacowania dochodu nierezydentów z ust. 2 i 3, gdy umowa podatkowa stanowi inaczej, a nie opodatkowania przychodów ze środka trwałego będącego budynkiem."}
+{"id": "7feab39c96", "address": "PIT art. 18", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "2d48188ad2", "address": "PIT art. 18", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "52ee0c4c41", "address": "PIT art. 23i ust. 2", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "346ae0b713", "address": "PIT art. 30ca ust. 14", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "92a31838e4", "address": "PIT art. 45ce ust. 3", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie korekty błędów lub oczywistych omyłek powstałych z winy organu podatkowego, a pytanie sugeruje każdą samodzielną korektę zeznania."}
+{"id": "0c81519292", "address": "PIT art. 45ce ust. 3", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie korekty błędów lub oczywistych omyłek powstałych z winy organu podatkowego, a pytanie przedstawia to jako zasadę ogólną."}
+{"id": "335e3a113b", "address": "PIT art. 23b ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "fbeabe798e", "address": "PIT art. 23j ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "e974f889f5", "address": "PIT art. 23j ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "450e66d09c", "address": "PIT art. 2 ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "2002a70d19", "address": "PIT art. 2 ust. 1", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "9201c15dd1", "address": "PIT art. 23l", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "7bb1b5cee8", "address": "PIT art. 23l", "origin": "paraphrased", "refs": 4, "context_ok": false, "note": "Art. 23l dotyczy umów na czas nieoznaczony albo oznaczony niespełniających warunków z art. 23b ust. 1 pkt 3, 23f ust. 1 lub 23i ust. 1; nie uzależnia zastosowania od braku przejścia przedmiotu na własność."}
+{"id": "4737483e90", "address": "PIT art. 25c", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "427f49cc74", "address": "PIT art. 25c", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "737b367a72", "address": "PIT art. 52zr", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "b4baf36507", "address": "PIT art. 52zr", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "029186bf19", "address": "PIT art. 52zo ust. 3", "origin": "generated", "refs": 2, "context_ok": false, "note": "Pytanie pomija kluczowy kontekst: wyjątek dotyczy wyłącznie darowizn na przeciwdziałanie skutkom działań wojennych w Ukrainie, przekazanych w okresie 1.01.2024–31.12.2026 podmiotom wskazanym w ust. 1."}
+{"id": "04d8074073", "address": "PIT art. 52zo ust. 3", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Przepis dotyczy wyłącznie darowizn na przeciwdziałanie skutkom wojny w Ukrainie, przekazanych w latach 2024–2026 wskazanym podmiotom."}
+{"id": "c9c6f01834", "address": "PIT art. 52zp", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy darowizn i nieodpłatnych świadczeń związanych z przeciwdziałaniem skutkom działań wojennych na terytorium Ukrainy, a nie pomocy dla poszkodowanych powodzią."}
+{"id": "e4ca5e94e4", "address": "PIT art. 52zp", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Przepis dotyczy darowizn i nieodpłatnych świadczeń związanych z przeciwdziałaniem skutkom wojny w Ukrainie, otrzymanych przez wskazane podmioty, a nie pomocy związanej z powodzią."}
+{"id": "1684f144e7", "address": "PIT art. 7a ust. 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "b936c9d07f", "address": "PIT art. 39 ust. 2", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "e4ebb5f4e0", "address": "PIT art. 24ba", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "051c07c0f8", "address": "PIT art. 26g", "origin": "generated", "refs": 3, "context_ok": false, "note": "Art. 26ea dotyczy kwoty dla podatnika rozpoczynającego działalność (przy stracie lub zbyt niskim dochodzie), a nie ulgi na innowacyjnych pracowników."}
+{"id": "84307ce921", "address": "PIT art. 26hc ust. 4", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "1f67d411dc", "address": "PIT art. 26hc ust. 4", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "ad1b04236c", "address": "PIT art. 10 ust. 3", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "1452819186", "address": "PIT art. 45 ust. 3c", "origin": "generated", "refs": 4, "context_ok": false, "note": "Przepis dotyczy wyłącznie należności z papierów wartościowych na rachunkach zbiorczych, gdy tożsamość podatnika nie została ujawniona płatnikowi i podatek pobrano na zasadach art. 30a ust. 2a. Nie dotyczy ogólnie odsetek lub dywidend wypłaconych przez podmiot zagraniczny z zastosowaniem umowy o unikaniu podwójnego opodatkowania."}
+{"id": "6c0ff93a71", "address": "PIT art. 23g ust. 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "d5a1c71ec5", "address": "PIT art. 23g ust. 1", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "ae1d71fd32", "address": "PIT art. 30p ust. 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "e99d019e47", "address": "PIT art. 13", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "13650a0c55", "address": "PIT art. 15 ust. 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "2a08300c2a", "address": "PIT art. 6 ust. 4c", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "9e526bdb2d", "address": "PIT art. 6 ust. 4c", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "fa27256ebf", "address": "PIT art. 8 ust. 1a", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "5c2405579f", "address": "PIT art. 26eb ust. 6", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis nie dotyczy ulgi na robotyzację, lecz utraty prawa do odliczenia związanego z nieodliczoną ulgą B+R z art. 26e."}
+{"id": "98075eb1f1", "address": "PIT art. 26eb ust. 6", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy utraty prawa do pomniejszania wpłacanych zaliczek jako płatnik (ulga na innowacyjnych pracowników, związana z nieodliczoną ulgą B+R), a nie ulgi na robotyzację."}
+{"id": "cfcbb5f2dc", "address": "PIT art. 52jc", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7f1463f6f3", "address": "PIT art. 26h ust. 8", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5c2a3ef58c", "address": "PIT art. 52zd", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "46fa0a969b", "address": "PIT art. 45c ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "bbc6cf1ad5", "address": "PIT art. 52c ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "eec31f39b6", "address": "PIT art. 25f", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c3729e29e5", "address": "PIT art. 3 ust. 2d", "origin": "generated", "refs": 3, "context_ok": false, "note": "Przepis dotyczy wyłącznie przychodów wymienionych w art. 29 ust. 1, a nie ogólnie „usług niematerialnych”; ponadto kontekst pkt 7 wymaga należności regulowanych przez podmiot mający miejsce zamieszkania, siedzibę lub zarząd w Polsce."}
+{"id": "12757237dd", "address": "PIT art. 3 ust. 2d", "origin": "paraphrased", "refs": 3, "context_ok": false, "note": "Przepis dotyczy wyłącznie nierezydentów będących osobami fizycznymi (PIT), a pytanie obejmuje też zagraniczne firmy. Dotyczy też tylko przychodów wymienionych w art. 29 ust. 1, nie każdej wypłaty objętej ogólnie podatkiem u źródła."}
+{"id": "4760dc717d", "address": "PIT art. 38 ust. 2", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "f16d27f618", "address": "PIT art. 38 ust. 2", "origin": "paraphrased", "refs": 3, "context_ok": true, "note": ""}
+{"id": "9d4a8bd1d3", "address": "PIT art. 26 ust. 13a", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "759a7d7224", "address": "PIT art. 25b ust. 4", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c400a5d90b", "address": "PIT art. 35 ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "0971d5de79", "address": "PIT art. 35 ust. 1", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "d28d8346fd", "address": "PIT art. 25e", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "3d04757cea", "address": "PIT art. 30i ust. 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "cc85e255f0", "address": "PIT art. 30i ust. 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7d4cff7cba", "address": "PIT art. 42a ust. 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "fb136833bf", "address": "PIT art. 1a ust. 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7fa590d1d6", "address": "PIT art. 1a ust. 3", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "341e4627f0", "address": "PIT art. 21 ust. 1 pkt 40b", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "2e2883da51", "address": "PIT art. 21 ust. 1 pkt 40b", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "d25cd09599", "address": "PIT art. 30e ust. 2", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "d6a9963353", "address": "PIT art. 30g ust. 18", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "f7f9d8bbdf", "address": "PIT art. 44 ust. 21", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "03e7b66a7d", "address": "PIT art. 44 ust. 21", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "eb19778fdd", "address": "PIT art. 23u", "origin": "generated", "refs": 2, "context_ok": false, "note": "Art. 23u odsyła tylko do art. 23o i 23p (zasada rynkowości i metody weryfikacji), a nie do przepisów o dokumentowaniu transakcji."}
+{"id": "15fd1d43e2", "address": "PIT art. 23u", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Art. 23u rozszerza zasadę ceny rynkowej na transakcje z podmiotem z raju podatkowego, ale sam nie ustanawia obowiązku przygotowania dokumentacji; pytanie błędnie dodaje ten obowiązek."}
+{"id": "92849489d1", "address": "PIT art. 23m ust. 1", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis nie obejmuje ogólnie każdej spółki osobowej i każdego wspólnika: dla spółki komandytowej i komandytowo-akcyjnej wskazuje wyłącznie relację z komplementariuszem, a nie z komandytariuszem ani akcjonariuszem."}
+{"id": "cdc6d68b8a", "address": "PIT art. 23w ust. 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "9d52c5d941", "address": "PIT art. 42g ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "fdae30a24b", "address": "PIT art. 42g ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "2f7ddda01b", "address": "Ordynacja art. 19 § 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "4d2e0dadc0", "address": "Ordynacja art. 19 § 3", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c41d86e5a0", "address": "Ordynacja art. 291a § 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "e46793903b", "address": "Ordynacja art. 70a § 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "70a1a43432", "address": "Ordynacja art. 70a § 1", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "a44e8460ee", "address": "Ordynacja art. 130 § 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5181697a43", "address": "Ordynacja art. 119zfe § 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "5edf2cfbfd", "address": "Ordynacja art. 119zfe § 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "da1d63cebf", "address": "Ordynacja art. 119zfd § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8c415a19e6", "address": "Ordynacja art. 119zfd § 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "0e09355f2d", "address": "Ordynacja art. 119zs § 1", "origin": "generated", "refs": 2, "context_ok": false, "note": "Pytanie pomija warunek, że żądanie służy weryfikacji lub uzupełnieniu informacji niezbędnych do zadań z tego działu, oraz że dane mają być dostępne; nie wskazuje też obowiązkowego identyfikatora użytego do logowania."}
+{"id": "6e1e5c7c8d", "address": "Ordynacja art. 48 § 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "16882d9cbd", "address": "Ordynacja art. 48 § 1", "origin": "paraphrased", "refs": 4, "context_ok": false, "note": "Art. 48 § 1 dotyczy odraczania terminów przewidzianych w prawie podatkowym, a nie terminu zapłaty podatku; odroczenie płatności podatku reguluje inny przepis."}
+{"id": "38b4d0a209", "address": "Ordynacja art. 117c", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "4a5c79ddf8", "address": "Ordynacja art. 239b § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "e5b5d212fb", "address": "Ordynacja art. 46i", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "649900951e", "address": "Ordynacja art. 14c § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "26e4057b18", "address": "Ordynacja art. 176", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "2f4c890e43", "address": "Ordynacja art. 176", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "25fc04e46f", "address": "Ordynacja art. 119h § 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "4ae8a47189", "address": "Ordynacja art. 119h § 2", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy tylko decyzji w sprawach z art. 119g § 1, w których może być zastosowany art. 119a, a zasięgnięcie opinii nie następuje, jeśli Rada wydała ją wcześniej."}
+{"id": "bd83ef2dbf", "address": "Ordynacja art. 119s § 4", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "4a6d9c919b", "address": "Ordynacja art. 20zz § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "0ed9047b19", "address": "Ordynacja art. 20zz § 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "eb5a170bfb", "address": "Ordynacja art. 119zda § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "e5614cf620", "address": "Ordynacja art. 119zda § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c292d37f0f", "address": "Ordynacja art. 274 § 4", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "91f5a902ef", "address": "Ordynacja art. 119zff § 8", "origin": "generated", "refs": 2, "context_ok": false, "note": "Zwrot 60% dotyczy wyłącznie sytuacji, gdy Szef KAS wydał wskazaną decyzję określającą skutki według art. 119a § 6, a nie ogólnie opłaty za opinię lub dowolną decyzję dotyczącą unikania opodatkowania."}
+{"id": "bfbd23f332", "address": "Ordynacja art. 33d § 4", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "92336cde9b", "address": "Ordynacja art. 20", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "dc0676d906", "address": "Ordynacja art. 93a § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "9495296772", "address": "Ordynacja art. 93a § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7d0963d316", "address": "Ordynacja art. 75 § 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "f178318130", "address": "Ordynacja art. 297c § 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "06f0e62645", "address": "Ordynacja art. 100 § 2", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "db6712848d", "address": "Ordynacja art. 287 § 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "9eba86a2be", "address": "Ordynacja art. 80a § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "6b246d153e", "address": "Ordynacja art. 23a", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "2d4220b351", "address": "Ordynacja art. 14za § 6", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "a39f660498", "address": "Ordynacja art. 306g § 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "4753fab248", "address": "Ordynacja art. 20zv § 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "f5aed3a237", "address": "Ordynacja art. 289 § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "94c230073a", "address": "Ordynacja art. 119zu § 1", "origin": "generated", "refs": 1, "context_ok": false, "note": "Przepis dotyczy ustalania wskaźnika ryzyka podmiotu kwalifikowanego, a nie wskaźnika ryzyka banku lub SKOK."}
+{"id": "561722868f", "address": "Ordynacja art. 50", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "697d5644c4", "address": "Ordynacja art. 119b § 1", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "03a4a29e98", "address": "Ordynacja art. 20zn § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "a19a366e37", "address": "Ordynacja art. 20zn § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "68849daf6d", "address": "Ordynacja art. 55 § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "46efd28bc0", "address": "Ordynacja art. 55 § 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "e86e9703e1", "address": "Ordynacja art. 285a § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "2bf6a3919b", "address": "Ordynacja art. 285a § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "fe94a83f01", "address": "Ordynacja art. 76c", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "2ceefbe5fb", "address": "Ordynacja art. 76c", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Druga część pytania zbyt szeroko opisuje decyzję „po moim wniosku”. Termin 30 dni dotyczy wyłącznie decyzji stwierdzającej nadpłatę wydanej w związku z wnioskiem z art. 75 § 1, czyli gdy podatnik kwestionuje pobranie lub wysokość podatku pobranego przez płatnika."}
+{"id": "971f2eacbe", "address": "Ordynacja art. 259b", "origin": "generated", "refs": 2, "context_ok": false, "note": "Pytanie błędnie wiąże sytuację z decyzją o odpowiedzialności następcy prawnego; odesłanie z art. 119zfk § 2 dotyczy innego katalogu decyzji. Przepis dotyczy „zainteresowanego”, nie wyłącznie podatnika."}
+{"id": "80f9e9b4b9", "address": "Ordynacja art. 259b", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "b67c4c2209", "address": "Ordynacja art. 297d", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "d5cdb2e3f6", "address": "Ordynacja art. 193a § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "3e459963a3", "address": "Ordynacja art. 193a § 2", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "82ad5d9f0b", "address": "Ordynacja art. 62b § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "ec42f3ae91", "address": "Ordynacja art. 62b § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "38cc46fd32", "address": "Ordynacja art. 115 § 4", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "83563fadb6", "address": "Ordynacja art. 14zu", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "6de1bda00c", "address": "Ordynacja art. 14zu", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "115749e7c7", "address": "Ordynacja art. 32 § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "da9b2e34a7", "address": "Ordynacja art. 119zo § 8", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "530b4f0b8b", "address": "Ordynacja art. 119zzi", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "1b64121d0b", "address": "Ordynacja art. 124", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "c40d3dbdb0", "address": "Ordynacja art. 150 § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5aa6a43ef5", "address": "Ordynacja art. 170 § 1a", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "f5ece3686e", "address": "Ordynacja art. 170 § 1a", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "8abfca2d7d", "address": "Ordynacja art. 305r § 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "941cc9fe65", "address": "Ordynacja art. 119zn § 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "9838bcbbec", "address": "Ordynacja art. 119zn § 1", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "da10fe5e12", "address": "Ordynacja art. 233 § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "5c77ac64ee", "address": "Ordynacja art. 7a § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "0e587065c2", "address": "Ordynacja art. 133a § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "b07583b0d1", "address": "Ordynacja art. 46g", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7196b09bf0", "address": "Ordynacja art. 112 § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "0697fe70a3", "address": "Ordynacja art. 112 § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "f32e0d9363", "address": "Ordynacja art. 146a § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "ae4aa06398", "address": "Ordynacja art. 146a § 1", "origin": "paraphrased", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "9f41651dc7", "address": "Ordynacja art. 20v", "origin": "generated", "refs": 1, "context_ok": false, "note": "Zgoda Szefa KAS dotyczy wyłącznie czynności sprawdzających na podstawie art. 274c, a nie wszystkich czynności sprawdzających wobec firmy."}
+{"id": "c0e14d711b", "address": "Ordynacja art. 20zzc § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "70db0807fd", "address": "Ordynacja art. 14zs § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "1345bd9064", "address": "Ordynacja art. 114 § 2", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "4a186cf8c9", "address": "Ordynacja art. 138n § 1", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "ec8db12e5a", "address": "Ordynacja art. 52a", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "322bdf031e", "address": "Ordynacja art. 86f § 3", "origin": "generated", "refs": 0, "context_ok": true, "note": "brak odesłań"}
+{"id": "7428724076", "address": "Ordynacja art. 58c § 1", "origin": "generated", "refs": 3, "context_ok": false, "note": "Przepis nie dotyczy wyłącznie dodatkowego zobowiązania związanego z klauzulą GAAR: obejmuje też m.in. decyzje dotyczące przepisów o cenach transferowych, a brak dokumentacji odnosi się właśnie do tej kategorii."}
+{"id": "14cb347be1", "address": "Ordynacja art. 49 § 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}

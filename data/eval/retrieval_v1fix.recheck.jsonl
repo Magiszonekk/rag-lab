@@ -1,0 +1,57 @@
+{"id": "6f6c2c5621", "address": "Ordynacja art. 119zs § 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "ad08d058fd", "address": "Ordynacja art. 259b", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "d186902821", "address": "Ordynacja art. 119zff § 8", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy skutków określonych tak, jak gdyby nie miał zastosowania przepis ustanawiający warunki zwolnienia (lub innej preferencji), a nie decyzji dotyczącej zastosowania przepisu wyłączającego zwolnienie."}
+{"id": "5f9acf7aad", "address": "Ordynacja art. 119h § 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "4bca4646f5", "address": "Ordynacja art. 119h § 2", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie decyzji w sprawach z art. 119g § 1, w których może być zastosowana klauzula z art. 119a, prowadzonych lub przejętych przez Szefa KAS, a nie każdej decyzji urzędu o „obchodzeniu przepisów podatkowych”."}
+{"id": "1cb97fe583", "address": "Ordynacja art. 20v", "origin": "generated", "refs": 1, "context_ok": false, "note": "Art. 274c dotyczy czynności sprawdzających u kontrahentów podatnika, a nie kierowania takich czynności do podatnika objętego umową."}
+{"id": "2f0a2783ac", "address": "Ordynacja art. 20v", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "91fa94bfd6", "address": "Ordynacja art. 48 § 1", "origin": "generated", "refs": 4, "context_ok": false, "note": "Termin zwrotu nadpłaty z art. 77 § 1 jest wyłączony z możliwości odroczenia na podstawie art. 48 § 1."}
+{"id": "ca917370d1", "address": "Ordynacja art. 76c", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "87d5f09f9b", "address": "Ordynacja art. 76c", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Odesłanie z art. 75 § 1 dotyczy wyłącznie nadpłaty, gdy podatnik kwestionuje pobranie lub wysokość podatku pobranego przez płatnika, a pytanie przedstawia je jako każdy wniosek o stwierdzenie nadpłaty."}
+{"id": "6536916e7f", "address": "Ordynacja art. 119zu § 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "2408512ec8", "address": "Ordynacja art. 119zu § 1", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "7752092a28", "address": "PIT art. 23c", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "b61078de99", "address": "PIT art. 23l", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "04909a4e2b", "address": "PIT art. 23m ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "9c8a10f49f", "address": "PIT art. 23m ust. 1", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "0c949d2786", "address": "PIT art. 23ze ust. 3", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "4c211b5c95", "address": "PIT art. 24b ust. 4", "origin": "generated", "refs": 1, "context_ok": false, "note": "Ust. 2 dotyczy podatnika obowiązanego do prowadzenia ksiąg, gdy nie można na ich podstawie określić dochodu, a nie podatnika „nieprowadzącego ksiąg”."}
+{"id": "e85b9da540", "address": "PIT art. 23z pkt 1a", "origin": "generated", "refs": 2, "context_ok": false, "note": "Pytanie pomija warunek, że przychody lub koszty z tych transakcji muszą być przypisane do zagranicznego zakładu."}
+{"id": "0b95107e8a", "address": "PIT art. 23z pkt 1a", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Pytanie pomija warunek, że przychody lub koszty z tych transakcji muszą być przypisane do zagranicznego zakładu."}
+{"id": "9b0e5dae42", "address": "PIT art. 26eb ust. 6", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "b3a19473de", "address": "PIT art. 23u", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "cafee67d3a", "address": "PIT art. 23u", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "85c58138f4", "address": "PIT art. 26g", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "211e4691a6", "address": "PIT art. 45 ust. 3c", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "8abdc06f66", "address": "PIT art. 3 ust. 2d", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "3f9e4d3957", "address": "PIT art. 45cf ust. 2", "origin": "generated", "refs": 2, "context_ok": false, "note": "Przepis dotyczy wyłącznie podatnika, o którym mowa w art. 45cd ust. 4, po informacji wydanej w trybie art. 45cf ust. 1; pytanie pomija to ograniczenie."}
+{"id": "cb5eb5de40", "address": "PIT art. 45ce ust. 3", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "a219005260", "address": "PIT art. 52zp", "origin": "generated", "refs": 2, "context_ok": false, "note": "Zwolnienie dotyczy wyłącznie darowizn i świadczeń otrzymanych przez podmioty enumeratywnie wskazane w art. 52zo ust. 1, a pytanie mówi ogólnie o każdym podmiocie."}
+{"id": "366588f0d9", "address": "VAT art. 100 ust. 12", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "3cffa983b6", "address": "VAT art. 100 ust. 12", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie przedstawiciela podatkowego z art. 18d ust. 1, działającego dla nieczynnego podatnika dokonującego tylko importu towarów przeznaczonych do innego państwa UE i ich dalszej WDT, a nie dowolnej wyznaczonej osoby obsługującej sprzedaż unijną."}
+{"id": "cfcbb24c7c", "address": "VAT art. 106na ust. 4", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "87852291f5", "address": "VAT art. 106na ust. 4", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "a5fc057f6c", "address": "VAT art. 108g ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "dcefe1587d", "address": "VAT art. 106nda ust. 15", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "a746c42551", "address": "VAT art. 106nda ust. 15", "origin": "paraphrased", "refs": 2, "context_ok": false, "note": "Brakuje warunku, że pierwotna faktura została już udostępniona nabywcy poza KSeF przed jej zaginięciem lub zniszczeniem."}
+{"id": "b4e9648952", "address": "PIT art. 52zo ust. 3", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "dec21d2cc6", "address": "PIT art. 52zo ust. 3", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "f5c6b0c31a", "address": "VAT art. 134a ust. 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "f86f667576", "address": "VAT art. 134c ust. 3", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "a1788901da", "address": "VAT art. 138e ust. 6", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "952cdd72cb", "address": "VAT art. 145g", "origin": "generated", "refs": 3, "context_ok": true, "note": ""}
+{"id": "2c424c1c36", "address": "VAT art. 145g", "origin": "paraphrased", "refs": 3, "context_ok": true, "note": ""}
+{"id": "de88e35fae", "address": "VAT art. 145i ust. 1", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "074ce4112f", "address": "VAT art. 32 ust. 1", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "11810756be", "address": "VAT art. 32 ust. 1", "origin": "paraphrased", "refs": 4, "context_ok": false, "note": "Brakuje warunku, że powiązania miały wpływ na ustalenie zaniżonego wynagrodzenia; samo powiązanie, cena niższa od rynkowej i brak pełnego odliczenia u nabywcy nie wystarczają."}
+{"id": "e42b514a6c", "address": "VAT art. 37 ust. 1", "origin": "generated", "refs": 2, "context_ok": true, "note": ""}
+{"id": "e4b997016e", "address": "VAT art. 37 ust. 1", "origin": "paraphrased", "refs": 2, "context_ok": true, "note": ""}
+{"id": "6e8e276f47", "address": "VAT art. 52 ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "dea264c61a", "address": "VAT art. 52 ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": false, "note": "Przepis dotyczy wyłącznie przesyłki z państwa trzeciego, a nie ogólnie „z zagranicy”, oraz wymaga m.in. niehandlowego, nieodpłatnego i okazjonalnego charakteru przesyłki."}
+{"id": "9b90e83e7b", "address": "VAT art. 57 ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "8d2f71da69", "address": "VAT art. 57 ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "639f9440a5", "address": "VAT art. 91 ust. 10", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "a25eb8e011", "address": "VAT art. 77 ust. 2", "origin": "generated", "refs": 1, "context_ok": true, "note": ""}
+{"id": "42e70e4f4a", "address": "VAT art. 77 ust. 2", "origin": "paraphrased", "refs": 1, "context_ok": true, "note": ""}
+{"id": "e2c4f9a2b6", "address": "VAT art. 97 ust. 3", "origin": "generated", "refs": 4, "context_ok": true, "note": ""}
+{"id": "00571c6e68", "address": "VAT art. 97 ust. 3", "origin": "paraphrased", "refs": 4, "context_ok": true, "note": ""}

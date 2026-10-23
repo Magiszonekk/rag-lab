@@ -25,9 +25,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, field
 from datetime import date
 
+from raglab.annotate_temporal import load_labels
 from raglab.corpus import Located, iter_units, load_corpus
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM, Completion, LLMError, parse_json
+from raglab.refs import Resolver
 
 EVAL_DIR = REPO_ROOT / "data" / "eval"
 GENERATOR_MODELS = ["claude-sonnet-5", "gpt-5.6-terra"]
@@ -38,9 +40,10 @@ PARAPHRASE_MODELS = ["gemini-3.8-flash", "gpt-5.6-luna"]
 COPY_LIMIT = 6  # ≥ tylu kolejnych słów z przepisu = przepisane; jedna poprawka z podaną frazą
 QUOTA = {"vat": 100, "pit": 80, "op": 70}
 MIN_WORDS, MAX_WORDS = 25, 420
-# Przepisy przejściowe / epizodyczne / końcowe (np. stawki VAT „w roku 2023”, limity „na rok 2005”) opisują
-# stan sprzed lat. Pytania z nich testują historię, nie obowiązujące prawo — wyłączone z zestawu (przegląd v1).
-TRANSITIONAL = re.compile(r"przejściow|końcow|epizodyczn", re.I)
+# Przepisy z rozdziałów przejściowych / epizodycznych / końcowych mają etykietę czasową (annotate_temporal):
+# pytania z przepisów „historical” (np. stawki VAT „w roku 2023”) wyłączone; „in_force” zostają — tam są m.in.
+# obowiązujące stawki VAT 23%/8% (art. 146ef), których nie ma w art. 41.
+TEMPORAL = load_labels()
 
 GEN_PROMPT = """Jesteś autorem zestawu testowego dla wyszukiwarki polskich przepisów podatkowych.
 Dostajesz jeden przepis ({act_name}, stan prawny {state_date}). Napisz JEDNO pytanie, które zadałby
@@ -58,7 +61,8 @@ Zasady:
 Odpowiedz wyłącznie JSON: {{"question": "...", "skip": false}}
 
 PRZEPIS ({address}):
-{text}"""
+{text}
+{refs}"""
 
 VAL_PROMPT = """Oceń parę: pytanie i przepis prawa podatkowego.
 1. "answers": czy przepis zawiera odpowiedź na pytanie (pełną lub zasadniczą)? true/false
@@ -70,7 +74,19 @@ Odpowiedz wyłącznie JSON: {{"answers": bool, "specific": bool, "leaks": bool, 
 PYTANIE: {question}
 
 PRZEPIS ({address}):
-{text}"""
+{text}
+{refs}"""
+
+REFS_BLOCK = """
+PRZEPISY, DO KTÓRYCH ODSYŁA (tylko kontekst — odpowiedź ma być w PRZEPISIE wyżej):
+{items}"""
+
+
+def refs_block(ctx: list[tuple[str, str]]) -> str:
+    if not ctx:
+        return ""
+    return REFS_BLOCK.format(items="\n\n".join(f"[{a}]\n{t}" for a, t in ctx))
+
 
 PARA_PROMPT = """Przepisz pytanie tak, jak zadałby je zwykły człowiek w rozmowie albo na forum: językiem
 potocznym, z konkretną sytuacją z życia, BEZ terminów z ustawy (np. zamiast „podatnik” — „ja”, „firma”;
@@ -103,7 +119,7 @@ def candidates(loc_iter: list[Located]) -> list[Located]:
         u = loc.unit
         if u.repealed or u.version is not None or any(c.version for c in loc.chain):
             continue
-        if any(TRANSITIONAL.search(p) for p in loc.article.path):
+        if TEMPORAL.get((loc.act, loc.article.number or "")) == "historical":
             continue
         is_para = u.kind == "paragraph"
         is_flat_article = u.kind == "article" and not any(c.kind == "paragraph" for c in u.children)
@@ -168,16 +184,27 @@ def _id(*parts: str) -> str:
 
 
 def process(
-    loc: Located, act_name: str, state: str, gen: LLM, val: LLM, para: LLM, para_p: float, rng: random.Random
+    loc: Located,
+    act_name: str,
+    state: str,
+    gen: LLM,
+    val: LLM,
+    para: LLM,
+    para_p: float,
+    rng: random.Random,
+    resolver: Resolver | None = None,
 ) -> tuple[list[Item], dict[str, object]]:
     text = loc.full_text()
+    refs = refs_block(resolver.context_for(loc)) if resolver else ""
     log: dict[str, object] = {"address": loc.address}
     try:
         c: Completion = gen.complete(
             [
                 {
                     "role": "user",
-                    "content": GEN_PROMPT.format(act_name=act_name, state_date=state, address=loc.address, text=text),
+                    "content": GEN_PROMPT.format(
+                        act_name=act_name, state_date=state, address=loc.address, text=text, refs=refs
+                    ),
                 }
             ],
             max_tokens=2000,
@@ -198,7 +225,9 @@ def process(
             msgs = [
                 {
                     "role": "user",
-                    "content": GEN_PROMPT.format(act_name=act_name, state_date=state, address=loc.address, text=text),
+                    "content": GEN_PROMPT.format(
+                        act_name=act_name, state_date=state, address=loc.address, text=text, refs=refs
+                    ),
                 },
                 {"role": "assistant", "content": c.text},
                 {"role": "user", "content": FIX_PROMPT.format(phrase=phrase)},
@@ -217,7 +246,7 @@ def process(
         return [], log
     try:
         v = val.complete(
-            [{"role": "user", "content": VAL_PROMPT.format(question=q, address=loc.address, text=text)}],
+            [{"role": "user", "content": VAL_PROMPT.format(question=q, address=loc.address, text=text, refs=refs)}],
             max_tokens=2500,
             temperature=0.0,
         )
@@ -281,16 +310,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--paraphrase", type=float, default=0.4, help="odsetek pytań z wersją potoczną")
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--limit", type=int, default=0, help="tylko N jednostek (próba)")
+    ap.add_argument("--only", nargs="*", default=[], help="tylko podane adresy (np. 'VAT art. 145i ust. 1')")
     args = ap.parse_args(argv)
 
     corpus = load_corpus()
     units = {k: candidates(list(iter_units(a))) for k, a in corpus.items()}
     picked = sample(units, args.seed)
+    if args.only:
+        index = {loc.address: loc for k, a in corpus.items() for loc in iter_units(a)}
+        picked = [index[x] for x in args.only]
     if args.limit:
         picked = picked[: args.limit]
     print({k: len(v) for k, v in units.items()}, "kandydatów;", len(picked), "wylosowanych", file=sys.stderr)
 
     gen, val, para = LLM(GENERATOR_MODELS), LLM(VALIDATOR_MODELS), LLM(PARAPHRASE_MODELS)
+    resolvers = {k: Resolver(a) for k, a in corpus.items()}
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     out_path = EVAL_DIR / f"retrieval_{args.version}.jsonl"
     log_path = EVAL_DIR / f"retrieval_{args.version}.log.jsonl"
@@ -315,6 +349,7 @@ def main(argv: list[str] | None = None) -> int:
                     para,
                     args.paraphrase,
                     random.Random(args.seed + i),
+                    resolvers[loc.act],
                 )
             ] = loc
         for n, f in enumerate(as_completed(futs), 1):

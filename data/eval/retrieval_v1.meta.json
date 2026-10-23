@@ -50,17 +50,33 @@
   "para": "a3cfca8967"
  },
  "postfilter": {
-  "rule": "usunięte pytania z artykułów w rozdziałach przejściowych/epizodycznych/końcowych",
+  "rule": "usunięte pytania z przepisów oznaczonych jako historical (data/annotations/temporal*.jsonl: etykiety GPT + ręczne poprawki)",
   "raw": 353,
-  "kept": 290,
+  "kept": 305,
   "kept_by_act": {
-   "vat/generated": 82,
-   "vat/paraphrased": 37,
-   "pit/generated": 57,
-   "pit/paraphrased": 24,
+   "vat/generated": 86,
+   "vat/paraphrased": 39,
+   "pit/generated": 63,
+   "pit/paraphrased": 27,
    "op/generated": 68,
    "op/paraphrased": 22
   }
  },
- "frozen": true
+ "frozen": true,
+ "context_recheck": {
+  "checked": 305,
+  "with_refs": 184,
+  "bad_items": 55,
+  "bad_sources": 42,
+  "regenerated_kept": 42,
+  "final": 283
+ },
+ "kept_by_act": {
+  "vat/generated": 85,
+  "vat/paraphrased": 37,
+  "pit/generated": 58,
+  "pit/paraphrased": 20,
+  "op/generated": 64,
+  "op/paraphrased": 19
+ }
 }

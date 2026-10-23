@@ -1,0 +1,42 @@
+{"address": "Ordynacja art. 119zs § 1", "status": "ok"}
+{"address": "Ordynacja art. 259b", "status": "ok"}
+{"address": "Ordynacja art. 119zff § 8", "status": "ok"}
+{"address": "Ordynacja art. 119h § 2", "status": "ok"}
+{"address": "Ordynacja art. 20v", "status": "ok"}
+{"address": "Ordynacja art. 48 § 1", "status": "ok"}
+{"address": "Ordynacja art. 76c", "status": "ok"}
+{"address": "Ordynacja art. 58c § 1", "status": "rejected_by_validator", "question": "W jakich sytuacjach stawka dodatkowego zobowiązania podatkowego ulega podwojeniu, np. gdy podstawa jego ustalenia przekracza 15 mln zł albo nie przedłożono dokumentacji cen transferowych?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Pytanie wprost dotyczy przesłanek podwojenia wskazanych w przepisie i przytacza jego charakterystyczne progi oraz warunki."}}
+{"address": "Ordynacja art. 119zu § 1", "status": "ok"}
+{"address": "PIT art. 23c", "status": "ok"}
+{"address": "PIT art. 23l", "status": "ok"}
+{"address": "PIT art. 23m ust. 1", "status": "ok"}
+{"address": "PIT art. 23ze ust. 3", "status": "ok"}
+{"address": "PIT art. 24b ust. 4", "status": "ok"}
+{"address": "PIT art. 23z pkt 1a", "status": "ok"}
+{"address": "PIT art. 26eb ust. 6", "status": "ok"}
+{"address": "PIT art. 23u", "first_question": "Czy przepisy o cenach transferowych dotyczące podmiotów powiązanych stosuje się również do transakcji z podmiotem niepowiązanym, który ma siedzibę w kraju stosującym szkodliwą konkurencję podatkową (rajem podatkowym)?", "status": "ok"}
+{"address": "PIT art. 45a", "status": "filtered_leak", "question": "Kto przekazuje 1,5% podatku na rzecz organizacji pożytku publicznego w sytuacji, gdy zeznanie podatkowe zostało złożone do urzędu skarbowego, którego zadania – ze względu na ochronę informacji niejawnych – pełni organ wskazany w art. 13a Ordynacji podatkowej?", "copied": "w art 13a ordynacji podatkowej"}
+{"address": "PIT art. 26g", "status": "ok"}
+{"address": "PIT art. 45 ust. 3c", "status": "ok"}
+{"address": "PIT art. 3 ust. 2d", "status": "ok"}
+{"address": "PIT art. 45cf ust. 2", "status": "ok"}
+{"address": "PIT art. 45ce ust. 3", "status": "ok"}
+{"address": "PIT art. 52zp", "status": "ok"}
+{"address": "VAT art. 100 ust. 12", "status": "ok"}
+{"address": "VAT art. 106na ust. 4", "status": "ok"}
+{"address": "VAT art. 108g ust. 2", "status": "ok"}
+{"address": "VAT art. 106nda ust. 15", "status": "ok"}
+{"address": "PIT art. 52zo ust. 3", "status": "ok"}
+{"address": "VAT art. 134a ust. 1", "status": "ok"}
+{"address": "VAT art. 134c ust. 3", "status": "ok"}
+{"address": "VAT art. 138e ust. 6", "status": "ok"}
+{"address": "VAT art. 136 ust. 2", "first_question": "Czy w transakcji trójstronnej uproszczonej procedurę uproszczoną i wystawienie faktury WE uproszczonej można zastosować także wtedy, gdy ostatnim w kolejności odbiorcą towaru jest osoba prawna, która nie jest podatnikiem VAT, ale jest zarejestrowana na potrzeby transakcji wewnątrzwspólnotowych w kraju zakończenia transportu towaru?", "status": "filtered_leak", "question": "Czy procedurę uproszczoną w transakcji trójstronnej oraz wystawienie faktury WE uproszczonej można zastosować, gdy finalnym odbiorcą towaru jest podmiot prawny niebędący podatnikiem VAT, lecz zarejestrowany na potrzeby transakcji wewnątrzwspólnotowych w państwie, w którym kończy się transport towaru?", "copied": "na potrzeby transakcji wewnątrzwspólnotowych w państwie"}
+{"address": "VAT art. 145g", "status": "ok"}
+{"address": "VAT art. 145i ust. 1", "status": "ok"}
+{"address": "VAT art. 32 ust. 1", "status": "ok"}
+{"address": "VAT art. 37 ust. 1", "status": "ok"}
+{"address": "VAT art. 52 ust. 2", "status": "ok"}
+{"address": "VAT art. 57 ust. 2", "status": "ok"}
+{"address": "VAT art. 91 ust. 10", "status": "ok"}
+{"address": "VAT art. 77 ust. 2", "status": "ok"}
+{"address": "VAT art. 97 ust. 3", "status": "ok"}
