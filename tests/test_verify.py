@@ -58,3 +58,10 @@ def test_resolve_compound_citations_to_parent() -> None:
     assert c.resolve("VAT art. 106j ust. 2 pkt 3, 5 i 6") == "VAT art. 106j ust. 2"
     assert c.resolve("Ordynacja art. 81b § 1 pkt 1 i § 2") == "Ordynacja art. 81b"
     assert c.resolve("Ordynacja art. 53 § 1 i 3") == "Ordynacja art. 53"
+
+
+def test_rewrite_strips_article_numbers() -> None:
+    from raglab.search.rewrite import _strip_article_numbers
+
+    s = _strip_article_numbers("Zgodnie z art. 86a ust. 1 i artykułem 90 podatnik odlicza 50%")
+    assert "86a" not in s and "artykułem 90" not in s and "50%" in s

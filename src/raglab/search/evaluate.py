@@ -126,6 +126,17 @@ def load_items(version: str) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def _with_rewrite(q: str, strategy: str, bm25: Callable[..., BM25Index], vec: Callable[..., VectorIndex]) -> list[Hit]:
+    from raglab.search.rewrite import rewrite
+
+    b, v = bm25("structural", "morfeusz2"), vec("structural", "mmlw-base")
+    rankings = [b.search(q, 50), v.search(q, 50)]
+    for s in strategy.split("+"):
+        rq = rewrite(q, s)
+        rankings += [b.search(rq, 50), v.search(rq, 50)]
+    return demote_historical(rrf(*rankings, top=20))
+
+
 def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
     corpus = load_corpus()
     chunk_sets: dict[str, list[Chunk]] = {}
@@ -190,6 +201,10 @@ def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
                 )
             )
         ),
+        # przepisywanie pytania (search/rewrite.py): RRF wyników dla pytania oryginalnego i przepisanego
+        "hybrid-rewrite": lambda: lambda q: _with_rewrite(q, "rewrite", bm25, vec),
+        "hybrid-hyde": lambda: lambda q: _with_rewrite(q, "hyde", bm25, vec),
+        "hybrid-rewrite-hyde": lambda: lambda q: _with_rewrite(q, "rewrite+hyde", bm25, vec),
         "fixed-bm25-morfeusz2": lambda: lambda q: bm25("fixed", "morfeusz2").search(q, 20),
         "fixed-vec-mmlw-base": lambda: lambda q: vec("fixed", "mmlw-base").search(q, 20),
         "fixed128-bm25-morfeusz2": lambda: lambda q: bm25("fixed128", "morfeusz2").search(q, 20),
@@ -226,6 +241,16 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     items = load_items(args.version)
+    rw = {
+        s
+        for c in args.configs
+        if c in ("hybrid-rewrite", "hybrid-hyde", "hybrid-rewrite-hyde")
+        for s in {"hybrid-rewrite": ["rewrite"], "hybrid-hyde": ["hyde"], "hybrid-rewrite-hyde": ["rewrite", "hyde"]}[c]
+    }
+    if rw:
+        from raglab.search.rewrite import prefetch
+
+        prefetch([it["question"] for it in items], sorted(rw))
     from raglab.corpus import iter_units as _iter
 
     for corpus_act in load_corpus().values():

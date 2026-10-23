@@ -26,7 +26,7 @@ from typing import Any
 
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM
-from raglab.rag.judge import JUDGE_MODELS, judge
+from raglab.rag.judge import JUDGE_MODELS, JUDGE_VERSION, judge
 from raglab.rag.variants import ANSWER_MODELS, SYSTEM_PROMPT, answer
 from raglab.rag.verify import check_cite, citation_recall, key_facts_present
 
@@ -170,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
             def score(job: tuple[dict[str, Any], dict[str, Any]]) -> dict[str, Any]:
                 it, a = job
                 jkey = hashlib.sha1(
-                    json.dumps([it["id"], a["answer"], a["refused"]], ensure_ascii=False).encode()
+                    json.dumps([JUDGE_VERSION, it["id"], a["answer"], a["refused"]], ensure_ascii=False).encode()
                 ).hexdigest()
                 j = jcache.get(jkey) or judge(it, a, judge_llm)
                 return {

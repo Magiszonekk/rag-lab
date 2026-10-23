@@ -11,6 +11,8 @@ from typing import Any
 from raglab.llm import LLM, LLMError, parse_json
 
 JUDGE_MODELS = ["claude-sonnet-5", "claude-opus-4-7"]
+# zmiana promptu / kontekstu sędziego → nowa wersja → werdykty z cache przestają obowiązywać
+JUDGE_VERSION = "2-full-context"
 
 JUDGE_PROMPT = """Oceniasz odpowiedź systemu RAG na pytanie o polskie prawo podatkowe. System może korzystać
 WYŁĄCZNIE z przepisów, które dostał w kontekście (VAT, PIT, Ordynacja podatkowa). Masz wzorcową odpowiedź
@@ -55,7 +57,9 @@ EXPECTED = {
 
 def judge(item: dict[str, Any], ans: dict[str, Any], llm: LLM) -> dict[str, Any]:
     expected = EXPECTED.get(item.get("expected_behavior") or "answer", "odpowiedzieć na podstawie przepisów")
-    ctx = "\n\n".join(f"[{c['address']}]\n{c['text'][:2500]}" for c in ans.get("context", []))
+    # pełny kontekst — obcinanie bloków (wcześniej 2500 znaków) sprawiało, że sędzia uznawał cytaty z dalszych
+    # ustępów długiego artykułu (PIT art. 10 ust. 5) za „spoza kontekstu”
+    ctx = "\n\n".join(f"[{c['address']}]\n{c['text']}" for c in ans.get("context", []))
     prompt = JUDGE_PROMPT.format(
         question=item["question"],
         expected=expected,
@@ -63,11 +67,19 @@ def judge(item: dict[str, Any], ans: dict[str, Any], llm: LLM) -> dict[str, Any]
         answer=ans.get("answer", ""),
         refused=ans.get("refused"),
         citations=", ".join(ans.get("citations", [])),
-        context=ctx[:14000],
+        context=ctx[:40000],
     )
+    last = ""
+    for _ in range(2):  # sporadyczny niedomknięty JSON — jedna ponowna próba
+        try:
+            c = llm.complete([{"role": "user", "content": prompt}], max_tokens=1500, temperature=0.0)
+            d = parse_json(c.text)
+            break
+        except (LLMError, ValueError) as e:
+            last = str(e)
+    else:
+        return {"verdict": "error", "faithful": None, "reason": last[:200], "judge_model": ""}
     try:
-        c = llm.complete([{"role": "user", "content": prompt}], max_tokens=1500, temperature=0.0)
-        d = parse_json(c.text)
         if not isinstance(d, dict) or d.get("verdict") not in (
             "correct",
             "partial",

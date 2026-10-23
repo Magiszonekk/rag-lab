@@ -88,7 +88,17 @@ RETRIEVERS: dict[str, Callable[[str], list[Hit]]] = {
     # przepisy historyczne za obowiązującymi (etykiety czasowe, etap 2a); wagi RRF równe — strojenie wag
     # na zestawie testowym odrzucone (dawało +0,7 pp, nieistotnie, a dopasowywałoby wariant do testu)
     "hybrid": lambda q: demote_historical(rrf(_indexes()[0].search(q, 50), _indexes()[1].search(q, 50), top=20)),
+    # hybryda + HyDE: model pisze hipotetyczny fragment przepisu, szukamy pytaniem i fragmentem (search/rewrite.py)
+    "hyde": lambda q: _hyde(q),
 }
+
+
+def _hyde(q: str) -> list[Hit]:
+    from raglab.search.rewrite import rewrite
+
+    bm25, vec = _indexes()
+    h = rewrite(q, "hyde")
+    return demote_historical(rrf(bm25.search(q, 50), vec.search(q, 50), bm25.search(h, 50), vec.search(h, 50), top=20))
 
 
 def render_context(blocks: list[Block]) -> str:
