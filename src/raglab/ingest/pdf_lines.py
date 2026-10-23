@@ -90,7 +90,6 @@ def _segments(page: pymupdf.Page, body: float) -> list[_Seg]:
                     refs.append(int(m.group(1)))
                     continue
                 text_parts.append(s["text"])
-            first = spans[0]
             visible = [s for s in spans if s["text"].strip()] or spans
             segs.append(
                 _Seg(
@@ -99,7 +98,7 @@ def _segments(page: pymupdf.Page, body: float) -> list[_Seg]:
                     text="".join(text_parts),
                     # rozmiar liczony bez spanów z samymi spacjami (bywają 12 pt w linii przypisu 9 pt)
                     size=max(s["size"] for s in visible),
-                    bold=bool(first["flags"] & 16),
+                    bold=bool(visible[0]["flags"] & 16),  # pierwszy span z treścią (bywa poprzedzony spacją)
                     refs=refs,
                     min_size=min(s["size"] for s in visible),
                 )

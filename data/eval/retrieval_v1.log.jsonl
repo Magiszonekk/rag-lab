@@ -1,0 +1,400 @@
+{"address": "VAT art. 130 ust. 2", "status": "skip_by_generator"}
+{"address": "VAT art. 152 ust. 2", "status": "ok"}
+{"address": "VAT art. 97 ust. 3", "status": "ok"}
+{"address": "VAT art. 28p ust. 3", "status": "ok"}
+{"address": "VAT art. 52 ust. 2", "status": "ok"}
+{"address": "VAT art. 134c ust. 3", "status": "ok"}
+{"address": "VAT art. 108d ust. 1", "status": "ok"}
+{"address": "VAT art. 22 ust. 1 pkt 5", "status": "ok"}
+{"address": "VAT art. 106m ust. 5", "first_question": "Jakimi metodami, oprócz kontroli biznesowych, można zapewnić autentyczność pochodzenia i integralność treści faktury elektronicznej?", "status": "ok"}
+{"address": "VAT art. 106nda ust. 15", "status": "ok"}
+{"address": "VAT art. 106nh ust. 2", "status": "ok"}
+{"address": "VAT art. 57 ust. 2", "status": "ok"}
+{"address": "VAT art. 13g", "status": "skip_by_generator"}
+{"address": "VAT art. 108c ust. 2", "status": "ok"}
+{"address": "VAT art. 133a ust. 2", "status": "ok"}
+{"address": "VAT art. 77 ust. 2", "status": "ok"}
+{"address": "VAT art. 138c ust. 2", "status": "ok"}
+{"address": "VAT art. 170 ust. 1", "status": "ok"}
+{"address": "VAT art. 134a ust. 1", "status": "ok"}
+{"address": "VAT art. 28l", "status": "ok"}
+{"address": "VAT art. 146d ust. 2", "status": "rejected_by_validator", "question": "Jakimi kryteriami musi się kierować minister finansów, wydając rozporządzenie obniżające stawki VAT lub wprowadzające zwolnienia od tego podatku?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Pytanie wprost dotyczy kryteriów wskazanych w przepisie i ujawnia jego oznaczenie."}}
+{"address": "VAT art. 28i ust. 2", "status": "rejected_by_validator", "question": "Gdzie jest miejsce świadczenia usługi gastronomicznej lub cateringowej wykonanej na pokładzie samolotu, statku lub pociągu w trakcie przewozu pasażerów po terytorium UE – w miejscu rozpoczęcia czy zakończenia podróży?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost wskazuje miejsce rozpoczęcia transportu; pytanie parafrazuje jego treść."}}
+{"address": "VAT art. 102 ust. 1", "status": "skip_by_generator"}
+{"address": "VAT art. 110", "status": "ok"}
+{"address": "VAT art. 106p", "status": "ok"}
+{"address": "VAT art. 33b ust. 2", "status": "ok"}
+{"address": "VAT art. 99 ust. 4a", "status": "ok"}
+{"address": "VAT art. 21 ust. 4", "status": "ok"}
+{"address": "VAT art. 106j ust. 1", "status": "ok"}
+{"address": "VAT art. 151 ust. 2", "status": "ok"}
+{"address": "VAT art. 62 ust. 9", "status": "ok"}
+{"address": "VAT art. 31a ust. 1", "status": "ok"}
+{"address": "VAT art. 138g ust. 8", "status": "ok"}
+{"address": "VAT art. 101", "status": "ok"}
+{"address": "VAT art. 64 ust. 1", "status": "ok"}
+{"address": "VAT art. 30c ust. 2", "status": "ok"}
+{"address": "VAT art. 110a", "status": "skip_by_generator"}
+{"address": "VAT art. 138h ust. 2", "status": "ok"}
+{"address": "VAT art. 13j", "status": "ok"}
+{"address": "VAT art. 130d ust. 1", "status": "ok"}
+{"address": "VAT art. 90a ust. 1", "status": "ok"}
+{"address": "VAT art. 37 ust. 1", "status": "ok"}
+{"address": "VAT art. 160 ust. 1", "status": "ok"}
+{"address": "VAT art. 68", "status": "ok"}
+{"address": "VAT art. 14 ust. 9a", "status": "ok"}
+{"address": "VAT art. 146ee ust. 1", "status": "ok"}
+{"address": "VAT art. 108g ust. 2", "status": "ok"}
+{"address": "VAT art. 8b ust. 1", "status": "ok"}
+{"address": "VAT art. 165", "status": "skip_by_generator"}
+{"address": "VAT art. 136 ust. 2", "status": "ok"}
+{"address": "VAT art. 91 ust. 10", "status": "ok"}
+{"address": "VAT art. 145g", "status": "ok"}
+{"address": "VAT art. 163 ust. 1", "status": "skip_by_generator"}
+{"address": "VAT art. 146ed", "status": "ok"}
+{"address": "VAT art. 43 ust. 1 pkt 19a", "status": "ok"}
+{"address": "VAT art. 150", "status": "ok"}
+{"address": "VAT art. 49 ust. 2", "status": "ok"}
+{"address": "VAT art. 100 ust. 12", "status": "ok"}
+{"address": "VAT art. 127 ust. 11b", "status": "ok"}
+{"address": "VAT art. 134 ust. 1", "status": "ok"}
+{"address": "VAT art. 133 ust. 1", "status": "ok"}
+{"address": "VAT art. 106o", "status": "ok"}
+{"address": "VAT art. 2 pkt 33", "status": "ok"}
+{"address": "VAT art. 8d ust. 3", "status": "ok"}
+{"address": "VAT art. 42b ust. 1a", "status": "ok"}
+{"address": "VAT art. 106na ust. 4", "status": "ok"}
+{"address": "VAT art. 112aa ust. 1", "first_question": "Jak długo faktury ustrukturyzowane są przechowywane w Krajowym Systemie e-Faktur i czy podatnik musi stosować ogólne zasady przechowywania faktur w tym przypadku?", "status": "ok"}
+{"address": "VAT art. 89a ust. 1a", "status": "ok"}
+{"address": "VAT art. 166", "status": "ok"}
+{"address": "VAT art. 106ni ust. 4", "status": "ok"}
+{"address": "VAT art. 38 ust. 2", "status": "ok"}
+{"address": "VAT art. 138e ust. 6", "status": "ok"}
+{"address": "VAT art. 130ca ust. 1", "status": "ok"}
+{"address": "VAT art. 146 ust. 4", "status": "ok"}
+{"address": "VAT art. 28c ust. 3", "status": "ok"}
+{"address": "VAT art. 10 ust. 7", "status": "ok"}
+{"address": "VAT art. 7a ust. 1", "first_question": "Czy prowadząc platformę internetową, poprzez którą umożliwiam sprzedaż na odległość towarów importowanych w przesyłkach o wartości nieprzekraczającej równowartości 150 euro, jestem traktowany jako podmiot, który sam otrzymał i dostarczył te towary dla celów VAT?", "status": "ok"}
+{"address": "VAT art. 127a ust. 1", "status": "ok"}
+{"address": "VAT art. 146da ust. 1", "status": "ok"}
+{"address": "VAT art. 79", "status": "ok"}
+{"address": "VAT art. 106c", "status": "ok"}
+{"address": "VAT art. 3 ust. 6", "status": "ok"}
+{"address": "VAT art. 13k ust. 4", "status": "ok"}
+{"address": "VAT art. 28f ust. 2", "status": "ok"}
+{"address": "VAT art. 145c", "status": "ok"}
+{"address": "VAT art. 146ea", "status": "ok"}
+{"address": "VAT art. 39a", "first_question": "Który organ jest właściwy do orzekania o odpowiedzialności osoby trzeciej za zaległości podatkowe podatnika w VAT z tytułu importu towarów?", "status": "ok"}
+{"address": "VAT art. 146g ust. 1", "status": "ok"}
+{"address": "VAT art. 108e", "status": "ok"}
+{"address": "VAT art. 106r pkt 3", "status": "rejected_by_validator", "question": "Jak podmiot korzystający z Krajowego Systemu e-Faktur może potwierdzić swoją tożsamość, w tym jako wystawca faktury, przy użyciu certyfikatu, i jakie wymagania techniczne muszą być spełnione przy takim uwierzytelnianiu?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Pytanie dotyczy dokładnie delegacji do określenia sposobów uwierzytelniania certyfikatem i wymagań technicznych; zawiera charakterystyczne sformułowania z przepisu."}}
+{"address": "VAT art. 76", "status": "ok"}
+{"address": "VAT art. 106ga ust. 2", "status": "ok"}
+{"address": "VAT art. 28j ust. 2", "status": "ok"}
+{"address": "VAT art. 31b ust. 1", "status": "ok"}
+{"address": "VAT art. 145k ust. 1", "status": "rejected_by_validator", "question": "Jakie konsekwencje karne grożą podatnikowi, który nie złoży w terminie zawiadomienia o rezygnacji z korzystania z kasy rejestrującej online/wirtualnej z systemem teleinformatycznym (zawiadomienie, o którym mowa w przepisach dotyczących kas online) albo poda w nim nieprawdziwe dane?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Pytanie dotyczy dokładnie niezłożenia, spóźnienia lub podania nieprawdziwych danych w tym zawiadomieniu; ujawnia też treść przepisu."}}
+{"address": "VAT art. 148", "first_question": "Jak dla celów limitu sprzedaży opodatkowanej liczy się wartość sprzedaży towarów za rok 2003 oraz za okres od 1 stycznia do 30 kwietnia 2004 r.?", "status": "ok"}
+{"address": "VAT art. 113b ust. 7", "status": "ok"}
+{"address": "VAT art. 173", "status": "skip_by_generator"}
+{"address": "VAT art. 90 ust. 6", "status": "ok"}
+{"address": "VAT art. 13l ust. 2", "status": "ok"}
+{"address": "VAT art. 104 ust. 2", "status": "ok"}
+{"address": "VAT art. 110e", "status": "ok"}
+{"address": "VAT art. 8c ust. 7", "status": "ok"}
+{"address": "VAT art. 153 ust. 2", "first_question": "Czy przepisy ustawy o VAT dotyczące przekształcenia spółdzielczego lokatorskiego prawa do lokalu mieszkalnego stosuje się, jeśli to prawo zostało ustanowione i lokal zasiedlony przed 1 maja 2004 r.?", "status": "ok"}
+{"address": "VAT art. 8e", "status": "ok"}
+{"address": "VAT art. 106nha", "status": "ok"}
+{"address": "VAT art. 172", "status": "ok"}
+{"address": "VAT art. 42 ust. 9", "status": "ok"}
+{"address": "VAT art. 32 ust. 1", "status": "ok"}
+{"address": "VAT art. 92 ust. 2", "status": "skip_by_generator"}
+{"address": "VAT art. 28o", "status": "skip_by_generator"}
+{"address": "VAT art. 16", "status": "ok"}
+{"address": "VAT art. 145i ust. 1", "status": "ok"}
+{"address": "VAT art. 30a ust. 2b", "status": "ok"}
+{"address": "VAT art. 119 ust. 8", "status": "ok"}
+{"address": "VAT art. 129 ust. 1", "status": "ok"}
+{"address": "VAT art. 112b ust. 3", "status": "ok"}
+{"address": "VAT art. 158", "status": "skip_by_generator"}
+{"address": "VAT art. 69", "status": "ok"}
+{"address": "VAT art. 146j", "status": "rejected_by_validator", "question": "Czy zasada odpowiedniego stosowania przepisu dotyczącego utraty prawa do opodatkowania marży przy sprzedaży dzieł sztuki ma zastosowanie również do dzieł sztuki, które były wcześniej opodatkowane obniżoną stawką VAT (8%, 9% lub 10%) stosowaną w ramach przepisów przejściowych?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost rozstrzyga wskazany przypadek; pytanie ujawnia istotną treść regulacji."}}
+{"address": "VAT art. 174", "status": "ok"}
+{"address": "VAT art. 80 ust. 2", "first_question": "Czy zwolnienie z VAT przy odstąpieniu pojazdu silnikowego między placówkami dyplomatycznymi/konsularnymi może obowiązywać, nawet jeśli nie zachowano wymaganego terminu, gdy przyczyną było przesiedlenie związane z podjęciem pracy w innym państwie, a osoba odstępująca pojazd przebywała w Polsce co najmniej 2 lata?", "status": "ok"}
+{"address": "VAT art. 66", "status": "ok"}
+{"address": "VAT art. 33 ust. 5", "status": "ok"}
+{"address": "VAT art. 26 ust. 2", "status": "ok"}
+{"address": "VAT art. 121 ust. 2", "status": "ok"}
+{"address": "VAT art. 28q", "status": "ok"}
+{"address": "VAT art. 146eg", "status": "ok"}
+{"address": "VAT art. 11 ust. 2", "status": "ok"}
+{"address": "VAT art. 58 ust. 2", "status": "ok"}
+{"address": "VAT art. 28e", "status": "ok"}
+{"address": "VAT art. 34 ust. 1a", "status": "ok"}
+{"address": "VAT art. 90c ust. 1", "status": "ok"}
+{"address": "VAT art. 13 ust. 8", "status": "rejected_by_validator", "question": "Czy dostawa towarów opodatkowanych na zasadach VAT marża oraz dostawa np. środków transportu morskiego czy lotniczego, objętych stawką 0% na podstawie przepisów o eksporcie, może być traktowana jako wewnątrzwspólnotowa dostawa towarów?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost wyłącza wskazane dostawy z WDT; pytanie jest konkretne i przywołuje treść/odesłania przepisu."}}
+{"address": "VAT art. 135 ust. 1", "status": "ok"}
+{"address": "VAT art. 30b ust. 1", "status": "ok"}
+{"address": "VAT art. 149 ust. 2", "status": "ok"}
+{"address": "VAT art. 111 ust. 4", "status": "ok"}
+{"address": "VAT art. 138i ust. 7", "status": "ok"}
+{"address": "VAT art. 9 ust. 1", "status": "ok"}
+{"address": "VAT art. 146ei", "status": "ok"}
+{"address": "VAT art. 2a ust. 1", "status": "ok"}
+{"address": "VAT art. 28b ust. 1", "status": "ok"}
+{"address": "VAT art. 117", "status": "ok"}
+{"address": "VAT art. 47 ust. 4", "status": "ok"}
+{"address": "VAT art. 78", "status": "ok"}
+{"address": "VAT art. 60", "status": "ok"}
+{"address": "VAT art. 138ga ust. 1", "status": "ok"}
+{"address": "VAT art. 85", "status": "rejected_by_validator", "question": "Jaką stawkę procentową należy zastosować do wartości brutto dostawy (metoda 'w stu'), aby obliczyć kwotę podatku należnego od usług opodatkowanych stawką 22%, 7% lub 5%?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis podaje dokładnie stawki dla wskazanych stawek VAT; pytanie parafrazuje jego treść."}}
+{"address": "VAT art. 115 ust. 1", "status": "ok"}
+{"address": "VAT art. 111a ust. 3", "status": "ok"}
+{"address": "VAT art. 176", "status": "skip_by_generator"}
+{"address": "VAT art. 106e ust. 3", "status": "ok"}
+{"address": "VAT art. 145d", "status": "ok"}
+{"address": "VAT art. 98 ust. 1", "status": "ok"}
+{"address": "VAT art. 110c", "status": "ok"}
+{"address": "VAT art. 5 ust. 1", "status": "ok"}
+{"address": "VAT art. 109b ust. 5", "status": "ok"}
+{"address": "VAT art. 130a", "status": "ok"}
+{"address": "PIT art. 22g ust. 5", "status": "ok"}
+{"address": "PIT art. 22a ust. 1", "status": "ok"}
+{"address": "PIT art. 52l", "status": "ok"}
+{"address": "PIT art. 42f ust. 1", "status": "ok"}
+{"address": "PIT art. 45cf ust. 2", "status": "ok"}
+{"address": "PIT art. 11a ust. 2", "status": "ok"}
+{"address": "PIT art. 52j ust. 3", "status": "ok"}
+{"address": "PIT art. 23p ust. 5", "status": "ok"}
+{"address": "PIT art. 41b", "status": "ok"}
+{"address": "PIT art. 52zk ust. 2", "status": "ok"}
+{"address": "PIT art. 22p ust. 1", "status": "ok"}
+{"address": "PIT art. 23k ust. 1", "status": "ok"}
+{"address": "PIT art. 23c", "status": "ok"}
+{"address": "PIT art. 23z pkt 1a", "status": "ok"}
+{"address": "PIT art. 31d ust. 1", "first_question": "Czy płatnik, który pobrał od podatnika zryczałtowany podatek dochodowy w wysokości wyższej niż należna, może samodzielnie złożyć wniosek o stwierdzenie nadpłaty tego podatku?", "status": "filtered_leak", "question": "Czy płatnik, który pobrał od podatnika zryczałtowany podatek dochodowy w kwocie wyższej niż należna, ma możliwość ubiegania się o zwrot nadpłaconej kwoty poprzez wystąpienie do urzędu skarbowego?", "copied": "pobrał od podatnika zryczałtowany podatek dochodowy"}
+{"address": "PIT art. 23ze ust. 3", "status": "ok"}
+{"address": "PIT art. 52va ust. 1", "status": "ok"}
+{"address": "PIT art. 45a", "status": "ok"}
+{"address": "PIT art. 52x ust. 6", "status": "ok"}
+{"address": "PIT art. 34 ust. 2", "status": "rejected_by_validator", "question": "W jaki sposób organ rentowy powinien obliczać zaliczki na podatek od świadczeń emerytalno-rentowych wypłacanych w poszczególnych miesiącach roku?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Pytanie dotyczy sposobu obliczania zaliczek przez organ rentowy; zawiera niemal dosłowne sformułowanie przepisu."}}
+{"address": "PIT art. 24b ust. 4", "status": "ok"}
+{"address": "PIT art. 18", "status": "ok"}
+{"address": "PIT art. 52ud", "first_question": "Czy jednorazowe świadczenie pieniężne wypłacone za dany miesiąc w związku z sytuacją ekologiczną na rzece Odrze podlega opodatkowaniu podatkiem dochodowym od osób fizycznych?", "status": "ok"}
+{"address": "PIT art. 23i ust. 2", "first_question": "Jakie zasady ustalania przychodów i kosztów stosuje się, gdy po zakończeniu podstawowego okresu umowy leasingu finansujący przenosi na korzystającego własność gruntu będącego przedmiotem tej umowy albo oddaje mu ten grunt do dalszego używania?", "status": "ok"}
+{"address": "PIT art. 30ca ust. 14", "status": "ok"}
+{"address": "PIT art. 45ce ust. 3", "status": "ok"}
+{"address": "PIT art. 52g", "status": "ok"}
+{"address": "PIT art. 23b ust. 2", "first_question": "Czy jeśli leasingodawca w dniu zawarcia umowy leasingu korzysta ze zwolnienia podatkowego przysługującego np. na podstawie działania w specjalnej strefie ekonomicznej, umowa ta podlega standardowym zasadom opodatkowania leasingu, czy obowiązują tu inne, szczególne reguły?", "status": "ok"}
+{"address": "PIT art. 23j ust. 2", "status": "ok"}
+{"address": "PIT art. 2 ust. 1", "status": "ok"}
+{"address": "PIT art. 23l", "status": "ok"}
+{"address": "PIT art. 25c", "first_question": "Na jaki dzień powstaje obowiązek podatkowy w przypadku przychodów nieznajdujących pokrycia w ujawnionych źródłach lub pochodzących ze źródeł nieujawnionych?", "status": "ok"}
+{"address": "PIT art. 52zr", "status": "ok"}
+{"address": "PIT art. 52zo ust. 3", "status": "ok"}
+{"address": "PIT art. 52zp", "status": "ok"}
+{"address": "PIT art. 7a ust. 3", "status": "ok"}
+{"address": "PIT art. 39 ust. 2", "status": "ok"}
+{"address": "VAT art. 6", "status": "ok"}
+{"address": "PIT art. 24ba", "status": "ok"}
+{"address": "PIT art. 26g", "status": "ok"}
+{"address": "PIT art. 26hc ust. 4", "status": "ok"}
+{"address": "PIT art. 52uc", "status": "ok"}
+{"address": "PIT art. 52pa", "status": "ok"}
+{"address": "PIT art. 52w ust. 7", "status": "ok"}
+{"address": "PIT art. 10 ust. 3", "status": "ok"}
+{"address": "PIT art. 30f ust. 7c", "status": "rejected_by_validator", "question": "Czy przy ustalaniu dochodu zagranicznej jednostki kontrolowanej można uwzględniać inne ulgi i zwolnienia podatkowe przewidziane w ustawie o PIT, czy stosuje się tylko te wskazane w przepisach o CFC?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost wyłącza inne ulgi i zwolnienia; pytanie parafrazuje jego treść."}}
+{"address": "PIT art. 45 ust. 3c", "status": "ok"}
+{"address": "PIT art. 23g ust. 1", "status": "ok"}
+{"address": "PIT art. 30p ust. 1", "status": "ok"}
+{"address": "PIT art. 13", "status": "ok"}
+{"address": "PIT art. 15 ust. 1", "status": "ok"}
+{"address": "PIT art. 52zm", "status": "ok"}
+{"address": "PIT art. 6 ust. 4c", "status": "ok"}
+{"address": "PIT art. 8 ust. 1a", "status": "ok"}
+{"address": "PIT art. 52q ust. 2a", "status": "ok"}
+{"address": "PIT art. 52zf ust. 3", "status": "ok"}
+{"address": "PIT art. 26eb ust. 6", "status": "ok"}
+{"address": "PIT art. 52jc", "status": "ok"}
+{"address": "PIT art. 26h ust. 8", "status": "ok"}
+{"address": "PIT art. 52zd", "status": "ok"}
+{"address": "PIT art. 45c ust. 1", "status": "ok"}
+{"address": "PIT art. 52c ust. 1", "status": "ok"}
+{"address": "PIT art. 25f", "first_question": "Który organ i w jakiej formie ustala podatek od przychodów nieznajdujących pokrycia w ujawnionych źródłach lub pochodzących ze źródeł nieujawnionych?", "status": "ok"}
+{"address": "PIT art. 3 ust. 2d", "status": "ok"}
+{"address": "PIT art. 38 ust. 2", "status": "ok"}
+{"address": "PIT art. 26 ust. 13a", "status": "ok"}
+{"address": "PIT art. 25b ust. 4", "status": "ok"}
+{"address": "PIT art. 52d", "status": "ok"}
+{"address": "PIT art. 52ze", "status": "ok"}
+{"address": "PIT art. 35 ust. 1", "status": "ok"}
+{"address": "PIT art. 25e", "status": "ok"}
+{"address": "PIT art. 30i ust. 2", "status": "ok"}
+{"address": "PIT art. 42a ust. 1", "status": "ok"}
+{"address": "PIT art. 52f", "first_question": "Czy zasiłek macierzyński oraz podwyższenie uposażenia i zasiłku macierzyńskiego przyznane na podstawie ustawy z 24 lipca 2015 r. o zmianie ustawy o świadczeniach rodzinnych są zwolnione z podatku dochodowego?", "status": "ok"}
+{"address": "PIT art. 1a ust. 3", "status": "ok"}
+{"address": "PIT art. 21 ust. 1 pkt 40b", "status": "ok"}
+{"address": "PIT art. 52k ust. 1", "status": "ok"}
+{"address": "PIT art. 30e ust. 2", "status": "ok"}
+{"address": "PIT art. 30g ust. 18", "first_question": "Czy przeniesienie własności budynku na inny podmiot lub oddanie go w leasing bez uzasadnionych przyczyn ekonomicznych, w celu uniknięcia podatku od przychodów z budynków, pozwala uniknąć tego podatku, i czy podmiot przejmujący budynek musi rozpoznać z tego tytułu przychód z budynków?", "status": "ok"}
+{"address": "PIT art. 44 ust. 21", "status": "ok"}
+{"address": "PIT art. 23u", "first_question": "Czy przepisy o cenach transferowych dotyczące zasady ceny rynkowej i dokumentowania transakcji mają zastosowanie również do transakcji z podmiotem niepowiązanym, który ma siedzibę w kraju stosującym szkodliwą konkurencję podatkową (raju podatkowym), mimo że nie jest to transakcja kontrolowana?", "status": "ok"}
+{"address": "PIT art. 23m ust. 1", "status": "ok"}
+{"address": "PIT art. 23w ust. 1", "status": "ok"}
+{"address": "PIT art. 42g ust. 2", "status": "ok"}
+{"address": "PIT art. 52zc", "status": "ok"}
+{"address": "PIT art. 23zb ust. 3", "status": "ok"}
+{"address": "PIT art. 24a ust. 4e", "status": "ok"}
+{"address": "PIT art. 14 ust. 2 pkt 11", "status": "ok"}
+{"address": "PIT art. 42 ust. 6", "first_question": "Czy płatnik musi sporządzić i przekazać podatnikowi informację o wypłaconych należnościach, jeśli na podstawie umowy o unikaniu podwójnego opodatkowania nie był obowiązany do poboru zryczałtowanego podatku?", "status": "ok"}
+{"address": "PIT art. 22o ust. 1", "status": "skip_by_generator"}
+{"address": "PIT art. 42e ust. 5", "status": "ok"}
+{"address": "PIT art. 54 ust. 3", "status": "ok"}
+{"address": "PIT art. 12 ust. 2b", "status": "ok"}
+{"address": "PIT art. 22 ust. 9b", "status": "ok"}
+{"address": "PIT art. 30dd ust. 1", "status": "ok"}
+{"address": "PIT art. 26ea ust. 2", "first_question": "Czy ulga na robotyzację (lub inna preferencja, o której mowa w art. 26ea ust. 1) przysługuje podatnikowi także w roku następującym po roku rozpoczęcia działalności gospodarczej, jeśli jest mikro, małym lub średnim przedsiębiorcą w rozumieniu Prawa przedsiębiorców?", "status": "ok"}
+{"address": "PIT art. 31c ust. 2", "status": "ok"}
+{"address": "PIT art. 57 ust. 2", "status": "ok"}
+{"address": "PIT art. 5", "first_question": "Czy dla celów podatku dochodowego od osób fizycznych za terytorium Polski uznaje się także wyłączną strefę ekonomiczną na morzu, w której Polska wykonuje prawa do badania i eksploatacji dna morskiego i jego zasobów naturalnych?", "status": "ok"}
+{"address": "PIT art. 22b ust. 1", "status": "ok"}
+{"address": "PIT art. 52zj", "status": "ok"}
+{"address": "PIT art. 14c ust. 8", "status": "ok"}
+{"address": "PIT art. 52zi", "status": "ok"}
+{"address": "PIT art. 22m ust. 4", "status": "ok"}
+{"address": "PIT art. 5a pkt 19a", "status": "ok"}
+{"address": "PIT art. 30dc ust. 2", "status": "ok"}
+{"address": "PIT art. 30m ust. 5", "status": "skip_by_generator"}
+{"address": "PIT art. 23f ust. 3", "status": "ok"}
+{"address": "PIT art. 52zg", "status": "ok"}
+{"address": "PIT art. 30df ust. 1", "status": "ok"}
+{"address": "PIT art. 22j ust. 2", "status": "ok"}
+{"address": "PIT art. 52za ust. 1", "status": "ok"}
+{"address": "PIT art. 23zc ust. 1", "status": "ok"}
+{"address": "PIT art. 30h ust. 4", "status": "ok"}
+{"address": "PIT art. 27f ust. 2c", "status": "ok"}
+{"address": "PIT art. 22e ust. 2", "status": "ok"}
+{"address": "PIT art. 52zt", "first_question": "Czy równoważnik pieniężny za brak lokalu mieszkalnego wypłacany funkcjonariuszom Służby Ochrony Państwa jest zwolniony z podatku dochodowego?", "status": "ok"}
+{"address": "PIT art. 41d ust. 2", "first_question": "W jakiej formie należy złożyć wniosek o wydanie opinii o stosowaniu preferencji podatkowych oraz jego uzupełnienie o dodatkowe fakty i dokumentację?", "status": "ok"}
+{"address": "PIT art. 52u ust. 2", "status": "ok"}
+{"address": "PIT art. 22f ust. 1", "status": "ok"}
+{"address": "PIT art. 22ł ust. 2", "status": "ok"}
+{"address": "PIT art. 26gb ust. 10", "status": "ok"}
+{"address": "PIT art. 30j ust. 2", "status": "ok"}
+{"address": "PIT art. 6a ust. 1", "first_question": "Czy można złożyć wniosek o wspólne opodatkowanie małżonków, jeśli małżonek podatnika zmarł w trakcie roku podatkowego albo po jego zakończeniu, ale przed złożeniem zeznania?", "status": "ok"}
+{"address": "Ordynacja art. 119zfza", "status": "skip_by_generator"}
+{"address": "PIT art. 32 ust. 3", "status": "ok"}
+{"address": "PIT art. 22h ust. 3a", "status": "ok"}
+{"address": "PIT art. 22c", "status": "ok"}
+{"address": "PIT art. 23v ust. 2", "status": "ok"}
+{"address": "PIT art. 44f ust. 16", "status": "ok"}
+{"address": "Ordynacja art. 19 § 3", "status": "ok"}
+{"address": "Ordynacja art. 291a § 3", "status": "ok"}
+{"address": "Ordynacja art. 70a § 1", "status": "ok"}
+{"address": "Ordynacja art. 130 § 3", "status": "ok"}
+{"address": "Ordynacja art. 119zfe § 2", "status": "ok"}
+{"address": "Ordynacja art. 119zfd § 2", "status": "ok"}
+{"address": "Ordynacja art. 119zs § 1", "status": "ok"}
+{"address": "Ordynacja art. 48 § 1", "status": "ok"}
+{"address": "Ordynacja art. 117c", "status": "ok"}
+{"address": "Ordynacja art. 239b § 1", "status": "ok"}
+{"address": "Ordynacja art. 46i", "status": "ok"}
+{"address": "Ordynacja art. 14c § 1", "status": "ok"}
+{"address": "Ordynacja art. 176", "status": "ok"}
+{"address": "Ordynacja art. 119h § 2", "status": "ok"}
+{"address": "Ordynacja art. 119s § 4", "status": "ok"}
+{"address": "Ordynacja art. 20zz § 2", "status": "ok"}
+{"address": "Ordynacja art. 119zda § 1", "status": "ok"}
+{"address": "Ordynacja art. 274 § 4", "status": "ok"}
+{"address": "Ordynacja art. 119zff § 8", "status": "ok"}
+{"address": "Ordynacja art. 33d § 4", "status": "ok"}
+{"address": "Ordynacja art. 20", "status": "ok"}
+{"address": "Ordynacja art. 297g", "status": "rejected_by_validator", "question": "Czy informacje objęte tajemnicą przedsiębiorstwa, przekazane przez inwestora przy zawieraniu porozumienia inwestycyjnego, mogą być udostępnione innym organom niż te wymienione w przepisach o porozumieniu inwestycyjnym, np. dyrektorowi Krajowej Informacji Skarbowej lub organom samorządowym?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost określa zamknięty krąg organów, w tym KIS i organy samorządowe w określonych zakresach."}}
+{"address": "Ordynacja art. 73 § 2", "status": "rejected_by_validator", "question": "Z jakim dniem powstaje nadpłata podatku dochodowego u podatnika rozliczającego się rocznie - czy decyduje dzień złożenia zeznania rocznego, czy dzień zapłaty podatku?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost wskazuje dzień złożenia zeznania rocznego; pytanie dotyczy tej regulacji i parafrazuje jej treść."}}
+{"address": "Ordynacja art. 93a § 1", "status": "ok"}
+{"address": "Ordynacja art. 75 § 3", "status": "ok"}
+{"address": "Ordynacja art. 297c § 1", "status": "ok"}
+{"address": "Ordynacja art. 100 § 2", "status": "ok"}
+{"address": "Ordynacja art. 287 § 1", "status": "ok"}
+{"address": "Ordynacja art. 80a § 1", "status": "ok"}
+{"address": "Ordynacja art. 14zi § 1", "status": "rejected_by_validator", "question": "Czy organ, który otrzymał opinię w sprawie opodatkowania wyrównawczego, musi ją przekazać innym organom podatkowym właściwym w zakresie spraw objętych tą opinią, i czy dotyczy to także informacji o dacie jej doręczenia?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost stanowi o niezwłocznym przekazaniu opinii i informacji o dacie doręczenia właściwym organom; pytanie odtwarza jego treść."}}
+{"address": "Ordynacja art. 23a", "status": "ok"}
+{"address": "Ordynacja art. 14za § 6", "status": "ok"}
+{"address": "Ordynacja art. 306g § 1", "status": "ok"}
+{"address": "Ordynacja art. 20zv § 3", "status": "ok"}
+{"address": "Ordynacja art. 289 § 1", "status": "ok"}
+{"address": "Ordynacja art. 119zu § 1", "status": "ok"}
+{"address": "Ordynacja art. 326 § 1", "status": "ok"}
+{"address": "Ordynacja art. 50", "status": "ok"}
+{"address": "Ordynacja art. 193 § 6", "status": "rejected_by_validator", "question": "Czy urząd skarbowy, uznając moje księgi podatkowe za nierzetelne lub wadliwe, musi wskazać, za jaki okres i w jakim zakresie nie uznaje ich za dowód, czy może odrzucić całość ksiąg bez takiego sprecyzowania?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost wymaga wskazania okresu i części; pytanie parafrazuje jego treść."}}
+{"address": "Ordynacja art. 119b § 1", "status": "ok"}
+{"address": "Ordynacja art. 20zn § 1", "status": "ok"}
+{"address": "Ordynacja art. 331 § 1", "status": "ok"}
+{"address": "Ordynacja art. 55 § 2", "status": "ok"}
+{"address": "Ordynacja art. 285a § 1", "status": "ok"}
+{"address": "Ordynacja art. 76c", "status": "ok"}
+{"address": "Ordynacja art. 259b", "status": "ok"}
+{"address": "Ordynacja art. 297d", "status": "ok"}
+{"address": "Ordynacja art. 193a § 2", "status": "ok"}
+{"address": "Ordynacja art. 62b § 1", "status": "ok"}
+{"address": "Ordynacja art. 115 § 4", "status": "ok"}
+{"address": "Ordynacja art. 14zu", "status": "ok"}
+{"address": "Ordynacja art. 32 § 2", "status": "ok"}
+{"address": "Ordynacja art. 119zo § 8", "status": "ok"}
+{"address": "Ordynacja art. 119zzi", "status": "ok"}
+{"address": "Ordynacja art. 124", "status": "ok"}
+{"address": "Ordynacja art. 150 § 2", "status": "ok"}
+{"address": "Ordynacja art. 170 § 1a", "status": "ok"}
+{"address": "Ordynacja art. 305r § 1", "status": "ok"}
+{"address": "Ordynacja art. 119zn § 1", "status": "ok"}
+{"address": "Ordynacja art. 233 § 2", "first_question": "Czy organ odwoławczy, rozpatrując odwołanie od decyzji podatkowej, może uchylić decyzję i przekazać sprawę do ponownego rozpatrzenia przez urząd pierwszej instancji, jeśli konieczne jest przeprowadzenie obszernego postępowania dowodowego, i czy musi wskazać, jakie okoliczności mają zostać wtedy zbadane?", "status": "ok"}
+{"address": "Ordynacja art. 7a § 1", "status": "ok"}
+{"address": "Ordynacja art. 133a § 2", "status": "ok"}
+{"address": "Ordynacja art. 212", "status": "rejected_by_validator", "question": "Od jakiego momentu organ podatkowy jest związany wydaną przez siebie decyzją – od dnia jej wydania czy od dnia doręczenia podatnikowi, i czy inaczej jest w przypadku decyzji o umorzeniu zaległości podatkowej z urzędu?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost rozstrzyga oba warianty; pytanie ujawnia oznaczenie art. 67d."}}
+{"address": "Ordynacja art. 46g", "status": "ok"}
+{"address": "Ordynacja art. 112 § 1", "status": "ok"}
+{"address": "Ordynacja art. 119zl § 2", "status": "rejected_by_validator", "question": "Czy urząd skarbowy może dokonać czynności związanych z blokadą rachunku bankowego podmiotu kwalifikowanego (np. przedłużenie blokady lub przekazanie zablokowanych środków na rachunek urzędu) w sobotę albo w dzień ustawowo wolny od pracy, czy musi to zrobić w dzień roboczy?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost stanowi o wykonywaniu wskazanych czynności także w soboty i dni wolne; pytanie przywołuje jego treść."}}
+{"address": "Ordynacja art. 146a § 1", "status": "ok"}
+{"address": "Ordynacja art. 240 § 3", "status": "rejected_by_validator", "question": "Czy można wznowić postępowanie podatkowe z powodu fałszywych dowodów lub przestępstwa, jeśli nie da się już wszcząć sprawy karnej przed sądem z powodu przedawnienia?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost przewiduje wznowienie mimo niemożności wszczęcia postępowania sądowego z upływu czasu; pytanie parafrazuje jego treść."}}
+{"address": "Ordynacja art. 20v", "status": "ok"}
+{"address": "Ordynacja art. 20zzc § 1", "status": "ok"}
+{"address": "Ordynacja art. 14zs § 1", "status": "ok"}
+{"address": "Ordynacja art. 114 § 2", "status": "ok"}
+{"address": "Ordynacja art. 138n § 1", "status": "ok"}
+{"address": "Ordynacja art. 52a", "status": "ok"}
+{"address": "Ordynacja art. 86f § 3", "status": "ok"}
+{"address": "Ordynacja art. 58c § 1", "status": "ok"}
+{"address": "Ordynacja art. 49 § 2", "status": "ok"}
+{"address": "Ordynacja art. 85", "status": "skip_by_generator"}
+{"address": "Ordynacja art. 20zb", "status": "ok"}
+{"address": "Ordynacja art. 35 § 2", "status": "ok"}
+{"address": "Ordynacja art. 53 § 5", "status": "ok"}
+{"address": "Ordynacja art. 33g", "status": "ok"}
+{"address": "Ordynacja art. 336", "status": "ok"}
+{"address": "Ordynacja art. 173 § 2", "status": "ok"}
+{"address": "Ordynacja art. 131 § 1", "status": "ok"}
+{"address": "Ordynacja art. 119zfn", "status": "ok"}
+{"address": "Ordynacja art. 138a § 4", "status": "ok"}
+{"address": "Ordynacja art. 14zk", "status": "ok"}
+{"address": "Ordynacja art. 23 § 1", "status": "ok"}
+{"address": "Ordynacja art. 119zw § 4", "status": "ok"}
+{"address": "Ordynacja art. 14zn", "first_question": "Czy do postępowania o wydanie opinii w sprawie opodatkowania wyrównawczego stosuje się ogólne zasady postępowania podatkowego, takie jak zasada legalizmu, terminy i sposób doręczeń, czy też obowiązują tu odrębne, szczególne regulacje?", "status": "ok"}
+{"address": "Ordynacja art. 82 § 1c", "status": "ok"}
+{"address": "Ordynacja art. 20zu § 2", "status": "ok"}
+{"address": "Ordynacja art. 291 § 1", "status": "ok"}
+{"address": "Ordynacja art. 290a", "status": "skip_by_generator"}
+{"address": "Ordynacja art. 62 § 1", "status": "ok"}
+{"address": "Ordynacja art. 46f", "first_question": "Ile wynosi opłata za wydanie wypisu z rejestru zastawów skarbowych lub zaświadczenia z tego rejestru?", "status": "rejected_by_validator", "question": "Jaką opłatę trzeba uiścić, aby otrzymać dokument potwierdzający wpis zastawu skarbowego, czyli odpis lub zaświadczenie z odpowiedniego rejestru?", "validator": {"answers": false, "specific": true, "leaks": false, "note": "Przepis wskazuje, że opłata zostanie określona w rozporządzeniu, ale nie podaje jej wysokości."}}
+{"address": "Ordynacja art. 60 § 1c", "first_question": "Jaką klauzulę musi zawierać oświadczenie podatnika o dokonaniu zapłaty podatku w formie polecenia zapłaty, składane pod rygorem odpowiedzialności karnej za fałszywe oświadczenie, i czy organ musi dodatkowo pouczać o tej odpowiedzialności?", "status": "ok"}
+{"address": "Ordynacja art. 119zzf § 1", "status": "ok"}
+{"address": "Ordynacja art. 67a § 1", "first_question": "Czy i na jakiej podstawie podatnik może złożyć wniosek o rozłożenie na raty zaległości podatkowej wraz z odsetkami za zwłokę albo o umorzenie takiej zaległości, jeśli znajduje się w trudnej sytuacji finansowej?", "status": "ok"}
+{"address": "Ordynacja art. 70e § 2", "first_question": "Od kiedy do kiedy zawiesza się bieg terminu przedawnienia podatku w związku ze złożeniem wniosku o wydanie decyzji określającej warunki cofnięcia skutków unikania opodatkowania, i co się dzieje z tym zawieszeniem, jeśli na decyzję wniesiono skargę do sądu administracyjnego?", "status": "ok"}
+{"address": "Ordynacja art. 14g § 1", "status": "ok"}
+{"address": "Ordynacja art. 117a § 1", "status": "ok"}
+{"address": "Ordynacja art. 111 § 4", "status": "ok"}
+{"address": "Ordynacja art. 14k § 1", "status": "ok"}
+{"address": "Ordynacja art. 270b", "status": "skip_by_generator"}
+{"address": "Ordynacja art. 80 § 2", "status": "ok"}
+{"address": "Ordynacja art. 272", "status": "ok"}
+{"address": "Ordynacja art. 110 § 1", "status": "ok"}
+{"address": "Ordynacja art. 150a", "status": "ok"}
+{"address": "Ordynacja art. 78a", "status": "ok"}

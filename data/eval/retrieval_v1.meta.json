@@ -1,0 +1,66 @@
+{
+ "version": "v1",
+ "created": "2026-10-23",
+ "seed": 20261023,
+ "quota": {
+  "vat": 100,
+  "pit": 80,
+  "op": 70
+ },
+ "kept_generated": {
+  "vat": 100,
+  "pit": 80,
+  "op": 70
+ },
+ "models": {
+  "generator": [
+   "claude-sonnet-5",
+   "gpt-5.6-terra"
+  ],
+  "validator": [
+   "gpt-5.6-terra",
+   "gemini-3.8-flash",
+   "gpt-5.6-luna"
+  ],
+  "paraphraser": [
+   "gemini-3.8-flash",
+   "gpt-5.6-luna"
+  ]
+ },
+ "corpus": {
+  "vat": {
+   "eli": "DU/2026/1263",
+   "sha256": "df1e1594382b430c4ae8b03004407249d0abd69678e6e6523fb438f083adaac0",
+   "state_date": "2026-08-26"
+  },
+  "pit": {
+   "eli": "DU/2026/592",
+   "sha256": "d26b883de6c8665244be50852d35a3b34400c0fa58606ab03563da0d74dc1dd2",
+   "state_date": "2026-04-01"
+  },
+  "op": {
+   "eli": "DU/2026/622",
+   "sha256": "e0ac56a7478bd0737ed5b0b47528515483efa97fdf94195706fd58c4c5d20280",
+   "state_date": "2026-04-21"
+  }
+ },
+ "prompts_sha1": {
+  "gen": "23e9af3027",
+  "val": "a978acdbdb",
+  "para": "a3cfca8967"
+ },
+ "postfilter": {
+  "rule": "usunięte pytania z artykułów w rozdziałach przejściowych/epizodycznych/końcowych",
+  "raw": 353,
+  "kept": 290,
+  "kept_by_act": {
+   "vat/generated": 82,
+   "vat/paraphrased": 37,
+   "pit/generated": 57,
+   "pit/paraphrased": 24,
+   "op/generated": 68,
+   "op/paraphrased": 22
+  }
+ },
+ "frozen": true
+}

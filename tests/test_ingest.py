@@ -209,3 +209,8 @@ def test_zalaczniki_nie_doklejone_do_ostatniego_artykulu(vat: Act) -> None:
 )
 def test_join_lines(a: str, b: str, out: str) -> None:
     assert join_lines(a, b) == out
+
+
+def test_tytul_dzialu_gdy_linia_zaczyna_sie_od_spacji(vat: Act) -> None:
+    # „DZIAŁ XIII” + tytuł w linii, której pierwszy span to niepogrubiona spacja
+    assert vat.article("146ea").path[0].startswith("DZIAŁ XIII Zmiany w przepisach obowiązujących")

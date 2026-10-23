@@ -1,0 +1,400 @@
+{"address": "VAT art. 130 ust. 2", "status": "skip_by_generator"}
+{"address": "VAT art. 152 ust. 2", "status": "filtered_leak", "question": "Czy urząd skarbowy może wykreślić firmę z rejestru VAT, jeśli w wymaganym terminie nie zostanie ustanowiony przedstawiciel podatkowy?"}
+{"address": "VAT art. 52 ust. 2", "status": "ok"}
+{"address": "VAT art. 97 ust. 3", "status": "ok"}
+{"address": "VAT art. 28p ust. 3", "status": "ok"}
+{"address": "VAT art. 106j ust. 1", "status": "ok"}
+{"address": "VAT art. 108c ust. 2", "status": "filtered_leak", "question": "Czy można uniknąć podwyższonej stawki odsetek za zwłokę od zaległości w VAT, jeśli co najmniej 95% podatku naliczonego wykazanego w deklaracji pochodzi z faktur zapłaconych z zastosowaniem mechanizmu podzielonej płatności?"}
+{"address": "VAT art. 134c ust. 3", "status": "ok"}
+{"address": "VAT art. 22 ust. 1 pkt 5", "status": "ok"}
+{"address": "VAT art. 106m ust. 5", "status": "ok"}
+{"address": "VAT art. 106nh ust. 2", "status": "filtered_leak", "question": "W jakim terminie po zakończeniu niedostępności Krajowego Systemu e-Faktur należy przesłać do KSeF faktury wystawione w czasie tej niedostępności, aby otrzymały numer identyfikujący?"}
+{"address": "VAT art. 108d ust. 1", "status": "ok"}
+{"address": "VAT art. 138c ust. 2", "status": "filtered_leak", "question": "Jakie warunki musi spełnić podmiot, aby mógł zostać ustanowiony przez podatnika pośrednikiem rozliczającym VAT od sprzedaży na odległość towarów importowanych?"}
+{"address": "VAT art. 133a ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 106nda ust. 15", "status": "ok"}
+{"address": "VAT art. 77 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 57 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 13g", "status": "val_error:LLMError"}
+{"address": "VAT art. 28l", "status": "val_error:LLMError"}
+{"address": "VAT art. 102 ust. 1", "status": "skip_by_generator"}
+{"address": "VAT art. 134a ust. 1", "status": "ok"}
+{"address": "VAT art. 146d ust. 2", "status": "ok"}
+{"address": "VAT art. 170 ust. 1", "status": "ok"}
+{"address": "VAT art. 28i ust. 2", "status": "ok"}
+{"address": "VAT art. 106p", "status": "filtered_leak", "question": "Czy dla niektórych rodzajów towarów lub usług może obowiązywać inny sposób przeliczania na złote kwot w walutach obcych wykazanych na fakturze niż standardowa zasada przeliczania kursem z dnia poprzedzającego powstanie obowiązku podatkowego?"}
+{"address": "VAT art. 33b ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 130d ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 138g ust. 8", "status": "ok"}
+{"address": "VAT art. 31a ust. 1", "status": "ok"}
+{"address": "VAT art. 138h ust. 2", "status": "ok"}
+{"address": "VAT art. 110", "status": "val_error:LLMError"}
+{"address": "VAT art. 99 ust. 4a", "status": "val_error:LLMError"}
+{"address": "VAT art. 101", "status": "val_error:LLMError"}
+{"address": "VAT art. 62 ust. 9", "status": "val_error:LLMError"}
+{"address": "VAT art. 146ee ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 151 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 21 ust. 4", "status": "val_error:LLMError"}
+{"address": "VAT art. 91 ust. 10", "status": "val_error:LLMError"}
+{"address": "VAT art. 30c ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 160 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 64 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 110a", "status": "skip_by_generator"}
+{"address": "VAT art. 150", "status": "filtered_leak", "question": "Czy dokument potwierdzający wywóz towaru poza terytorium kraju, otrzymany już po 30 kwietnia 2004 r., uprawnia do korekty podatku należnego od tej sprzedaży i w jakim maksymalnym terminie taka korekta musi zostać dokonana?"}
+{"address": "VAT art. 108g ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 13j", "status": "val_error:LLMError"}
+{"address": "VAT art. 37 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 90a ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 68", "status": "val_error:LLMError"}
+{"address": "VAT art. 14 ust. 9a", "status": "val_error:LLMError"}
+{"address": "VAT art. 165", "status": "skip_by_generator"}
+{"address": "VAT art. 136 ust. 2", "status": "filtered_leak", "question": "Czy uproszczenie w transakcji trójstronnej dotyczące faktury wystawianej przez drugiego w kolejności podatnika można zastosować, gdy ostatnim odbiorcą towaru jest osoba prawna niebędąca podatnikiem VAT, ale zarejestrowana na potrzeby transakcji wewnątrzwspólnotowych w kraju, do którego towar jest dostarczany?"}
+{"address": "VAT art. 166", "status": "val_error:LLMError"}
+{"address": "VAT art. 8b ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 8d ust. 3", "status": "val_error:LLMError"}
+{"address": "VAT art. 163 ust. 1", "status": "skip_by_generator"}
+{"address": "VAT art. 134 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 43 ust. 1 pkt 19a", "status": "filtered_leak", "question": "Czy mogę zastosować zwolnienie z VAT na usługi medyczne, które nabyłem we własnym imieniu, ale na rzecz pacjenta, od podmiotu wykonującego działalność leczniczą lub świadczącego usługi medyczne, mimo że sam nie jestem podmiotem leczniczym?"}
+{"address": "VAT art. 145g", "status": "val_error:LLMError"}
+{"address": "VAT art. 42b ust. 1a", "status": "filtered_leak", "question": "Czy aby złożyć wniosek o wydanie Wiążącej Informacji Stawkowej (WIS), trzeba mieć konto w e-Urzędzie Skarbowym z podanym adresem e-mail lub numerem telefonu do kontaktu?"}
+{"address": "VAT art. 146ed", "status": "val_error:LLMError"}
+{"address": "VAT art. 127 ust. 11b", "status": "val_error:LLMError"}
+{"address": "VAT art. 49 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 100 ust. 12", "status": "val_error:LLMError"}
+{"address": "VAT art. 133 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 106o", "status": "val_error:LLMError"}
+{"address": "VAT art. 2 pkt 33", "status": "val_error:LLMError"}
+{"address": "VAT art. 106ni ust. 4", "status": "val_error:LLMError"}
+{"address": "VAT art. 38 ust. 2", "status": "filtered_leak", "question": "Czy naczelnik urzędu celno-skarbowego może określić podstawę opodatkowania VAT z importu towarów, jeśli z powodu przedawnienia nie można już powiadomić dłużnika o długu celnym, a od powstania obowiązku podatkowego nie minęło jeszcze 5 lat?"}
+{"address": "VAT art. 89a ust. 1a", "status": "val_error:LLMError"}
+{"address": "VAT art. 130ca ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 28c ust. 3", "status": "val_error:LLMError"}
+{"address": "VAT art. 106na ust. 4", "status": "val_error:LLMError"}
+{"address": "VAT art. 146g ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 112aa ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 138e ust. 6", "status": "val_error:LLMError"}
+{"address": "VAT art. 146 ust. 4", "status": "val_error:LLMError"}
+{"address": "VAT art. 7a ust. 1", "status": "filtered_leak", "question": "Czy podatnik prowadzący platformę internetową, za pomocą której ułatwia sprzedaż na odległość towarów importowanych w przesyłkach o wartości nieprzekraczającej równowartości 150 euro, jest traktowany jak podmiot, który sam otrzymał i dostarczył te towary?"}
+{"address": "VAT art. 10 ust. 7", "status": "val_error:LLMError"}
+{"address": "VAT art. 146ea", "status": "val_error:LLMError"}
+{"address": "VAT art. 39a", "status": "filtered_leak", "question": "Który organ podatkowy jest właściwy do orzekania o odpowiedzialności osoby trzeciej za zaległości podatnika w podatku VAT z tytułu importu towarów?"}
+{"address": "VAT art. 127a ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 28f ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 79", "status": "val_error:LLMError"}
+{"address": "VAT art. 3 ust. 6", "status": "val_error:LLMError"}
+{"address": "VAT art. 146da ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 13k ust. 4", "status": "filtered_leak", "question": "Jeśli towary przemieszczone do magazynu typu call-off stock zostały skradzione lub zniszczone, w którym dniu uznaje się, że przestały być spełnione warunki stosowania tej procedury - i co w sytuacji, gdy nie można ustalić dokładnej daty utraty towaru?"}
+{"address": "VAT art. 106c", "status": "val_error:LLMError"}
+{"address": "VAT art. 145c", "status": "val_error:LLMError"}
+{"address": "VAT art. 108e", "status": "val_error:LLMError"}
+{"address": "VAT art. 106r pkt 3", "status": "val_error:LLMError"}
+{"address": "VAT art. 106ga ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 148", "status": "val_error:LLMError"}
+{"address": "VAT art. 76", "status": "filtered_leak", "question": "Czy przywóz paszy i ściółki dla zwierząt transportowanych z państwa trzeciego do Polski, znajdujących się w środkach transportu wykorzystywanych do przewozu tych zwierząt, jest zwolniony z VAT importowego?"}
+{"address": "VAT art. 28j ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 145k ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 113b ust. 7", "status": "val_error:LLMError"}
+{"address": "VAT art. 31b ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 13l ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 90 ust. 6", "status": "val_error:LLMError"}
+{"address": "VAT art. 104 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 173", "status": "val_error:LLMError"}
+{"address": "VAT art. 8c ust. 7", "status": "val_error:LLMError"}
+{"address": "VAT art. 110e", "status": "val_error:LLMError"}
+{"address": "VAT art. 153 ust. 2", "status": "filtered_leak", "question": "Czy przepisy ustawy o VAT dotyczące przekształcenia spółdzielczego lokatorskiego prawa do lokalu mieszkalnego stosuje się, jeśli to prawo zostało ustanowione i lokal zasiedlony jeszcze przed 1 maja 2004 r.?"}
+{"address": "VAT art. 8e", "status": "val_error:LLMError"}
+{"address": "VAT art. 106nha", "status": "filtered_leak", "question": "Jeśli wystawiłem fakturę w okresie awarii Krajowego Systemu e-Faktur, ale zanim ją wysłałem do KSeF, pojawił się komunikat o awarii systemu - co powinienem zrobić z tą faktura, w zależności od tego, czy jest to komunikat o wystąpieniu awarii czy o jej zakończeniu?"}
+{"address": "VAT art. 172", "status": "val_error:LLMError"}
+{"address": "VAT art. 32 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 145i ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 42 ust. 9", "status": "val_error:LLMError"}
+{"address": "VAT art. 80 ust. 2", "status": "filtered_leak", "question": "Czy cudzoziemiec przedstawiciel placówki dyplomatycznej może skorzystać ze zwolnienia z VAT przy odstąpieniu pojazdu silnikowego, jeśli nie zachował wymaganego terminu z powodu przesiedlenia w celu podjęcia pracy w innym państwie, a przebywał w Polsce ponad 2 lata?"}
+{"address": "VAT art. 28o", "status": "skip_by_generator"}
+{"address": "VAT art. 92 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 119 ust. 8", "status": "filtered_leak", "question": "Jak opodatkować usługę turystyczną VAT marża, jeśli nabywane usługi dla bezpośredniej korzyści turysty są wykonywane częściowo na terytorium UE, a częściowo poza nią - czy całość można objąć stawką 0%?"}
+{"address": "VAT art. 30a ust. 2b", "status": "val_error:LLMError"}
+{"address": "VAT art. 16", "status": "val_error:LLMError"}
+{"address": "VAT art. 129 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 146j", "status": "val_error:LLMError"}
+{"address": "VAT art. 174", "status": "val_error:LLMError"}
+{"address": "VAT art. 69", "status": "val_error:LLMError"}
+{"address": "VAT art. 112b ust. 3", "status": "val_error:LLMError"}
+{"address": "VAT art. 158", "status": "skip_by_generator"}
+{"address": "VAT art. 66", "status": "val_error:LLMError"}
+{"address": "VAT art. 33 ust. 5", "status": "val_error:LLMError"}
+{"address": "VAT art. 146eg", "status": "val_error:LLMError"}
+{"address": "VAT art. 121 ust. 2", "status": "filtered_leak", "question": "Czy złota moneta ujęta w corocznym wykazie publikowanym w serii C Dziennika Urzędowego UE automatycznie spełnia warunki uznania jej za złoto inwestycyjne przez cały ten rok, czy trzeba to weryfikować na bieżąco przy każdej transakcji?"}
+{"address": "VAT art. 26 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 28q", "status": "val_error:LLMError"}
+{"address": "VAT art. 11 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 34 ust. 1a", "status": "val_error:LLMError"}
+{"address": "VAT art. 58 ust. 2", "status": "val_error:LLMError"}
+{"address": "VAT art. 28e", "status": "val_error:LLMError"}
+{"address": "VAT art. 138i ust. 7", "status": "val_error:LLMError"}
+{"address": "VAT art. 90c ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 30b ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 13 ust. 8", "status": "val_error:LLMError"}
+{"address": "VAT art. 135 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 149 ust. 2", "status": "filtered_leak", "question": "Jeśli podatnik otrzymał dokument potwierdzający wywóz towaru poza terytorium kraju już po 30 kwietnia 2004 r., w rozliczeniu za jaki okres może skorygować podatek należny od tej sprzedaży?"}
+{"address": "VAT art. 28b ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 146ei", "status": "val_error:LLMError"}
+{"address": "VAT art. 111 ust. 4", "status": "val_error:LLMError"}
+{"address": "VAT art. 2a ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 78", "status": "val_error:LLMError"}
+{"address": "VAT art. 60", "status": "val_error:LLMError"}
+{"address": "VAT art. 117", "status": "val_error:LLMError"}
+{"address": "VAT art. 138ga ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 47 ust. 4", "status": "val_error:LLMError"}
+{"address": "VAT art. 9 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 115 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 111a ust. 3", "status": "val_error:LLMError"}
+{"address": "VAT art. 85", "status": "val_error:LLMError"}
+{"address": "VAT art. 106e ust. 3", "status": "val_error:LLMError"}
+{"address": "VAT art. 130a", "status": "val_error:LLMError"}
+{"address": "VAT art. 176", "status": "skip_by_generator"}
+{"address": "VAT art. 6", "status": "val_error:LLMError"}
+{"address": "VAT art. 145d", "status": "val_error:LLMError"}
+{"address": "VAT art. 110c", "status": "val_error:LLMError"}
+{"address": "VAT art. 5 ust. 1", "status": "val_error:LLMError"}
+{"address": "VAT art. 109b ust. 5", "status": "val_error:LLMError"}
+{"address": "VAT art. 98 ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 22g ust. 5", "status": "val_error:LLMError"}
+{"address": "PIT art. 23g ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 22a ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 42f ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 23p ust. 5", "status": "val_error:LLMError"}
+{"address": "PIT art. 52l", "status": "val_error:LLMError"}
+{"address": "PIT art. 11a ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 52j ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 45cf ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 41b", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zk ust. 2", "status": "filtered_leak", "question": "Czy koszty poniesione na nieodpłatne świadczenia pomocowe dla Ukrainy w związku z działaniami wojennymi, przekazane w 2023 roku na rzecz podmiotów uprawnionych do takiej pomocy, mogą być zaliczone do kosztów uzyskania przychodów, jeśli wcześniej nie zostały rozliczone w kosztach w inny sposób, np. przez odpisy amortyzacyjne?"}
+{"address": "PIT art. 23c", "status": "val_error:LLMError"}
+{"address": "PIT art. 23k ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 22p ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 31d ust. 1", "status": "filtered_leak", "question": "Czy płatnik, który pobrał od podatnika zryczałtowany podatek dochodowy w zbyt wysokiej kwocie lub mimo że nie powinien go pobierać, może sam złożyć wniosek o stwierdzenie nadpłaty tego podatku?"}
+{"address": "PIT art. 23z pkt 1a", "status": "val_error:LLMError"}
+{"address": "PIT art. 34 ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 23ze ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 45a", "status": "filtered_leak", "question": "Który organ przejmuje obowiązki naczelnika urzędu skarbowego w zakresie przekazywania informacji o dochodach (PIT-11) oraz załatwiania spraw podatników, jeśli jest to uzasadnione ochroną informacji niejawnych i bezpieczeństwem państwa?"}
+{"address": "PIT art. 52x ust. 6", "status": "val_error:LLMError"}
+{"address": "PIT art. 52va ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 18", "status": "val_error:LLMError"}
+{"address": "PIT art. 23i ust. 2", "status": "filtered_leak", "question": "Jak ustalić przychody i koszty, jeśli po zakończeniu podstawowego okresu umowy leasingu finansujący przenosi na korzystającego własność gruntu, który był przedmiotem tej umowy, albo oddaje mu ten grunt do dalszego używania?"}
+{"address": "PIT art. 23b ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 52ud", "status": "filtered_leak", "question": "Czy jednorazowe świadczenie pieniężne wypłacone za dany miesiąc w związku z sytuacją ekologiczną na rzece Odrze trzeba wykazać jako dochód do opodatkowania PIT?"}
+{"address": "PIT art. 24b ust. 4", "status": "val_error:LLMError"}
+{"address": "PIT art. 45ce ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 30ca ust. 14", "status": "val_error:LLMError"}
+{"address": "PIT art. 25c", "status": "filtered_leak", "question": "Kiedy powstaje obowiązek podatkowy w przypadku przychodów nieznajdujących pokrycia w ujawnionych źródłach lub pochodzących ze źródeł nieujawnionych?"}
+{"address": "PIT art. 52g", "status": "val_error:LLMError"}
+{"address": "PIT art. 23j ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 23l", "status": "val_error:LLMError"}
+{"address": "PIT art. 2 ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zr", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zo ust. 3", "status": "filtered_leak", "question": "Czy można odliczyć od dochodu darowizny rzeczy lub praw majątkowych, jeśli koszty ich wytworzenia lub cena nabycia zostały już wcześniej zaliczone do kosztów uzyskania przychodów?"}
+{"address": "PIT art. 52zp", "status": "val_error:LLMError"}
+{"address": "PIT art. 7a ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 26g", "status": "val_error:LLMError"}
+{"address": "PIT art. 39 ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 26hc ust. 4", "status": "val_error:LLMError"}
+{"address": "PIT art. 52uc", "status": "val_error:LLMError"}
+{"address": "PIT art. 24ba", "status": "filtered_leak", "question": "Czy podatnik, który przenosi składniki majątku (objęte podatkiem od niezrealizowanych zysków) poza terytorium Polski, ma obowiązek wyodrębnić te składniki w prowadzonych księgach rachunkowych, ewidencji środków trwałych lub wykazie środków trwałych?"}
+{"address": "PIT art. 52w ust. 7", "status": "val_error:LLMError"}
+{"address": "PIT art. 52pa", "status": "val_error:LLMError"}
+{"address": "PIT art. 10 ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 30f ust. 7c", "status": "val_error:LLMError"}
+{"address": "PIT art. 13", "status": "val_error:LLMError"}
+{"address": "PIT art. 45 ust. 3c", "status": "val_error:LLMError"}
+{"address": "PIT art. 15 ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 30p ust. 1", "status": "filtered_leak", "question": "Jaką stawkę ryczałtu od przychodów zagranicznych płaci członek rodziny podatnika opodatkowanego ryczałtem i czy musi ponosić wydatki wymagane od samego podatnika, a co się zmienia w razie śmierci podatnika lub utraty statusu członka rodziny?"}
+{"address": "PIT art. 6 ust. 4c", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zm", "status": "val_error:LLMError"}
+{"address": "PIT art. 8 ust. 1a", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zf ust. 3", "status": "filtered_leak", "question": "Czy mogę odliczyć od dochodu darowizną przekazane rzeczy lub prawa majątkowe, jeśli koszty ich wytworzenia lub cena nabycia zostały już wcześniej zaliczone do kosztów uzyskania przychodów?"}
+{"address": "PIT art. 26eb ust. 6", "status": "val_error:LLMError"}
+{"address": "PIT art. 52q ust. 2a", "status": "filtered_leak", "question": "Jak dla celów ustalenia spadku przychodów rozumieć 'analogiczny okres poprzedniego roku podatkowego', jeśli podatnik rozlicza się w okresach innych niż kalendarzowe lata podatkowe?"}
+{"address": "PIT art. 52c ust. 1", "status": "filtered_leak", "question": "Czy świadczenie wypłacane żołnierzowi na pokrycie kosztów wynajmu mieszkania jest zwolnione z podatku dochodowego i do jakiej kwoty miesięcznie?"}
+{"address": "PIT art. 52jc", "status": "val_error:LLMError"}
+{"address": "PIT art. 26h ust. 8", "status": "val_error:LLMError"}
+{"address": "PIT art. 25f", "status": "filtered_leak", "question": "Który organ podatkowy wydaje decyzję ustalającą podatek od przychodów nieznajdujących pokrycia w ujawnionych źródłach i za jaki okres go ustala?"}
+{"address": "PIT art. 3 ust. 2d", "status": "val_error:LLMError"}
+{"address": "PIT art. 45c ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zd", "status": "filtered_leak", "question": "Czy jednorazowe odprawy pieniężne wypłacane na podstawie ustawy o funkcjonowaniu górnictwa węgla kamiennego są zwolnione z podatku dochodowego od osób fizycznych?"}
+{"address": "PIT art. 52ze", "status": "filtered_leak", "question": "Czy dofinansowanie na zakup odbiornika cyfrowego przyznane na podstawie ustawy o wsparciu gospodarstw domowych w związku ze zmianą standardu telewizji naziemnej trzeba wykazać jako przychód podlegający opodatkowaniu PIT?"}
+{"address": "PIT art. 38 ust. 2", "status": "filtered_leak", "question": "Jak zakład pracy chronionej powinien rozliczać pobrane zaliczki na podatek od wynagrodzeń pracowników po tym, jak dochód danego pracownika od początku roku przekroczy górną granicę pierwszego przedziału skali podatkowej - czy nadal przekazuje je na PFRON i zakładowy fundusz rehabilitacji?"}
+{"address": "PIT art. 25b ust. 4", "status": "val_error:LLMError"}
+{"address": "PIT art. 26 ust. 13a", "status": "val_error:LLMError"}
+{"address": "PIT art. 35 ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52d", "status": "val_error:LLMError"}
+{"address": "PIT art. 25e", "status": "val_error:LLMError"}
+{"address": "PIT art. 52f", "status": "filtered_leak", "question": "Czy zasiłek macierzyński oraz kwoty podwyższenia uposażenia i zasiłku macierzyńskiego przyznane na podstawie ustawy z 24 lipca 2015 r. o zmianie ustawy o świadczeniach rodzinnych są opodatkowane podatkiem dochodowym?"}
+{"address": "PIT art. 30i ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 42a ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 1a ust. 3", "status": "filtered_leak", "question": "Kto jest podatnikiem z tytułu udziału w spółce cywilnej po śmierci wspólnika, jeśli ustanowiono zarząd sukcesyjny, i do kiedy ten stan trwa?"}
+{"address": "PIT art. 21 ust. 1 pkt 40b", "status": "val_error:LLMError"}
+{"address": "PIT art. 44 ust. 21", "status": "val_error:LLMError"}
+{"address": "PIT art. 30e ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 30g ust. 18", "status": "filtered_leak", "question": "Czy przeniesienie własności budynku na inny podmiot albo oddanie go w leasing bez uzasadnionych przyczyn ekonomicznych, w celu uniknięcia podatku od przychodów z budynków, pozwala uniknąć tego podatku, i czy podmiot nabywający budynek lub przyjmujący go do używania musi rozpoznać przychód z budynków z tego tytułu?"}
+{"address": "PIT art. 23u", "status": "val_error:LLMError"}
+{"address": "PIT art. 52k ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 23m ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 23w ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zc", "status": "val_error:LLMError"}
+{"address": "PIT art. 42 ust. 6", "status": "filtered_leak", "question": "Czy płatnik musi wystawić podatnikowi informację o uzyskanych przychodach (np. IFT), jeśli na podstawie umowy o unikaniu podwójnego opodatkowania nie pobrał od danej wypłaty podatku u źródła?"}
+{"address": "PIT art. 42g ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 24a ust. 4e", "status": "val_error:LLMError"}
+{"address": "PIT art. 23zb ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 14 ust. 2 pkt 11", "status": "val_error:LLMError"}
+{"address": "PIT art. 54 ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 42e ust. 5", "status": "val_error:LLMError"}
+{"address": "PIT art. 12 ust. 2b", "status": "val_error:LLMError"}
+{"address": "PIT art. 22 ust. 9b", "status": "val_error:LLMError"}
+{"address": "PIT art. 26ea ust. 2", "status": "filtered_leak", "question": "Czy ulga na prototyp przysługuje przedsiębiorcy również w roku następującym po roku rozpoczęcia działalności gospodarczej, jeśli w tym kolejnym roku ma status mikroprzedsiębiorcy, małego lub średniego przedsiębiorcy?"}
+{"address": "PIT art. 57 ust. 2", "status": "filtered_leak", "question": "Czy odpłatność na rzecz zleceniodawcy wynikająca z umowy na warunkach zlecenia może być kosztem uzyskania przychodu, jeśli jeszcze nie została faktycznie zapłacona?"}
+{"address": "PIT art. 22o ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 31c ust. 2", "status": "filtered_leak", "question": "Przy jakiej prognozowanej wysokości dochodów opodatkowanych według skali podatkowej podatnik może złożyć wniosek o niepobieranie zaliczek na podatek w danym roku?"}
+{"address": "PIT art. 30dd ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 5", "status": "filtered_leak", "question": "Czy wyłączna strefa ekonomiczna poza morzem terytorialnym, w której Polska wykonuje prawa do badania i eksploatacji dna morskiego oraz jego zasobów naturalnych, jest uznawana za terytorium Rzeczypospolitej Polskiej dla celów podatku dochodowego od osób fizycznych?"}
+{"address": "PIT art. 14c ust. 8", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zj", "status": "val_error:LLMError"}
+{"address": "PIT art. 22b ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zi", "status": "val_error:LLMError"}
+{"address": "PIT art. 30dc ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 5a pkt 19a", "status": "val_error:LLMError"}
+{"address": "PIT art. 22m ust. 4", "status": "filtered_leak", "question": "Jaką roczną stawkę amortyzacyjną stosuje się do spółdzielczego prawa do lokalu użytkowego i czy jest ona inna, gdy jego wartość początkową ustalono metodą uproszczoną na podstawie powierzchni lokalu?"}
+{"address": "PIT art. 30df ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52za ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 52zg", "status": "val_error:LLMError"}
+{"address": "PIT art. 30m ust. 5", "status": "skip_by_generator"}
+{"address": "PIT art. 22j ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 23f ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 30h ust. 4", "status": "filtered_leak", "question": "Do kiedy trzeba złożyć deklarację o wysokości daniny solidarnościowej i wpłacić tę daninę do urzędu skarbowego?"}
+{"address": "PIT art. 52zt", "status": "filtered_leak", "question": "Czy równoważnik pieniężny za brak lokalu mieszkalnego wypłacany funkcjonariuszom Służby Ochrony Państwa jest zwolniony z podatku dochodowego?"}
+{"address": "PIT art. 23zc ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 27f ust. 2c", "status": "val_error:LLMError"}
+{"address": "PIT art. 41d ust. 2", "status": "filtered_leak", "question": "W jakiej formie należy złożyć wniosek o wydanie opinii o stosowaniu preferencji w podatku u źródła oraz jego późniejsze uzupełnienia?"}
+{"address": "PIT art. 22e ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 22f ust. 1", "status": "val_error:LLMError"}
+{"address": "PIT art. 6a ust. 1", "status": "filtered_leak", "question": "Czy można złożyć wniosek o wspólne opodatkowanie z małżonkiem, który zmarł w trakcie roku podatkowego albo po jego zakończeniu, ale przed złożeniem zeznania?"}
+{"address": "PIT art. 52u ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 26gb ust. 10", "status": "val_error:LLMError"}
+{"address": "PIT art. 44f ust. 16", "status": "val_error:LLMError"}
+{"address": "PIT art. 22ł ust. 2", "status": "val_error:LLMError"}
+{"address": "PIT art. 30j ust. 2", "status": "filtered_leak", "question": "Jakie dokumenty należy dołączyć do oświadczenia o zmianie rezydencji podatkowej, potwierdzające miejsce zamieszkania dla celów podatkowych w okresie wskazanym w tym oświadczeniu?"}
+{"address": "PIT art. 22h ust. 3a", "status": "val_error:LLMError"}
+{"address": "PIT art. 32 ust. 3", "status": "val_error:LLMError"}
+{"address": "PIT art. 23v ust. 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zfza", "status": "skip_by_generator"}
+{"address": "PIT art. 22c", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 19 § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 291a § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 70a § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zfd § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 48 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zfe § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 130 § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 239b § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 46i", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zs § 1", "status": "filtered_leak", "question": "Czy Szef Krajowej Administracji Skarbowej może żądać od banku podania adresów IP, z których logowano się do bankowości elektronicznej na rachunek podmiotu kwalifikowanego, wraz z datą i godziną tych logowań?"}
+{"address": "Ordynacja art. 117c", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 20zz § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14c § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 176", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119s § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zda § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119h § 2", "status": "filtered_leak", "question": "Czy mogę w odwołaniu od decyzji wydanej z zastosowaniem przepisów przeciw unikaniu opodatkowania wnioskować o zasięgnięcie opinii Rady do Spraw Przeciwdziałania Unikaniu Opodatkowania i czy organ musi mnie poinformować o takiej możliwości już w decyzji pierwszej instancji?"}
+{"address": "Ordynacja art. 274 § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 73 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zff § 8", "status": "filtered_leak", "question": "W jakiej wysokości zwraca się opłatę zabezpieczającą wniesioną w związku z decyzją Szefa KAS określającą skutki podatkowe tak, jakby doszło do cofnięcia unikania opodatkowania, jeśli podatnik skorygował deklaracje oraz zapłacił wynikającą z korekty kwotę wraz z odsetkami za zwłokę?"}
+{"address": "Ordynacja art. 20", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 33d § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 297g", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 93a § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 75 § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 297c § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 100 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14zi § 1", "status": "filtered_leak", "question": "Czy organ wydający opinię w sprawie opodatkowania wyrównawczego ma obowiązek przekazać ją właściwym organom podatkowym i czy musi to zrobić wraz z informacją o dacie jej doręczenia podatnikowi?"}
+{"address": "Ordynacja art. 80a § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 259b", "status": "filtered_leak", "question": "Co się stanie z decyzją określającą warunki cofnięcia skutków unikania opodatkowania, jeśli podatnik nie skorzysta z przysługujących mu uprawnień dotyczących korzyści podatkowej wynikającej z zaniżenia zobowiązania podatkowego?"}
+{"address": "Ordynacja art. 287 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 23a", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 76c", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 331 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14za § 6", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 306g § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 20zn § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 326 § 1", "status": "filtered_leak", "question": "Czy hipoteka ustawowa ustanowiona na zabezpieczenie zaległości podatkowych w pierwszym roku po wejściu w życie Ordynacji podatkowej wygasa automatycznie, jeśli urząd nie złoży wniosku o jej wpis do księgi wieczystej, i w jakim terminie to następuje?"}
+{"address": "Ordynacja art. 50", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zu § 1", "status": "filtered_leak", "question": "Jakie kategorie danych może przetwarzać izba rozliczeniowa w celu ustalenia wskaźnika ryzyka wykorzystywanego w systemie teleinformatycznym izby rozliczeniowej (STIR)?"}
+{"address": "Ordynacja art. 289 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 20zv § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 55 § 2", "status": "filtered_leak", "question": "Jeśli wpłacam na zaległy podatek kwotę, która nie wystarcza na pokrycie całej zaległości wraz z odsetkami za zwłokę, jak urząd rozlicza taką wpłatę między kapitał zaległości a odsetki?"}
+{"address": "Ordynacja art. 193 § 6", "status": "filtered_leak", "question": "Czy urząd skarbowy, uznając moje księgi podatkowe za nierzetelne lub wadliwe, musi w protokole kontroli wskazać, za jaki okres i w jakim zakresie odmawia im wiarygodności, czy może odrzucić je w całości bez takiego wskazania?"}
+{"address": "Ordynacja art. 297d", "status": "filtered_leak", "question": "Czy Minister Finansów ma dostęp do informacji o schematach podatkowych zebranych w ramach MDR i może je wykorzystywać do analiz podatkowych?"}
+{"address": "Ordynacja art. 119b § 1", "status": "filtered_leak", "question": "Czy organ podatkowy może zastosować klauzulę przeciwko unikaniu opodatkowania wobec podatku VAT albo wobec opłat i niepodatkowych należności budżetowych?"}
+{"address": "Ordynacja art. 285a § 1", "status": "filtered_leak", "question": "Gdzie i w jakich godzinach urząd może prowadzić kontrolę podatkową, a co się dzieje, jeśli w jej trakcie firma skróci godziny swojej działalności, oraz czy mogę zmusić kontrolerów do przyjścia do mojej siedziby, gdy księgi podatkowe są prowadzone w innym miejscu?"}
+{"address": "Ordynacja art. 14zu", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 193a § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 32 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 62b § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 170 § 1a", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zo § 8", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zzi", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 124", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 233 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 115 § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 150 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zn § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 240 § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 114 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 133a § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 7a § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 305r § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 46g", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 212", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 112 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 146a § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 20v", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 20zzc § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14zs § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 52a", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 138n § 1", "status": "filtered_leak", "question": "Do jakiego organu lub podmiotu zwraca się organ podatkowy o wyznaczenie doradcy podatkowego jako tymczasowego pełnomocnika szczególnego dla podatnika, i co można zrobić, jeśli ten doradca musi działać poza siedzibą tego organu?"}
+{"address": "Ordynacja art. 119zl § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 86f § 3", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 49 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 58c § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 85", "status": "skip_by_generator"}
+{"address": "Ordynacja art. 33g", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 20zb", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 35 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 53 § 5", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 173 § 2", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 336", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 119zfn", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 131 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 138a § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14zn", "status": "filtered_leak", "question": "Czy do postępowania o wydanie opinii w sprawie opodatkowania wyrównawczego stosuje się ogólne zasady Ordynacji podatkowej, np. dotyczące zasad postępowania, doręczeń, terminów czy wezwań, mimo że nie ma odrębnych przepisów regulujących te kwestie dla tego trybu?"}
+{"address": "Ordynacja art. 14zk", "status": "filtered_leak", "question": "Czy jeśli otrzymałem opinię w sprawie opodatkowania wyrównawczego, ale skutki podatkowe danych czynności wystąpiły wcześniej niż jej doręczenie, zastosowanie się do tej opinii zwalnia mnie z obowiązku zapłaty podatku?"}
+{"address": "Ordynacja art. 119zw § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 82 § 1c", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 23 § 1", "status": "filtered_leak", "question": "W jakich sytuacjach urząd skarbowy może ustalić podstawę opodatkowania w drodze oszacowania, a nie na podstawie faktycznych danych z ksiąg podatkowych?"}
+{"address": "Ordynacja art. 20zu § 2", "status": "filtered_leak", "question": "Jakie dodatkowe elementy, poza ogólnymi wymogami wniosku, musi zawierać wniosek o zawarcie porozumienia inwestycyjnego – np. czy trzeba podać deklarowaną wartość inwestycji i sposób jej wyliczenia oraz adres do e-doręczeń?"}
+{"address": "Ordynacja art. 291 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 46f", "status": "filtered_leak", "question": "Ile wynosi opłata za wydanie wypisu z rejestru zastawów skarbowych lub zaświadczenia o wpisie?"}
+{"address": "Ordynacja art. 62 § 1", "status": "filtered_leak", "question": "Jeśli mam zobowiązania podatkowe z różnych tytułów i dokonam wpłaty bez wskazania, na jaki podatek ma być zaliczona, to na poczet którego zobowiązania urząd ją zaliczy?"}
+{"address": "Ordynacja art. 290a", "status": "skip_by_generator"}
+{"address": "Ordynacja art. 60 § 1c", "status": "filtered_leak", "question": "Czy składając oświadczenie dotyczące terminu zapłaty podatku (np. o dacie obciążenia rachunku bankowego) muszę zostać odrębnie pouczony o odpowiedzialności karnej za złożenie fałszywego oświadczenia, czy wystarczy odpowiednia klauzula w samym oświadczeniu?"}
+{"address": "Ordynacja art. 70e § 2", "status": "filtered_leak", "question": "Od kiedy i do kiedy wstrzymuje się bieg terminu przedawnienia zobowiązania podatkowego w związku ze złożeniem wniosku o wydanie decyzji określającej warunki cofnięcia skutków unikania opodatkowania, zwłaszcza jeśli na tę decyzję wniesiono skargę do sądu administracyjnego?"}
+{"address": "Ordynacja art. 119zzf § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 67a § 1", "status": "filtered_leak", "question": "Czy jako podatnik mogę złożyć wniosek do urzędu skarbowego o rozłożenie na raty zaległości podatkowej wraz z odsetkami za zwłokę, i w jakich sytuacjach organ podatkowy może się na to zgodzić?"}
+{"address": "Ordynacja art. 117a § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14g § 1", "status": "filtered_leak", "question": "Co się stanie, jeśli wniosek o wydanie interpretacji indywidualnej nie będzie zawierał wymaganych danych, np. nie zostanie w nim przedstawiony wyczerpująco stan faktyczny ani stanowisko wnioskodawcy?"}
+{"address": "Ordynacja art. 270b", "status": "filtered_leak", "question": "Czy wysokość opłaty za sporządzenie kopii lub odpisu dokumentów z akt sprawy podatkowej jest ustalana dowolnie przez urząd, czy wynika z odgórnie określonych stawek?"}
+{"address": "Ordynacja art. 111 § 4", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 14k § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 150a", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 80 § 2", "status": "filtered_leak", "question": "Co się dzieje z prawem do złożenia wniosku o zaliczenie nadpłaty na poczet przyszłych zobowiązań podatkowych oraz z możliwością zaliczenia nadpłaty na poczet zaległości i bieżących zobowiązań po upływie terminu na jej zwrot?"}
+{"address": "Ordynacja art. 110 § 1", "status": "val_error:LLMError"}
+{"address": "Ordynacja art. 272", "status": "filtered_leak", "question": "Jakie czynności może podjąć urząd skarbowy w ramach czynności sprawdzających dotyczących rozliczeń podatnika – czy obejmują one też weryfikację wydatków w kontekście przychodów nieznajdujących pokrycia w ujawnionych źródłach?"}
+{"address": "Ordynacja art. 78a", "status": "val_error:LLMError"}
