@@ -87,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
                 print(" / ".join(path))
                 first_num = art.number or ""
                 last = path
-            prev = art.number
+            prev = art.number or ""
         print(f"  art. {first_num}–{prev}")
         return 0
     if args.cmd == "status":
