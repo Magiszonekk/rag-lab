@@ -9,3 +9,4 @@ data/raw/
 data/corpus/
 *.egg-info/
 .private/
+data/cache/

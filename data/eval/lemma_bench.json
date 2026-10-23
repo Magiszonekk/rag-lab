@@ -1,0 +1,59 @@
+{
+ "morfeusz2": {
+  "version": "morfeusz2-1.99.15",
+  "gold_accuracy": 1.0,
+  "gold_n": 70,
+  "gold_errors": {},
+  "groups_consistent": "10/10",
+  "split_groups": {},
+  "corpus_tokens": 322352,
+  "corpus_seconds": 0.9
+ },
+ "spacy": {
+  "version": "spacy-3.8.16/pl_core_news_md-3.8.0",
+  "gold_accuracy": 0.886,
+  "gold_n": 70,
+  "gold_errors": {
+   "nabyciu": "nabyciu",
+   "nabycia": "nabyć",
+   "należnego": "należnego",
+   "darowizn": "darowizn",
+   "zeznaniu": "zeznaniu",
+   "odwołania": "odwołać",
+   "samochodowymi": "samochodowymi",
+   "odsetek": "odsetka"
+  },
+  "groups_consistent": "4/10",
+  "split_groups": {
+   "zwolnienie": [
+    "zwolnienie",
+    "zwolnieć",
+    "zwolnić"
+   ],
+   "nadpłata": [
+    "nadpłacie",
+    "nadpłata"
+   ],
+   "przychód": [
+    "przychod",
+    "przychód"
+   ],
+   "odliczenie": [
+    "odliczen",
+    "odliczenie",
+    "odliczeć"
+   ],
+   "zeznanie": [
+    "zeznanie",
+    "zeznaniu"
+   ],
+   "mieszkanie": [
+    "mieszkanie",
+    "mieszkano",
+    "mieszkać"
+   ]
+  },
+  "corpus_tokens": 323774,
+  "corpus_seconds": 90.8
+ }
+}

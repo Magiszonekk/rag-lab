@@ -327,7 +327,7 @@
 {"address": "Ordynacja art. 50", "status": "ok"}
 {"address": "Ordynacja art. 193 § 6", "status": "rejected_by_validator", "question": "Czy urząd skarbowy, uznając moje księgi podatkowe za nierzetelne lub wadliwe, musi wskazać, za jaki okres i w jakim zakresie nie uznaje ich za dowód, czy może odrzucić całość ksiąg bez takiego sprecyzowania?", "validator": {"answers": true, "specific": true, "leaks": true, "note": "Przepis wprost wymaga wskazania okresu i części; pytanie parafrazuje jego treść."}}
 {"address": "Ordynacja art. 119b § 1", "status": "ok"}
-{"address": "Ordynacja art. 20zn § 1", "status": "ok"}
+{"address": "Ordynacja art. 20zn § 1", "status": "ok"}
 {"address": "Ordynacja art. 331 § 1", "status": "ok"}
 {"address": "Ordynacja art. 55 § 2", "status": "ok"}
 {"address": "Ordynacja art. 285a § 1", "status": "ok"}

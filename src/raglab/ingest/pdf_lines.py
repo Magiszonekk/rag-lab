@@ -178,10 +178,18 @@ def read_pdf(path: Path) -> PdfText:
             elif current is not None:
                 current.text = _join(current.text, n.text.strip())
         for s in content:
-            lines.append(Line(pno, s.y, s.x, s.text.rstrip(), s.size, s.bold, s.refs))
+            lines.append(Line(pno, s.y, s.x, _clean_spaces(s.text).rstrip(), s.size, s.bold, s.refs))
     margin = Counter(round(ln.x) for ln in lines if ln.size >= body - 0.5).most_common(2)
     left = float(min(x for x, _ in margin))
     return PdfText(lines, footnotes, body, left, doc.page_count)
+
+
+_SPACES = str.maketrans({"\u202f": " ", "\u00a0": " ", "\u2009": " ", "\u2007": " ", "\u00ad": ""})
+
+
+def _clean_spaces(text: str) -> str:
+    """Twarde / wąskie spacje (np. „§\u202f4” w Ordynacji) → zwykła spacja; miękki dywiz usuwany."""
+    return text.translate(_SPACES)
 
 
 def _join(a: str, b: str) -> str:
