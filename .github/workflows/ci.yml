@@ -34,6 +34,10 @@ jobs:
       - name: Type check
         run: uv run mypy src
 
+      # korpus (pobranie PDF-ów z API Sejmu + parsowanie) — potrzebny testom verify i bramce wyszukiwania
+      - name: Build corpus
+        run: uv run python -m raglab.ingest build > /dev/null
+
       - name: Test
         run: uv run pytest -q
 
@@ -41,5 +45,4 @@ jobs:
       # Tylko konfiguracje BM25 — embeddingi na CPU w CI trwałyby ~15 min; wektory mierzy pełna ewaluacja.
       - name: Retrieval quality gate (recall@5 vs baseline)
         run: |
-          uv run python -m raglab.ingest build > /dev/null
           uv run python -m raglab.search.evaluate --configs bm25-none bm25-morfeusz2 fixed-bm25-morfeusz2 --ci-gate
