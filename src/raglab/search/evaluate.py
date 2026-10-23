@@ -27,7 +27,7 @@ from typing import Any
 from raglab.corpus import load_corpus
 from raglab.ingest.sources import REPO_ROOT
 from raglab.search.chunking import Chunk, est_tokens, fixed, structural
-from raglab.search.index import BM25Index, Embedder, Hit, VectorIndex, rrf
+from raglab.search.index import BM25Index, Embedder, Hit, VectorIndex, demote_historical, rrf
 from raglab.search.normalize import get_normalizer
 
 EVAL_DIR = REPO_ROOT / "data" / "eval"
@@ -165,6 +165,29 @@ def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
         "hybrid-rrf": lambda: (
             lambda q: rrf(
                 bm25("structural", "morfeusz2").search(q, 50), vec("structural", "mmlw-base").search(q, 50), top=20
+            )
+        ),
+        "hybrid-rrf-demote": lambda: (
+            lambda q: demote_historical(
+                rrf(bm25("structural", "morfeusz2").search(q, 50), vec("structural", "mmlw-base").search(q, 50), top=20)
+            )
+        ),
+        "hybrid-rrf-w2": lambda: (
+            lambda q: rrf(
+                bm25("structural", "morfeusz2").search(q, 50),
+                vec("structural", "mmlw-base").search(q, 50),
+                top=20,
+                weights=(1.0, 2.0),
+            )
+        ),
+        "hybrid-rrf-w2-demote": lambda: (
+            lambda q: demote_historical(
+                rrf(
+                    bm25("structural", "morfeusz2").search(q, 50),
+                    vec("structural", "mmlw-base").search(q, 50),
+                    top=20,
+                    weights=(1.0, 2.0),
+                )
             )
         ),
         "fixed-bm25-morfeusz2": lambda: lambda q: bm25("fixed", "morfeusz2").search(q, 20),

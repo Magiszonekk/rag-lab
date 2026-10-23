@@ -11,3 +11,4 @@ data/corpus/
 .private/
 data/cache/
 results/eval_run.log
+results/answers/

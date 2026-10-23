@@ -125,13 +125,14 @@ class VectorIndex:
         return [Hit(self.chunks[i], float(scores[i])) for i in top]
 
 
-def rrf(*rankings: list[Hit], k: int = 60, top: int = 20) -> list[Hit]:
-    """Reciprocal rank fusion: score = Σ 1 / (k + rank)."""
+def rrf(*rankings: list[Hit], k: int = 60, top: int = 20, weights: tuple[float, ...] | None = None) -> list[Hit]:
+    """Reciprocal rank fusion: score = Σ w_i / (k + rank_i)."""
     scores: dict[str, float] = {}
     by_id: dict[str, Chunk] = {}
-    for ranking in rankings:
+    ws = weights or tuple(1.0 for _ in rankings)
+    for w, ranking in zip(ws, rankings, strict=True):
         for rank, h in enumerate(ranking, 1):
-            scores[h.chunk.id] = scores.get(h.chunk.id, 0.0) + 1.0 / (k + rank)
+            scores[h.chunk.id] = scores.get(h.chunk.id, 0.0) + w / (k + rank)
             by_id[h.chunk.id] = h.chunk
     order = sorted(scores, key=lambda i: -scores[i])[:top]
     return [Hit(by_id[i], scores[i]) for i in order]
@@ -139,3 +140,9 @@ def rrf(*rankings: list[Hit], k: int = 60, top: int = 20) -> list[Hit]:
 
 def write_index_meta(path: Path, meta: dict[str, object]) -> None:
     path.write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def demote_historical(hits: list[Hit]) -> list[Hit]:
+    """Przepisy `historical` (etykiety czasowe) przesuwane za obowiązujące — bez usuwania: pytanie może
+    dotyczyć przeszłości, ale nie powinny wypychać z top-k przepisów obowiązujących (etap 2a)."""
+    return [h for h in hits if h.chunk.status != "historical"] + [h for h in hits if h.chunk.status == "historical"]

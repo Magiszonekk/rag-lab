@@ -3,7 +3,7 @@
 > 🇵🇱 Przejrzysty RAG na polskich ustawach podatkowych (VAT, PIT, Ordynacja podatkowa): kilka wariantów
 > wyszukiwania na tych samych danych, porównanych liczbami, z podglądem każdego kroku. Projekt w budowie.
 
-**Status: milestone M1 done (retrieval + test sets); answering variants next.** Not tax advice — a technical demo.
+**Status: M1 done (retrieval + test sets); M2 in progress (answering variants, verification, judge).** Not tax advice — a technical demo.
 
 ## Idea
 
@@ -58,6 +58,30 @@ What the numbers say (and don't):
 **CI gate**: every PR rebuilds the corpus and runs the BM25 configurations on the retrieval set (no LLM,
 no keys, deterministic); the build fails if recall@5 drops more than 2 pp below `results/retrieval_baseline.json`.
 
+## First results — answers (M2, in progress)
+
+Golden set v1: 53 answerable questions + 19 out-of-corpus. Same answering model, prompt and context builder for
+every variant — only retrieval differs. Judge: a model from a different family than the answerer, with a fixed
+scale (correct / partial / incorrect / refusal_ok / refusal_missing) and a reason; 15 verdicts spot-checked by hand.
+
+| variant | correct (95% CI) | correct + partial | key facts | cites gold provision | faithful to context | correct refusals | false refusals | p50 latency |
+|---|---|---|---|---|---|---|---|---|
+| simple (vectors) | 0.698 (0.57–0.81) | 0.811 | 0.623 | 0.714 | 0.958 | 13/13 | 0.151 | 2.8 s |
+| **hybrid (BM25 + vectors)** | **0.755 (0.64–0.87)** | **0.830** | **0.642** | **0.758** | 0.958 | 13/13 | **0.094** | 3.3 s |
+| hybrid + `verify=cite` | 0.755 | 0.811 | 0.623 | 0.758 | 0.944 | 13/13 | 0.113 | 3.3 s |
+
+- **Refusals work**: all 13 questions about other acts / non-tax topics were refused; the other 6 out-of-corpus
+  cases (other dates, individual advice, partial coverage) were handled as expected in 15/19 overall.
+- **Most errors are retrieval misses, not hallucinations**: of the hybrid's 5 wrong answers, 4 are refusals where
+  the right provision wasn't in the top-5 (mostly colloquial questions: 6/11 correct vs 21/26 for factual).
+- **Transitional provisions matter**: art. 41 VAT still says 22%; the 23% rate lives in a transitional article.
+  The context builder attaches overriding transitional provisions with an explicit note — without it the system
+  cites the right article and gives the wrong rate, which no citation check can catch.
+- **`verify=cite` is cheap but blunt**: it blocked 1 answer per variant, both false positives (a derived sum
+  "2 × 92.67 = 185.34 zł"; a citation to a paragraph the model knew but wasn't in context). It costs ~2 pp of
+  false refusals and catches nothing on this set — LLM-level verification (`verify=llm`) is next.
+- Cost: ~3k tokens per question.
+
 ## Test sets
 
 - `data/eval/retrieval_v1.jsonl` — 283 retrieval questions; generation, validation and review notes in
@@ -77,6 +101,7 @@ uv run python -m raglab.ingest build      # build data/corpus/*.json
 uv run python -m raglab.ingest show vat 86
 uv run pytest -q
 uv run python -m raglab.search.evaluate   # retrieval metrics → results/retrieval_v1.json
+uv run python -m raglab.rag.evaluate      # answers + judge on the golden set (needs LLM_* in .env)
 uv run python -m raglab.lookup show "VAT art. 146ef ust. 1"
 docker compose up -d                      # Postgres + pgvector on 127.0.0.1:5436
 ```
