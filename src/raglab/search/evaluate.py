@@ -38,6 +38,7 @@ EMBED_MODELS = {
 }
 
 
+_CACHE_OBJS: list[Embedder] = []
 GOLD_WORDS: dict[str, int] = {}  # adres → liczba słów jednostki z potomkami (wypełniane w main)
 
 
@@ -140,6 +141,7 @@ def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
         return chunk_sets[kind]
 
     cache: dict[str, object] = {}
+    _CACHE_OBJS.clear()
 
     def bm25(kind: str, lem: str) -> BM25Index:
         key = f"bm25:{kind}:{lem}"
@@ -151,7 +153,9 @@ def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
         key = f"vec:{kind}:{model}"
         if key not in cache:
             name, qp, dp = EMBED_MODELS[model]
-            cache[key] = VectorIndex(chunks(kind), Embedder(name, query_prefix=qp, doc_prefix=dp))
+            emb = Embedder(name, query_prefix=qp, doc_prefix=dp)
+            _CACHE_OBJS.append(emb)
+            cache[key] = VectorIndex(chunks(kind), emb)
         return cache[key]  # type: ignore[return-value]
 
     available: dict[str, Callable[[], Callable[[str], list[Hit]]]] = {
@@ -194,7 +198,8 @@ def main(argv: list[str] | None = None) -> int:
         help="porównaj z results/retrieval_baseline.json i zakończ kodem 1 przy spadku",
     )
     ap.add_argument("--max-drop", type=float, default=0.02, help="dopuszczalny spadek recall@5 (bramka CI)")
-    ap.add_argument("--write-baseline", action="store_true")
+    ap.add_argument("--write-baseline", action="store_true", help="zapisz baseline bramki CI (nie nadpisuje raportu)")
+    ap.add_argument("--out", default=None, help="nazwa pliku raportu w results/ (domyślnie retrieval_<wersja>.json)")
     args = ap.parse_args(argv)
 
     items = load_items(args.version)
@@ -217,6 +222,8 @@ def main(argv: list[str] | None = None) -> int:
         rs = run_config(search, items)
         dt = time.monotonic() - t0
         per_config[name] = rs
+        for obj in list(_CACHE_OBJS):
+            obj.save()
         entry: dict[str, object] = {"latency_ms_per_query": round(1000 * dt / len(items), 1)}
         for subset, sel in (
             ("all", rs),
@@ -250,10 +257,10 @@ def main(argv: list[str] | None = None) -> int:
     report["mcnemar_hit@5"] = pairs
     per_q = {n: {r.qid: r.rank for r in rs} for n, rs in per_config.items()}
     RESULTS_DIR.mkdir(exist_ok=True)
-    out = RESULTS_DIR / f"retrieval_{args.version}.json"
-    if not args.ci_gate:
+    out = RESULTS_DIR / (args.out or f"retrieval_{args.version}.json")
+    if not args.ci_gate and not args.write_baseline:
         out.write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
-        (RESULTS_DIR / f"retrieval_{args.version}.per_question.json").write_text(json.dumps(per_q), encoding="utf-8")
+        out.with_suffix(".per_question.json").write_text(json.dumps(per_q), encoding="utf-8")
         print(f"zapisano {out}", file=sys.stderr)
     base_path = RESULTS_DIR / "retrieval_baseline.json"
     if args.write_baseline:

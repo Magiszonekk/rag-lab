@@ -36,3 +36,10 @@ jobs:
 
       - name: Test
         run: uv run pytest -q
+
+      # Bramka jakości (koncept D8): deterministyczne metryki wyszukiwania, bez LLM i bez kluczy.
+      # Tylko konfiguracje BM25 — embeddingi na CPU w CI trwałyby ~15 min; wektory mierzy pełna ewaluacja.
+      - name: Retrieval quality gate (recall@5 vs baseline)
+        run: |
+          uv run python -m raglab.ingest build > /dev/null
+          uv run python -m raglab.search.evaluate --configs bm25-none bm25-morfeusz2 fixed-bm25-morfeusz2 --ci-gate

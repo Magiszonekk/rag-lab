@@ -10,3 +10,4 @@ data/corpus/
 *.egg-info/
 .private/
 data/cache/
+results/eval_run.log

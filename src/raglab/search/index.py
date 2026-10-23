@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -45,10 +46,19 @@ class BM25Index:
         return [Hit(self.chunks[i], float(scores[i])) for i in top if scores[i] > 0]
 
 
+def _model_cached(model: str) -> bool:
+    snap = Path.home() / ".cache" / "huggingface" / "hub" / f"models--{model.replace('/', '--')}" / "snapshots"
+    return snap.exists() and any(snap.iterdir())
+
+
 class Embedder:
     """sentence-transformers na CPU z cache na dysku (klucz: model + tekst) — D12."""
 
     def __init__(self, model: str, *, query_prefix: str = "", doc_prefix: str = "", batch_size: int = 32) -> None:
+        # Model z lokalnego cache bez pytania Hugging Face o nowe wersje: na serwerze połączenie IPv6 z HF
+        # potrafi wisieć w SYN-SENT (zmierzone 2026-10-23); pobrana wersja modelu i tak jest przypięta.
+        if _model_cached(model):
+            os.environ.setdefault("HF_HUB_OFFLINE", "1")
         from sentence_transformers import SentenceTransformer
 
         self.model_name = model
@@ -58,11 +68,15 @@ class Embedder:
         self.model = SentenceTransformer(model, device="cpu")
         self.model.max_seq_length = min(self.model.max_seq_length or 512, 512)
         safe = model.replace("/", "__")
-        self.cache_path = CACHE_DIR / f"emb_{safe}.npz"
+        # cache: jedna macierz + lista kluczy (np.savez z tysiącami nazwanych tablic ładuje się minutami)
+        self.cache_path = CACHE_DIR / f"emb_{safe}.npy"
+        self.keys_path = CACHE_DIR / f"emb_{safe}.keys.json"
         self._cache: dict[str, np.ndarray] = {}
-        if self.cache_path.exists():
-            data = np.load(self.cache_path)
-            self._cache = {k: data[k] for k in data.files}
+        self._dirty = False
+        if self.cache_path.exists() and self.keys_path.exists():
+            matrix = np.load(self.cache_path)
+            keys = json.loads(self.keys_path.read_text())
+            self._cache = {k: matrix[i] for i, k in enumerate(keys)}
 
     @staticmethod
     def _key(text: str) -> str:
@@ -83,12 +97,19 @@ class Embedder:
             )
             for i, v in zip(missing, vecs, strict=True):
                 self._cache[keys[i]] = v.astype(np.float32)
-            self.save()
+            self._dirty = True
+            if not is_query or len(missing) > 50:
+                self.save()
         return np.stack([self._cache[k] for k in keys])
 
     def save(self) -> None:
+        if not self._dirty:
+            return
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        np.savez(self.cache_path, **self._cache)  # type: ignore[arg-type]
+        keys = list(self._cache)
+        np.save(self.cache_path, np.stack([self._cache[k] for k in keys]))
+        self.keys_path.write_text(json.dumps(keys))
+        self._dirty = False
 
 
 class VectorIndex:

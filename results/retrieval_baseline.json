@@ -1,0 +1,8 @@
+{
+ "testset": "retrieval_v1",
+ "recall@5": {
+  "bm25-none": 0.689,
+  "bm25-morfeusz2": 0.806,
+  "fixed-bm25-morfeusz2": 0.802
+ }
+}
