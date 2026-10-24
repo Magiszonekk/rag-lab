@@ -121,7 +121,7 @@ def answer(question: str, variant: str, llm: LLM, *, k: int = 5) -> Answer:
     try:
         c = llm.complete(
             [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": user}],
-            max_tokens=2500,
+            max_tokens=6000,  # modele z rozumowaniem: przy 2500 zdarzał się ucięty JSON
             temperature=0.0,
         )
         d = parse_json(c.text)

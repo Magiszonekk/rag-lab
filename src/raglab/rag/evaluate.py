@@ -146,9 +146,7 @@ def main(argv: list[str] | None = None) -> int:
             for key, a in ex.map(gen, todo):
                 if a.get("error"):
                     print(f"  błąd: {a['error'][:150]}", file=sys.stderr)
-                    cache[key] = (
-                        a  # w tym przebiegu liczy się jako błąd, ale nie zapisujemy — ponowienie przy następnym
-                    )
+                    cache[key] = a  # liczy się jako błąd, ale bez zapisu — ponowienie w następnym przebiegu
                     continue
                 cache[key] = a
                 f.write(json.dumps({"key": key, "answer": a}, ensure_ascii=False) + "\n")
