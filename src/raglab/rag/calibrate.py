@@ -28,7 +28,7 @@ from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_VERSION, judge
 
 # gemini-3.8-flash przez bramkę ~70 s na odpowiedź (zmierzone) — niepraktyczne dla ~200 ocen.
-SECOND_JUDGE = ["openai/gpt-oss-120b"]  # trzecia rodzina: ani Claude (sędzia 1), ani Gemini
+SECOND_JUDGE = ["gemini-2.5-flash"]  # trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1)
 CONFIGS = ["simple/verify=off", "hybrid/verify=off", "hyde/verify=off"]
 DETAILS = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
 SECOND = RUNS / "judge2_cache.jsonl"
@@ -73,7 +73,7 @@ def run() -> None:
         for line in SECOND.read_text(encoding="utf-8").splitlines():
             r = json.loads(line)
             done[r["key"]] = r["judge"]
-    llm = LLM(SECOND_JUDGE)
+    llm = LLM(SECOND_JUDGE, timeout=240.0, attempts=6, backoff=5.0)
 
     def key(r: dict[str, Any]) -> str:
         raw = json.dumps([JUDGE_VERSION, SECOND_JUDGE, r["item"]["id"], r["answer"]["answer"]], ensure_ascii=False)
@@ -81,7 +81,7 @@ def run() -> None:
 
     todo = [r for r in rows if key(r) not in done]
     print(f"drugi sędzia: {len(todo)} ocen do wykonania", file=sys.stderr)
-    with ThreadPoolExecutor(4) as ex, SECOND.open("a", encoding="utf-8") as f:
+    with ThreadPoolExecutor(2) as ex, SECOND.open("a", encoding="utf-8") as f:
         for r, j in zip(todo, ex.map(lambda r: judge(r["item"], r["answer"], llm), todo), strict=True):
             if j["verdict"] != "error":
                 done[key(r)] = j

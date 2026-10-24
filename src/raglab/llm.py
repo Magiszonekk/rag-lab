@@ -44,12 +44,15 @@ class LLMError(RuntimeError):
 
 
 class LLM:
-    def __init__(self, models: list[str], *, timeout: float = 120.0) -> None:
+    def __init__(self, models: list[str], *, timeout: float = 120.0, attempts: int = 3, backoff: float = 1.0) -> None:
         load_env()
         self.base = os.environ["LLM_BASE_URL"].rstrip("/")
         self._key = os.environ["LLM_API_KEY"]
         self.models = models
         self.client = httpx.Client(timeout=timeout)
+        # darmowe modele: chwilowe 429 (limit na minutę) — więcej prób i dłuższe czekanie (backoff * 2**próba)
+        self.attempts = attempts
+        self.backoff = backoff
 
     def complete(
         self,
@@ -61,7 +64,7 @@ class LLM:
     ) -> Completion:
         last_err = ""
         for model in self.models:
-            for attempt in range(3):
+            for attempt in range(self.attempts):
                 body: dict[str, object] = {
                     "model": model,
                     "messages": messages,
@@ -79,13 +82,13 @@ class LLM:
                     )
                 except httpx.HTTPError as e:
                     last_err = f"{model}: {type(e).__name__}"
-                    time.sleep(2**attempt)
+                    time.sleep(self.backoff * 2**attempt)
                     continue
                 if r.status_code in RETRYABLE:
                     last_err = f"{model}: HTTP {r.status_code}"
                     if "cooldown" in r.text:
                         break  # cooldown trwa godzinami — od razu następny model
-                    time.sleep(2**attempt)
+                    time.sleep(self.backoff * 2**attempt)
                     continue
                 if r.status_code != 200:
                     last_err = f"{model}: HTTP {r.status_code} {r.text[:120]}"

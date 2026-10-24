@@ -130,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
             jcache[r["key"]] = r["judge"]
 
     answer_llm = LLM(ANSWER_MODELS)
-    judge_llm = LLM(JUDGE_MODELS)
+    judge_llm = LLM(JUDGE_MODELS, timeout=240.0, attempts=6, backoff=5.0)  # darmowy sędzia: limit na minutę
 
     # 1) odpowiedzi (sekwencyjnie po wariantach — wyszukiwanie ładuje modele raz; generacja równolegle)
     for variant in args.variants:
