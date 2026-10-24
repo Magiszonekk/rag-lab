@@ -24,7 +24,7 @@ from pathlib import Path
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM, LLMError, parse_json
 
-REWRITE_MODELS = ["gemini-3-flash-preview"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
+REWRITE_MODELS = ["claude-sonnet-5"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
 CACHE = REPO_ROOT / "data" / "cache" / "rewrite.jsonl"
 
 PROMPTS = {
@@ -88,7 +88,14 @@ def rewrite(question: str, strategy: str, llm: LLM | None = None) -> str:
             max_tokens=1200,
             temperature=0.0,
         )
-        d = parse_json(c.text)
+        try:
+            d = parse_json(c.text)
+        except ValueError:
+            # sporadycznie model nie domyka JSON-a / wstawia cudzysłów w tekście — bierzemy pole query wprost
+            m = re.search(r'"query"\s*:\s*"(.*)', c.text, re.S)
+            if not m:
+                raise
+            d = {"query": re.sub(r'"\s*[,}]?\s*(```)?\s*$', "", m.group(1).strip())}
         if not isinstance(d, dict) or not d.get("query"):
             raise ValueError("brak pola query")
         q = str(d["query"])
