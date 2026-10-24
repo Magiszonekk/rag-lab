@@ -28,7 +28,9 @@ from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_VERSION, judge
 
 # gemini-3.8-flash przez bramkę ~70 s na odpowiedź (zmierzone) — niepraktyczne dla ~200 ocen.
-SECOND_JUDGE = ["gemini-2.5-flash"]  # trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1)
+SECOND_JUDGE = [
+    "gemini-3-flash-preview"
+]  # gemini-2.5-flash: limit dzienny po 11 ocenach (2026-10-25);  # trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1)
 CONFIGS = ["simple/verify=off", "hybrid/verify=off", "hyde/verify=off"]
 DETAILS = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
 SECOND = RUNS / "judge2_cache.jsonl"
