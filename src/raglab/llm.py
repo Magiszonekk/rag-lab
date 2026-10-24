@@ -93,8 +93,14 @@ class LLM:
                 if r.status_code != 200:
                     last_err = f"{model}: HTTP {r.status_code} {r.text[:120]}"
                     break
-                d = r.json()
-                text = (d["choices"][0]["message"].get("content") or "").strip()
+                try:
+                    d = r.json()
+                    text = (d["choices"][0]["message"].get("content") or "").strip()
+                except (ValueError, KeyError, IndexError, TypeError):
+                    # HTTP 200 z błędem w treści (darmowe modele przez OpenRouter: {"error": {...}}) — jak 429
+                    last_err = f"{model}: HTTP 200 bez choices: {r.text[:120]}"
+                    time.sleep(self.backoff * 2**attempt)
+                    continue
                 if not text:
                     last_err = f"{model}: pusta odpowiedź"
                     break

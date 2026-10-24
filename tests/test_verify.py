@@ -65,3 +65,26 @@ def test_rewrite_strips_article_numbers() -> None:
 
     s = _strip_article_numbers("Zgodnie z art. 86a ust. 1 i artykułem 90 podatnik odlicza 50%")
     assert "86a" not in s and "artykułem 90" not in s and "50%" in s
+
+
+def test_llm_200_without_choices_is_retryable_error(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    import httpx
+
+    from raglab.llm import LLM, LLMError
+
+    monkeypatch.setenv("LLM_BASE_URL", "http://example.invalid/v1")
+    monkeypatch.setenv("LLM_API_KEY", "x")
+    llm = LLM(["m"], attempts=2, backoff=0.0)
+    calls = []
+
+    def fake_post(*a, **k):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        return httpx.Response(200, json={"error": {"message": "upstream"}})
+
+    monkeypatch.setattr(llm.client, "post", fake_post)
+    try:
+        llm.complete([{"role": "user", "content": "x"}])
+        raise AssertionError("powinien być LLMError")
+    except LLMError as e:
+        assert "bez choices" in str(e)
+    assert len(calls) == 2
