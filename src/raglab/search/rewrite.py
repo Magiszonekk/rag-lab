@@ -117,6 +117,12 @@ def prefetch(questions: list[str], strategies: list[str], workers: int = 6) -> N
         return
     with ThreadPoolExecutor(workers) as ex:
         list(ex.map(lambda qs: rewrite(qs[0], qs[1], llm), todo))
+    missing = [(q, s) for q, s in todo if _key(s, q) not in _load()]
+    if missing:
+        # bez tego wyszukiwanie po cichu szukałoby pytaniem oryginalnym i raportowało „brak efektu”
+        raise RuntimeError(
+            f"{len(missing)}/{len(todo)} przepisań nie powiodło się (model {REWRITE_MODELS[0]}) — przerwano"
+        )
 
 
 __all__ = ["CACHE", "PROMPTS", "Path", "prefetch", "rewrite"]
