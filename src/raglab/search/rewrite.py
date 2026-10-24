@@ -24,7 +24,7 @@ from pathlib import Path
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM, LLMError, parse_json
 
-REWRITE_MODELS = ["gpt-5.6-luna", "gpt-5.6-terra"]
+REWRITE_MODELS = ["gemini-3-flash-preview"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
 CACHE = REPO_ROOT / "data" / "cache" / "rewrite.jsonl"
 
 PROMPTS = {
@@ -95,6 +95,8 @@ def rewrite(question: str, strategy: str, llm: LLM | None = None) -> str:
         if d.get("keywords"):
             q += " " + " ".join(str(x) for x in d["keywords"])
         q = _strip_article_numbers(q)
+        if c.served_model != REWRITE_MODELS[0]:
+            raise ValueError(f"odpowiedział inny model: {c.served_model}")
     except (LLMError, ValueError):
         return question  # nie cache'ujemy błędu
     with _lock:

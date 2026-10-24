@@ -26,7 +26,11 @@ from raglab.search.chunking import structural
 from raglab.search.index import BM25Index, Embedder, Hit, VectorIndex, demote_historical, rrf
 from raglab.search.normalize import get_normalizer
 
-ANSWER_MODELS = ["gpt-5.6-luna", "gpt-5.6-terra"]
+# Limit GPT (Codex) w bramce wyczerpany 2026-10-24 (odnowienie ~25 dni); wyniki GPT: results/*.gpt56luna.*
+# Wszystkie tabele w README liczone jednym modelem odpowiadającym; zmiana modelu = przeliczenie całości.
+# Jeden model, BEZ zapasu z innej rodziny: zapas po cichu mieszał modele w jednej tabeli (2026-10-24: gemini-3.6
+# padł na limicie klucza Google, a ~1000 odpowiedzi poszło do GLM). Przy błędzie — wpis z błędem, ponowienie później.
+ANSWER_MODELS = ["gemini-3-flash-preview"]
 
 SYSTEM_PROMPT = """Jesteś asystentem odpowiadającym na pytania o polskie prawo podatkowe WYŁĄCZNIE na podstawie
 przepisów podanych w sekcji PRZEPISY. Masz dostęp tylko do: ustawy o VAT, ustawy o PIT i Ordynacji podatkowej,

@@ -144,6 +144,12 @@ def main(argv: list[str] | None = None) -> int:
             gen(todo[0])  # rozgrzanie indeksów w wątku głównym
         with ThreadPoolExecutor(args.workers) as ex, cache_path.open("a", encoding="utf-8") as f:
             for key, a in ex.map(gen, todo):
+                if a.get("error"):
+                    print(f"  błąd: {a['error'][:150]}", file=sys.stderr)
+                    cache[key] = (
+                        a  # w tym przebiegu liczy się jako błąd, ale nie zapisujemy — ponowienie przy następnym
+                    )
+                    continue
                 cache[key] = a
                 f.write(json.dumps({"key": key, "answer": a}, ensure_ascii=False) + "\n")
                 f.flush()
