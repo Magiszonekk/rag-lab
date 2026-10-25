@@ -1,0 +1,51 @@
+name: Law watch
+
+# Strażnik zmian w prawie (koncept D1): co tydzień pyta API Sejmu, czy po stanie korpusu pojawił się nowszy
+# tekst jednolity albo nowelizacja, która już weszła w życie. Niczego nie podmienia; aktualizuje
+# results/law_watch.json (czyta go UI) i zakłada issue, gdy korpus jest w części nieaktualny.
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"   # poniedziałki 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Check for later changes
+        id: watch
+        run: |
+          set +e
+          uv run --no-dev python -m raglab.law_watch --check 2> watch.txt
+          echo "stale=$?" >> "$GITHUB_OUTPUT"
+          cat watch.txt
+      - name: Commit report
+        run: |
+          if ! git diff --quiet results/law_watch.json; then
+            git config user.name "law-watch"
+            git config user.email "law-watch@users.noreply.github.com"
+            git add results/law_watch.json
+            git commit -m "law watch: $(date -u +%F)"
+            git push
+          fi
+      - name: Open issue when corpus is stale
+        if: steps.watch.outputs.stale == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Korpus nieaktualny: zmiany w prawie po stanie korpusu"
+          if ! gh issue list --state open --search "$title in:title" --json number -q '.[0].number' | grep -q .; then
+            { echo "Strażnik zmian (raglab.law_watch) znalazł zmiany, które weszły w życie po dacie stanu korpusu."
+              echo "Odświeżenie korpusu = świadoma decyzja + nowa wersja zestawów testowych (koncept D1)."
+              echo; echo '```'; cat watch.txt; echo '```'; } > body.md
+            gh issue create --title "$title" --body-file body.md
+          fi

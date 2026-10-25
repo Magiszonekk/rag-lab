@@ -171,8 +171,18 @@ def eval_results() -> dict[str, Any]:
 def corpus() -> list[dict[str, Any]]:
     from raglab.corpus import ACT_LABEL, load_corpus
 
-    return [{"act": ACT_LABEL.get(k, k), "title": a.title, "state_date": str(a.state_date),
-             "articles": len(a.articles)} for k, a in load_corpus().items()]  # fmt: skip
+    watch: dict[str, Any] = {}
+    wp = RESULTS / "law_watch.json"
+    if wp.exists():
+        watch = json.loads(wp.read_text(encoding="utf-8")).get("acts", {})
+    out = []
+    for k, a in load_corpus().items():
+        w = watch.get(k, {})
+        later = [c for c in w.get("changes_after_corpus", []) if c.get("already_in_force")]
+        changes = [{"eli": c["eli"], "in_force_from": c["in_force_from"]} for c in later]
+        row = {"act": ACT_LABEL.get(k, k), "title": a.title, "state_date": str(a.state_date)}
+        out.append({**row, "articles": len(a.articles), "later_changes_in_force": len(later), "later_changes": changes})
+    return out
 
 
 @app.get("/trace/{trace_id}")

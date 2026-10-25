@@ -61,3 +61,28 @@ def test_mask_personal_data() -> None:
 
     s = mask("PESEL 85010112345, NIP 123-456-78-90, mail jan@x.pl, tel. +48 600 700 800")
     assert "85010112345" not in s and "jan@x.pl" not in s and "600 700 800" not in s and "123-456-78-90" not in s
+
+
+def test_law_watch_logic_with_fake_api(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    from datetime import date
+
+    import raglab.law_watch as lw
+
+    acts = {
+        "DU/2026/1263": {"announcementDate": "2026-09-01", "references": {"Tekst jednolity dla aktu": [{"id": "B"}]}},
+        "B": {"references": {
+            "Inf. o tekście jednolitym": [{"id": "DU/2026/1263"}],
+            "Akty zmieniające": [{"id": "OLD", "date": "2026-08-01"}, {"id": "NEW", "date": "2026-10-01"},
+                                 {"id": "FUT", "date": "2027-01-01"}]}},
+        "NEW": {"announcementDate": "2026-09-20", "title": "nowela"},
+        "FUT": {"announcementDate": "2026-09-04", "title": "przyszła"},
+        "OLD": {"announcementDate": "2026-07-01", "title": "stara"},
+    }  # fmt: skip
+    monkeypatch.setattr(lw, "_get", lambda client, eli: acts[eli])
+    monkeypatch.setattr(
+        lw.tomllib, "loads", lambda s: {"source": [{"key": "vat", "eli": "DU/2026/1263", "name": "VAT"}]}
+    )
+    rep = lw.watch(today=date(2026, 10, 25))["acts"]["vat"]
+    assert [c["eli"] for c in rep["changes_after_corpus"]] == ["NEW", "FUT"]
+    assert rep["changes_after_corpus"][0]["already_in_force"] and not rep["changes_after_corpus"][1]["already_in_force"]
+    assert rep["stale"] is True

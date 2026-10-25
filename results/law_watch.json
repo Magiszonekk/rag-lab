@@ -1,0 +1,147 @@
+{
+ "checked": "2026-10-25",
+ "acts": {
+  "vat": {
+   "name": "Ustawa o podatku od towarów i usług",
+   "corpus_text": "DU/2026/1263",
+   "corpus_announced": "2026-09-01",
+   "base_act": "DU/2004/535",
+   "newer_consolidated_text": [],
+   "changes_after_corpus": [
+    {
+     "eli": "DU/2026/1270",
+     "title": "Ustawa z dnia 4 września 2026 r. o zmianie ustawy o podatku od towarów i usług oraz ustawy o zasadach ewidencji i identyfikacji podatników i płatników",
+     "announced": "2026-09-04",
+     "in_force_from": "2027-01-01",
+     "already_in_force": false
+    }
+   ],
+   "stale": false
+  },
+  "pit": {
+   "name": "Ustawa o podatku dochodowym od osób fizycznych",
+   "corpus_text": "DU/2026/592",
+   "corpus_announced": "2026-04-17",
+   "base_act": "DU/1991/350",
+   "newer_consolidated_text": [],
+   "changes_after_corpus": [
+    {
+     "eli": "DU/2026/779",
+     "title": "Ustawa z dnia 15 maja 2026 r. o zmianie ustawy o podatku dochodowym od osób fizycznych, ustawy o podatku dochodowym od osób prawnych oraz ustawy o zryczałtowanym podatku dochodowym od niektórych przyc",
+     "announced": "2026-05-15",
+     "in_force_from": "2026-07-01",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/1079",
+     "title": "Ustawa z dnia 17 lipca 2026 r. o zmianie niektórych ustaw w celu wsparcia przedsiębiorstw żeglugowych oraz stworzenia warunków ich funkcjonowania pod polską banderą",
+     "announced": "2026-07-17",
+     "in_force_from": "2026-09-10",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/846",
+     "title": "Ustawa z dnia 29 maja 2026 r. o zmianie ustawy - Ordynacja podatkowa oraz niektórych innych ustaw",
+     "announced": "2026-05-29",
+     "in_force_from": "2026-10-01",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/1287",
+     "title": "Ustawa z dnia 18 września 2026 r. o podatku od nadzwyczajnych zysków osiągniętych w okresie od marca 2026 r. do marca 2027 r. ze zbycia paliw ciekłych",
+     "announced": "2026-09-18",
+     "in_force_from": "2026-11-01",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1371",
+     "title": "Ustawa z dnia 18 września 2026 r. o zmianie ustawy o podatku dochodowym od osób fizycznych oraz ustawy o podatku dochodowym od osób prawnych",
+     "announced": "2026-09-18",
+     "in_force_from": "2026-11-05",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1347",
+     "title": "Ustawa z dnia 4 września 2026 r. o zmianie ustawy o odnawialnych źródłach energii oraz niektórych innych ustaw",
+     "announced": "2026-09-04",
+     "in_force_from": "2026-12-01",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1354",
+     "title": "Ustawa z dnia 18 września 2026 r. o zmianie ustawy o podatkach i opłatach lokalnych, ustawy o podatku dochodowym od osób fizycznych oraz ustawy o podatku od czynności cywilnoprawnych",
+     "announced": "2026-09-18",
+     "in_force_from": "2027-01-01",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1098",
+     "title": "Ustawa z dnia 3 lipca 2026 r. o osobistych kontach inwestycyjnych",
+     "announced": "2026-07-03",
+     "in_force_from": "2027-01-01",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1123",
+     "title": "Ustawa z dnia 31 lipca 2026 r. o zmianie ustawy o opiece nad dziećmi w wieku do lat 3 oraz niektórych innych ustaw",
+     "announced": "2026-07-31",
+     "in_force_from": "2028-01-01",
+     "already_in_force": false
+    }
+   ],
+   "stale": true
+  },
+  "op": {
+   "name": "Ordynacja podatkowa",
+   "corpus_text": "DU/2026/622",
+   "corpus_announced": "2026-04-22",
+   "base_act": "DU/1997/926",
+   "newer_consolidated_text": [],
+   "changes_after_corpus": [
+    {
+     "eli": "DU/2026/1154",
+     "title": "Ustawa z dnia 17 lipca 2026 r. o zmianie ustawy o jakości handlowej artykułów rolno-spożywczych oraz niektórych innych ustaw",
+     "announced": "2026-07-17",
+     "in_force_from": "2026-09-16",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/825",
+     "title": "Ustawa z dnia 29 maja 2026 r. o zmianie ustawy - Ordynacja podatkowa",
+     "announced": "2026-05-29",
+     "in_force_from": "2026-09-24",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/846",
+     "title": "Ustawa z dnia 29 maja 2026 r. o zmianie ustawy - Ordynacja podatkowa oraz niektórych innych ustaw",
+     "announced": "2026-05-29",
+     "in_force_from": "2026-10-01",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/875",
+     "title": "Ustawa z dnia 11 czerwca 2026 r. o zmianie niektórych ustaw w celu uproszczenia procedur administracyjnych w sprawach rozstrzyganych w drodze decyzji administracyjnych albo załatwianych milcząco",
+     "announced": "2026-06-11",
+     "in_force_from": "2027-01-01",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1098",
+     "title": "Ustawa z dnia 3 lipca 2026 r. o osobistych kontach inwestycyjnych",
+     "announced": "2026-07-03",
+     "in_force_from": "2027-01-01",
+     "already_in_force": false
+    },
+    {
+     "eli": "DU/2026/1206",
+     "title": "Ustawa z dnia 31 lipca 2026 r. o zmianie ustawy - Prawo bankowe oraz niektórych innych ustaw",
+     "announced": "2026-07-31",
+     "in_force_from": "2027-01-11",
+     "already_in_force": false
+    }
+   ],
+   "stale": true
+  }
+ }
+}
