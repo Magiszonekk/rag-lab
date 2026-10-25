@@ -86,3 +86,30 @@ def test_law_watch_logic_with_fake_api(monkeypatch) -> None:  # type: ignore[no-
     assert [c["eli"] for c in rep["changes_after_corpus"]] == ["NEW", "FUT"]
     assert rep["changes_after_corpus"][0]["already_in_force"] and not rep["changes_after_corpus"][1]["already_in_force"]
     assert rep["stale"] is True
+
+
+def test_demo_path_uses_only_demo_model(monkeypatch, api) -> None:  # type: ignore[no-untyped-def]
+    """Każde wywołanie modelu w ścieżce /ask idzie przez klienta bramki demo (HyDE, odpowiedź, weryfikacja)."""
+    import raglab.llm as L
+
+    calls: list[str] = []
+
+    def fake_complete(self, messages, **kw):  # type: ignore[no-untyped-def]
+        calls.append(self.models[0])
+        txt = messages[-1]["content"]
+        if "hipotetyczny" in txt or "fragment polskiej ustawy" in txt:
+            body = '{"query": "Zwrot różnicy podatku następuje w terminie dni od złożenia rozliczenia"}'
+        elif "Sprawdzasz odpowiedź" in txt:
+            body = '{"claims": [], "verdict": "pass", "fixed_answer": null}'
+        else:
+            body = '{"answer": "Termin wynosi 40 dni.", "citations": ["VAT art. 87 ust. 2"], "refused": false}'
+        return L.Completion(text=body, requested_model=self.models[0], served_model=self.models[0],
+                            prompt_tokens=1, completion_tokens=1, latency_ms=1)  # fmt: skip
+
+    monkeypatch.setattr(L.LLM, "complete", fake_complete)
+    demo = L.LLM(["demo-answer"])
+    q = "Ile dni ma urząd na zwrot nadwyżki VAT? (test izolacji modeli demo)"
+    a = api._answer(q, "hyde", "llm", demo)
+    assert calls and set(calls) == {"demo-answer"}, calls
+    assert a.get("error") is None and a["llm_check"]["verdict"] == "pass"
+    assert L.system_llm() is None  # kontekst wyczyszczony po odpowiedzi

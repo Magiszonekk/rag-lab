@@ -21,7 +21,7 @@ import threading
 from typing import Any
 
 from raglab.ingest.sources import REPO_ROOT
-from raglab.llm import LLM, LLMError, parse_json
+from raglab.llm import LLM, LLMError, parse_json, system_llm
 
 VERIFY_MODELS = ["claude-sonnet-5"]
 CACHE = REPO_ROOT / "results" / "answers" / "verify_cache.jsonl"
@@ -81,14 +81,20 @@ def verify_llm(ans: dict[str, Any], question: str, llm: LLM | None = None) -> di
     k = _key(ans, question)
     if k in mem:
         return mem[k]
-    llm = llm or LLM(VERIFY_MODELS)
+    sys_llm = system_llm()
+    llm = llm or sys_llm or LLM(VERIFY_MODELS)
+    expected = llm.models[0] if sys_llm is not None and llm is sys_llm else VERIFY_MODELS[0]
+    if sys_llm is not None:
+        k = _key({**ans, "answer": ans["answer"] + "@" + sys_llm.models[0]}, question)
+        if k in mem:
+            return mem[k]
     ctx = "\n\n".join(f"[{c['address']}]" + (f" ({c['note']})" if c.get("note") else "") + f"\n{c['text']}"
                       for c in ans.get("context", []))  # fmt: skip
     prompt = PROMPT.format(question=question, answer=ans["answer"], citations=", ".join(ans["citations"]),
                            context=ctx[:40000])  # fmt: skip
     try:
         c = llm.complete([{"role": "user", "content": prompt}], max_tokens=6000, temperature=0.0)
-        if c.served_model != VERIFY_MODELS[0]:
+        if c.served_model != expected:
             raise ValueError(f"odpowiedział inny model: {c.served_model}")
         d = parse_json(c.text)
         if not isinstance(d, dict) or d.get("verdict") not in ("pass", "fix", "fail"):

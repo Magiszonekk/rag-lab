@@ -6,6 +6,7 @@ Zwraca też model, który FAKTYCZNIE odpowiedział (proxy potrafi podmienić mod
 
 from __future__ import annotations
 
+import contextvars
 import json
 import os
 import time
@@ -41,6 +42,20 @@ class Completion:
 
 class LLMError(RuntimeError):
     pass
+
+
+# Model dla WSZYSTKICH kroków systemu (HyDE, odpowiedź, agent, weryfikacja) w bieżącym kontekście.
+# API demo ustawia tu klienta bramki demo (D11) — bez tego kroki pomocnicze wołałyby domyślne modele ról
+# (klucz ewaluacji, modele z subskrypcji). Ewaluacja zostawia None.
+_system_llm: contextvars.ContextVar[LLM | None] = contextvars.ContextVar("raglab_system_llm", default=None)
+
+
+def system_llm() -> LLM | None:
+    return _system_llm.get()
+
+
+def use_system_llm(llm: LLM | None) -> contextvars.Token[LLM | None]:
+    return _system_llm.set(llm)
 
 
 class LLM:

@@ -22,7 +22,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from raglab.ingest.sources import REPO_ROOT
-from raglab.llm import LLM, LLMError, parse_json
+from raglab.llm import LLM, LLMError, parse_json, system_llm
 
 REWRITE_MODELS = ["claude-sonnet-5"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
 CACHE = REPO_ROOT / "data" / "cache" / "rewrite.jsonl"
@@ -81,7 +81,14 @@ def rewrite(question: str, strategy: str, llm: LLM | None = None) -> str:
     k = _key(strategy, question)
     if k in mem:
         return mem[k]
-    llm = llm or LLM(REWRITE_MODELS)
+    sys_llm = system_llm()
+    llm = llm or sys_llm or LLM(REWRITE_MODELS)
+    expected = llm.models[0] if sys_llm is not None and llm is sys_llm else REWRITE_MODELS[0]
+    if sys_llm is not None:
+        # cache osobny dla modelu demo (prompt ten sam, inny model w kluczu)
+        k = hashlib.sha1(f"{strategy}|{sys_llm.models[0]}|{PROMPTS[strategy]}|{question}".encode()).hexdigest()[:16]
+        if k in mem:
+            return mem[k]
     try:
         c = llm.complete(
             [{"role": "user", "content": PROMPTS[strategy].format(question=question)}],
@@ -102,7 +109,7 @@ def rewrite(question: str, strategy: str, llm: LLM | None = None) -> str:
         if d.get("keywords"):
             q += " " + " ".join(str(x) for x in d["keywords"])
         q = _strip_article_numbers(q)
-        if c.served_model != REWRITE_MODELS[0]:
+        if c.served_model != expected:
             raise ValueError(f"odpowiedział inny model: {c.served_model}")
     except (LLMError, ValueError):
         return question  # nie cache'ujemy błędu

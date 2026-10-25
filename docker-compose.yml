@@ -22,5 +22,31 @@ services:
       timeout: 5s
       retries: 10
 
+  # Bramka modeli (D11). Profil "gateway": startuje tylko jawnie (docker compose --profile gateway up -d),
+  # bo lista modeli demo czeka na decyzję właściciela.
+  litellm:
+    profiles: ["gateway"]
+    image: ghcr.io/berriai/litellm-database:v1.106.4   # przypięta wersja
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      LITELLM_DATABASE_URL: postgresql://${POSTGRES_USER:-raglab}:${POSTGRES_PASSWORD:-change-me}@db:5432/litellm
+      DEMO_UPSTREAM_MODEL: openai/${DEMO_UPSTREAM_MODEL:-gemini-3.6-flash}
+      LITELLM_TELEMETRY: "False"
+      # z kontenera upstream na hoście jest pod host.docker.internal (adres z LLM_BASE_URL przepisany niżej)
+      LLM_BASE_URL: ${LLM_BASE_URL_FROM_DOCKER:-http://host.docker.internal:8000/v1}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    ports:
+      - "127.0.0.1:${RAGLAB_LITELLM_PORT:-3027}:4000"
+    volumes:
+      - ./deploy/litellm/config.yaml:/app/config.yaml:ro
+    mem_limit: 1g
+
 volumes:
   raglab_db_data:

@@ -106,6 +106,18 @@ def _demo_llm() -> LLM:
 
 
 def _answer(question: str, variant: str, verify: str, llm: LLM) -> dict[str, Any]:
+    from raglab.llm import use_system_llm
+
+    token = use_system_llm(llm)  # HyDE, agent, weryfikacja — wszystko przez bramkę demo
+    try:
+        return _answer_inner(question, variant, verify, llm)
+    finally:
+        from raglab.llm import _system_llm
+
+        _system_llm.reset(token)
+
+
+def _answer_inner(question: str, variant: str, verify: str, llm: LLM) -> dict[str, Any]:
     from raglab.rag.evaluate import apply_verify
 
     if variant.startswith("agentic"):
@@ -119,7 +131,7 @@ def _answer(question: str, variant: str, verify: str, llm: LLM) -> dict[str, Any
     if verify == "llm" and not a.get("error"):
         from raglab.rag.verify_llm import apply_llm
 
-        a = apply_llm(a, question, llm)
+        a = apply_llm(a, question)
     elif verify == "cite":
         a = apply_verify(a, "cite", question)
     return a
