@@ -87,30 +87,60 @@ Golden set v1: 53 answerable questions + 19 out-of-corpus. Same answering model,
 every variant; only retrieval differs. **Answerer: Claude Sonnet 5. Judge: Nemotron 3 Ultra** (a different
 model family), with a fixed scale (correct / partial / incorrect / refusal_ok / refusal_missing) and a reason.
 
-| variant | correct (95% CI) | correct + partial | key facts | cites gold provision | faithful | correct refusals | false refusals | p50 latency |
+| variant | correct (95% CI) | correct + partial | key facts | cites gold provision | faithful | correct refusals | false refusals* | p50 latency |
 |---|---|---|---|---|---|---|---|---|
-| simple (vectors) | 0.755 (0.64–0.87) | 0.774 | 0.698 | 0.704 | 0.986 | 12/13 | 0.151 | 6.2 s |
-| hybrid (BM25 + vectors) | 0.811 (0.70–0.91) | 0.849 | 0.698 | 0.758 | 0.986 | 13/13 | 0.113 | 6.2 s |
-| **hybrid + HyDE** | **0.906 (0.81–0.98)** | **0.925** | **0.792** | **0.843** | 0.972 | 13/13 | **0.000** | 10.2 s |
-| hybrid + HyDE + `verify=cite` | 0.830 | 0.849 | 0.726 | 0.843 | 0.889 | 13/13 | 0.094 | |
+| simple (vectors) | 0.755 (0.64–0.87) | 0.774 | 0.698 | 0.704 | 0.986 | 12/13 | 0.226 | 6.2 s |
+| hybrid (BM25 + vectors) | 0.811 (0.70–0.91) | 0.849 | 0.698 | 0.758 | 0.986 | 13/13 | 0.151 | 6.2 s |
+| **hybrid + HyDE** | **0.906 (0.81–0.98)** | **0.925** | **0.792** | **0.843** | 0.972 | 13/13 | **0.057** | 10.2 s |
+| hybrid + HyDE + `verify=cite` | 0.830 | 0.849 | 0.726 | 0.843 | 0.889 | 13/13 | 0.132 | |
+| hybrid + HyDE + `verify=llm` | 0.906 | 0.925 | 0.792 | 0.843 | 0.958 | 13/13 | 0.057 | +5–40 s |
+
+\*A false refusal is an answerable question where the system said it couldn't answer — either with the refusal
+flag or in plain words ("the provision isn't in my materials"). Counting only the flag hid most of them (HyDE:
+0/53 by flag, 3/53 in fact); found while reviewing judge disagreements.
 
 - **HyDE vs simple is significant** (10 : 2 on "correct", p = 0.039); **HyDE vs hybrid is not yet**
   (6 : 1, p = 0.13) — 53 questions are too few to separate them.
 - **Refusals work**: the questions about other acts / non-tax topics were refused, with no answers from the
-  model's own knowledge. Only 3 HyDE answers are wrong; colloquial questions are 9/11 correct.
+  model's own knowledge.
+- **The remaining errors are retrieval misses, not hallucinations.** All 3 HyDE false refusals are questions
+  whose key provision (art. 86a ust. 1 — 50% for mixed-use cars; art. 113 ust. 13; art. 111 ust. 1) didn't
+  reach the top-5; the system says so instead of guessing. One real substantive error remains: a KSeF question
+  where the model applies an exemption for EU-established taxpayers (art. 113a ust. 1) to a Polish freelancer.
 - **Transitional provisions matter**: art. 41 VAT still says 22%; the 23% rate lives in a transitional article.
   The context builder attaches overriding transitional provisions with an explicit note. Without it the system
   cites the right article and gives the wrong rate, which no citation check can catch.
-- **`verify=cite` hurts**: it blocked 6 HyDE answers, 5 of them correct — every time a derived or restated
-  number ("2 × 92.67 = 185.34 zł", "5 lat", "180 dni") that doesn't appear verbatim in the cited text. It stays
-  off; sentence-level LLM verification (`verify=llm`) is next.
-- **Same conclusions on a second series** (GPT-5.6 answering, Claude judging; `results/*.gpt56luna.*`): HyDE
-  0.849, hybrid 0.792, simple 0.717. Numbers from different answerer/judge pairs are not mixed in one table.
-- **Judge fix, reported honestly**: an earlier judge version saw only the first 2,500 characters of each
-  context block and marked citations of later paragraphs as "not in context" (−2 to −4 pp for every variant).
-- **Judge calibration is pending**: a second judge from a third family on the same 216 answers, then a manual
-  review of every disagreement against the statute (`src/raglab/rag/calibrate.py`). Free-tier quotas of the
-  candidate second judges ran out mid-run; the run is resumable and only fills in missing verdicts.
+
+### Answer verification
+
+- **`verify=cite` (deterministic) hurts**: numbers in the answer must appear in the cited text. It blocked 6
+  HyDE answers, 5 of them correct — derived or restated numbers ("2 × 92.67 = 185.34 zł", "5 lat", "180 dni").
+- **`verify=llm` (sentence by sentence)**: a verifier model splits the answer into claims and checks each against
+  the context (arithmetic and paraphrase allowed); unsupported sentences are removed, an unsupported main thesis
+  turns the answer into a refusal. It blocked **no** correct answer, trimmed 6–7 answers per variant (e.g. "so the
+  ex-wife must pay tax on 200 zł" — the statute only says the excess isn't exempt) and changed the score by
+  0 to +2 pp. It does **not** catch a misapplied provision (the KSeF case): the claim *is* in the cited text; the
+  error is that it doesn't fit the user's facts. It is the default guard for the demo; `cite` stays off.
+
+### Judge calibration
+
+A second judge from a third model family (GPT-OSS-120B; answerer is Claude, main judge Nemotron) scored the same
+72 HyDE answers; 41 pairs completed before its free-tier daily limit. Agreement 85% (35/41), Cohen's κ = 0.52
+on collapsed classes (ok / partial / wrong / correct refusal). All 6 disagreements were reviewed by hand against
+the statute (`data/eval/golden/judge_review_v1.jsonl`): each judge was right in 3.
+
+- **Main judge's systematic error**: it rated honest "the provision isn't in my context" answers as correct
+  refusals, even when the answer *is* in the corpus. By the scale that is a failure (a retrieval miss). This is
+  why false refusals are now counted from the answer text, not only the flag (table above).
+- **Second judge's errors**: it penalised correct extra details (calling the real 8% transitional rate "alleged")
+  and was too lenient on the misapplied KSeF exemption.
+- The "human" reviewer here is the author's assistant model (Claude), checking against the statute text — the
+  answerer's family. A review by a tax professional is out of scope; treat κ = 0.52 as moderate agreement.
+
+**Same conclusions on a second series** (GPT-5.6 answering, Claude judging; `results/*.gpt56luna.*`): HyDE
+0.849, hybrid 0.792, simple 0.717. Numbers from different answerer/judge pairs are not mixed in one table.
+An earlier judge version saw only the first 2,500 characters of each context block and marked citations of later
+paragraphs as "not in context" (−2 to −4 pp for every variant); fixed before all numbers above.
 
 ## Test sets
 
@@ -143,7 +173,7 @@ in `.env` (see `.env.example`).
 
 - **M1** ✅ retrieval baseline: chunking by legal structure, BM25 on lemmas vs. vectors vs. hybrid,
   recall@k / MRR with confidence intervals, CI gate on retrieval metrics; golden answer set.
-- **M2** — answering variants (simple, hybrid + reranker, agentic with LangGraph), answer checking
+- **M2** (in progress: variants, HyDE, verification and judge calibration done; agentic variant next) — answering variants (simple, hybrid + reranker, agentic with LangGraph), answer checking
   (citations / key facts / LLM judge calibrated against human labels), tracing.
 - **M2b** — scaling the corpus from 3 to 19 tax acts and measuring retrieval degradation.
 - **M3** — public demo with comparison mode and trace viewer.

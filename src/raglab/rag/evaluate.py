@@ -81,7 +81,13 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     acceptable = [1.0 if r["judge"]["verdict"] in ("correct", "partial") else 0.0 for r in ans_rows]
     kf = [r["key_facts"] for r in ans_rows]
     faithful = [1.0 if r["judge"]["faithful"] else 0.0 for r in rows if r["judge"]["faithful"] is not None]
-    false_ref = [1.0 if r["answer"]["refused"] else 0.0 for r in ans_rows]
+
+    # odmowa „faktyczna”: flaga refused ALBO odpowiedź, którą sędzia uznał za odmowę (model pisze „nie mam przepisu”
+    # bez ustawiania flagi). Sama flaga zaniżała fałszywe odmowy: hyde 0/53 wg flagi, 3/53 faktycznie (przegląd sporów).
+    def _refused(r: dict[str, Any]) -> bool:
+        return bool(r["answer"]["refused"]) or r["judge"]["verdict"] in ("refusal_ok", "refusal_missing")
+
+    false_ref = [1.0 if _refused(r) else 0.0 for r in ans_rows]
     good_ref = [1.0 if r["answer"]["refused"] else 0.0 for r in ref_rows]
     ooc_ok = [1.0 if r["judge"]["verdict"] in ("refusal_ok", "correct") else 0.0 for r in ooc_other]
     tokens = [r["answer"]["prompt_tokens"] + r["answer"]["completion_tokens"] for r in rows]

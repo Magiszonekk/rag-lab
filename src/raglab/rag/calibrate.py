@@ -144,10 +144,12 @@ def run() -> None:
 def report() -> None:
     pairs = {(p["config"], p["id"]): p for p in json.loads((RUNS / "calib_pairs.json").read_text())}
     rev = [json.loads(x) for x in REVIEW.read_text(encoding="utf-8").splitlines() if x.strip()]
-    a = [collapse(p["j1"], p["refused"]) for p in pairs.values()]
-    b = [collapse(p["j2"], p["refused"]) for p in pairs.values()]
+    valid = [p for p in pairs.values() if p["j1"] != "error" and p["j2"] != "error"]  # pary z oboma werdyktami
+    a = [collapse(p["j1"], p["refused"]) for p in valid]
+    b = [collapse(p["j2"], p["refused"]) for p in valid]
     out: dict[str, Any] = {
         "n": len(pairs),
+        "n_pairs_both_judged": len(valid),
         "judge_agreement": round(sum(x == y for x, y in zip(a, b, strict=True)) / len(a), 3),
         "judge_kappa": round(kappa(a, b), 3),
         "reviewed": len(rev),

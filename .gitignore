@@ -12,3 +12,4 @@ data/corpus/
 data/cache/
 results/eval_run.log
 results/answers/
+data/eval/golden/judge_review_v1.SHEET.md
