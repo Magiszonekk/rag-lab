@@ -28,9 +28,9 @@ from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_VERSION, judge
 
 # gemini-3.8-flash przez bramkę ~70 s na odpowiedź (zmierzone) — niepraktyczne dla ~200 ocen.
-# trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1). gemini-2.5-flash i 3-flash-preview padły na
-# dziennym limicie Google (2026-10-25); 3.8-flash ma osobny limit, ale ~80 s na ocenę → 4 wątki
-SECOND_JUDGE = ["gemini-3.8-flash"]
+# trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1). Gemini 2.5 / 3-preview / 3.8 padły na dziennym
+# limicie Google po 1–14 ocenach (2026-10-25); gpt-oss-120b (groq) przeszedł próbę 12/12
+SECOND_JUDGE = ["openai/gpt-oss-120b"]
 CONFIGS = ["simple/verify=off", "hybrid/verify=off", "hyde/verify=off"]
 DETAILS = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
 SECOND = RUNS / "judge2_cache.jsonl"
@@ -40,6 +40,13 @@ OUT = REPO_ROOT / "results" / "judge_calibration_v1.json"
 
 COLLAPSE = {"correct": "ok", "partial": "partial", "incorrect": "wrong", "refusal_missing": "wrong",
             "refusal_ok": "refusal_ok", "error": "error"}  # fmt: skip
+
+
+def collapse(verdict: str, refused: bool) -> str:
+    """Odmowa uznana za słuszną to jedna klasa, niezależnie od tego, czy sędzia napisał „correct” czy „refusal_ok”."""
+    if refused and verdict in ("correct", "refusal_ok"):
+        return "refusal_ok"
+    return COLLAPSE[verdict]
 
 
 def kappa(a: list[str], b: list[str]) -> float:
@@ -83,7 +90,7 @@ def run() -> None:
 
     todo = [r for r in rows if key(r) not in done]
     print(f"drugi sędzia: {len(todo)} ocen do wykonania", file=sys.stderr)
-    with ThreadPoolExecutor(4) as ex, SECOND.open("a", encoding="utf-8") as f:
+    with ThreadPoolExecutor(2) as ex, SECOND.open("a", encoding="utf-8") as f:
         for r, j in zip(todo, ex.map(lambda r: judge(r["item"], r["answer"], llm), todo), strict=True):
             if j["verdict"] != "error":
                 done[key(r)] = j
@@ -91,8 +98,8 @@ def run() -> None:
     for r in rows:
         r["judge2"] = done.get(key(r), {"verdict": "error", "faithful": None, "reason": "", "judge_model": ""})
 
-    a = [COLLAPSE[r["judge1"]["verdict"]] for r in rows]
-    b = [COLLAPSE[r["judge2"]["verdict"]] for r in rows]
+    a = [collapse(r["judge1"]["verdict"], r["answer"]["refused"]) for r in rows]
+    b = [collapse(r["judge2"]["verdict"], r["answer"]["refused"]) for r in rows]
     agree = sum(x == y for x, y in zip(a, b, strict=True))
     print(f"zgodność {agree}/{len(rows)} = {agree / len(rows):.3f}, kappa {kappa(a, b):.3f}", file=sys.stderr)
     print("macierz (sędzia1 → sędzia2):", Counter(zip(a, b, strict=True)).most_common(), file=sys.stderr)
@@ -120,7 +127,7 @@ def run() -> None:
         ]
     SHEET.write_text("\n".join(lines) + "\n", encoding="utf-8")
     json.dump([{"config": r["config"], "id": r["item"]["id"], "j1": r["judge1"]["verdict"],
-                "j2": r["judge2"]["verdict"]} for r in rows],
+                "j2": r["judge2"]["verdict"], "refused": r["answer"]["refused"]} for r in rows],
               (RUNS / "calib_pairs.json").open("w"), ensure_ascii=False)  # fmt: skip
     print(f"arkusz: {SHEET} ({len(sample)} pozycji)", file=sys.stderr)
 
@@ -128,8 +135,8 @@ def run() -> None:
 def report() -> None:
     pairs = {(p["config"], p["id"]): p for p in json.loads((RUNS / "calib_pairs.json").read_text())}
     rev = [json.loads(x) for x in REVIEW.read_text(encoding="utf-8").splitlines() if x.strip()]
-    a = [COLLAPSE[p["j1"]] for p in pairs.values()]
-    b = [COLLAPSE[p["j2"]] for p in pairs.values()]
+    a = [collapse(p["j1"], p["refused"]) for p in pairs.values()]
+    b = [collapse(p["j2"], p["refused"]) for p in pairs.values()]
     out: dict[str, Any] = {
         "n": len(pairs),
         "judge_agreement": round(sum(x == y for x, y in zip(a, b, strict=True)) / len(a), 3),
@@ -142,7 +149,11 @@ def report() -> None:
     agreed = [r for r in rev if r not in disputed]
     for name, subset in (("disputed", disputed), ("agreed_sample", agreed)):
         for j in ("j1", "j2"):
-            ok = sum(COLLAPSE[pairs[(r["config"], r["id"])][j]] == COLLAPSE[r["verdict"]] for r in subset)
+            ok = sum(
+                collapse(pairs[(r["config"], r["id"])][j], pairs[(r["config"], r["id"])]["refused"])
+                == collapse(r["verdict"], pairs[(r["config"], r["id"])]["refused"])
+                for r in subset
+            )
             out[f"{name}_{j}_matches_review"] = f"{ok}/{len(subset)}"
     # korekta wyników: o ile zmienia się „poprawne” per wariant, gdy werdykty sporne zastąpić przeglądem
     for cfg in CONFIGS:
