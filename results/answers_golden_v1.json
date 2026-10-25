@@ -609,6 +609,156 @@
    "latency_ms_p50": 10203,
    "latency_ms_p95": 26488,
    "errors": 0
+  },
+  "agentic-strict/verify=off": {
+   "answerable_correct": {
+    "mean": 0.981,
+    "ci95": [
+     0.943,
+     1.0
+    ],
+    "n": 53
+   },
+   "answerable_correct_or_partial": {
+    "mean": 1.0,
+    "ci95": [
+     1.0,
+     1.0
+    ],
+    "n": 53
+   },
+   "key_facts": {
+    "mean": 0.849,
+    "ci95": [
+     0.755,
+     0.925
+    ],
+    "n": 53
+   },
+   "citation_recall": {
+    "mean": 0.925,
+    "ci95": [
+     0.868,
+     0.972
+    ],
+    "n": 53
+   },
+   "faithful": {
+    "mean": 0.986,
+    "ci95": [
+     0.958,
+     1.0
+    ],
+    "n": 72
+   },
+   "false_refusals": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "n": 53
+   },
+   "correct_refusals": {
+    "mean": 1.0,
+    "ci95": [
+     1.0,
+     1.0
+    ],
+    "n": 13
+   },
+   "ooc_other_ok": {
+    "mean": 1.0,
+    "ci95": [
+     1.0,
+     1.0
+    ],
+    "n": 6
+   },
+   "verdicts": {
+    "correct": 58,
+    "partial": 1,
+    "refusal_ok": 13
+   },
+   "tokens_per_question": 10893,
+   "latency_ms_p50": 10194,
+   "latency_ms_p95": 29597,
+   "errors": 0
+  },
+  "agentic-strict/verify=llm": {
+   "answerable_correct": {
+    "mean": 1.0,
+    "ci95": [
+     1.0,
+     1.0
+    ],
+    "n": 53
+   },
+   "answerable_correct_or_partial": {
+    "mean": 1.0,
+    "ci95": [
+     1.0,
+     1.0
+    ],
+    "n": 53
+   },
+   "key_facts": {
+    "mean": 0.849,
+    "ci95": [
+     0.755,
+     0.925
+    ],
+    "n": 53
+   },
+   "citation_recall": {
+    "mean": 0.925,
+    "ci95": [
+     0.868,
+     0.972
+    ],
+    "n": 53
+   },
+   "faithful": {
+    "mean": 0.986,
+    "ci95": [
+     0.958,
+     1.0
+    ],
+    "n": 72
+   },
+   "false_refusals": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "n": 53
+   },
+   "correct_refusals": {
+    "mean": 1.0,
+    "ci95": [
+     1.0,
+     1.0
+    ],
+    "n": 13
+   },
+   "ooc_other_ok": {
+    "mean": 0.833,
+    "ci95": [
+     0.5,
+     1.0
+    ],
+    "n": 6
+   },
+   "verdicts": {
+    "correct": 58,
+    "refusal_ok": 13,
+    "partial": 1
+   },
+   "tokens_per_question": 10893,
+   "latency_ms_p50": 10194,
+   "latency_ms_p95": 29597,
+   "errors": 0
   }
  }
 }

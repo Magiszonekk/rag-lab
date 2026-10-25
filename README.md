@@ -3,7 +3,7 @@
 > 🇵🇱 Przejrzysty RAG na polskich ustawach podatkowych (VAT, PIT, Ordynacja podatkowa): kilka wariantów
 > wyszukiwania na tych samych danych, porównanych liczbami, z podglądem każdego kroku. Projekt w budowie.
 
-**Status: M1 done (retrieval + test sets); M2 in progress (answering variants, verification, judge).** Not tax advice — a technical demo.
+**Status: M1 and M2 done (retrieval, test sets, answering variants incl. agentic, verification, judge calibration); public demo (M3) next.** Not tax advice — a technical demo.
 
 ## Idea
 
@@ -94,6 +94,9 @@ model family), with a fixed scale (correct / partial / incorrect / refusal_ok / 
 | **hybrid + HyDE** | **0.906 (0.81–0.98)** | **0.925** | **0.792** | **0.843** | 0.972 | 13/13 | **0.057** | 10.2 s |
 | hybrid + HyDE + `verify=cite` | 0.830 | 0.849 | 0.726 | 0.843 | 0.889 | 13/13 | 0.132 | |
 | hybrid + HyDE + `verify=llm` | 0.906 | 0.925 | 0.792 | 0.843 | 0.958 | 13/13 | 0.057 | +5–40 s |
+| agentic (LangGraph) | 0.981 (0.94–1.00) | 0.981 | 0.896 | 0.925 | 0.944 | 12/13 | 0.000 | 10.2 s |
+| **agentic, strict navigation** | **0.981 (0.94–1.00)** | **1.000** | 0.849 | 0.925 | **0.986** | 13/13 | **0.000** | 10.2 s |
+| agentic strict + `verify=llm` | 1.000 | 1.000 | 0.849 | 0.925 | 0.986 | 13/13 | 0.000 | |
 
 \*A false refusal is an answerable question where the system said it couldn't answer — either with the refusal
 flag or in plain words ("the provision isn't in my materials"). Counting only the flag hid most of them (HyDE:
@@ -110,6 +113,26 @@ flag or in plain words ("the provision isn't in my materials"). Counting only th
 - **Transitional provisions matter**: art. 41 VAT still says 22%; the 23% rate lives in a transitional article.
   The context builder attaches overriding transitional provisions with an explicit note. Without it the system
   cites the right article and gives the wrong rate, which no citation check can catch.
+
+### Agentic variant
+
+A LangGraph loop: `retrieve` (hybrid + HyDE, as above) → `plan` ⇄ `tools` → `answer`. In `plan` the model sees
+the collected provisions and picks one action (JSON protocol, no native tool calling): **get** provisions by
+address, **search** again with a different wording, or **answer**. At most 3 tool steps; the final answer uses
+the same prompt as the other variants.
+
+- It fixes exactly the retrieval misses above: it sees art. 86a ust. 2–5 and fetches ust. 1 (the 50% rule);
+  follows "o którym mowa w art. 113 ust. 13" to the exemption exclusion; fetches art. 111 ust. 1 (the cash
+  register duty). 56 of 72 questions need no extra step, so the median cost equals HyDE.
+- **Is it the system or the model's memory?** In the free variant 6 of 25 fetched addresses came from the model
+  knowing where things are in the VAT act (nothing in the context pointed there; once even an act outside the
+  corpus). The **strict** variant may fetch only another unit of an article already in context or a provision
+  the text refers to. It scores the same (strict vs free 1 : 1, p = 1.0) — the gain is navigation of the
+  statute's structure, not recall. Strict is the variant for the demo.
+- vs hybrid: 10 : 1 (p = 0.012); vs simple: 12 : 0 (p = 0.0005); **vs HyDE: 4 : 0, p = 0.125 — not
+  significant** on 53 questions. With ~48/53 already correct for HyDE, the golden set is close to saturated; a
+  harder test set is needed to separate the best variants (M2b).
+- Cost: median 9.6k tokens per question vs 4.8k for HyDE; p95 latency 30 s vs 22 s.
 
 ### Answer verification
 
@@ -173,7 +196,7 @@ in `.env` (see `.env.example`).
 
 - **M1** ✅ retrieval baseline: chunking by legal structure, BM25 on lemmas vs. vectors vs. hybrid,
   recall@k / MRR with confidence intervals, CI gate on retrieval metrics; golden answer set.
-- **M2** (in progress: variants, HyDE, verification and judge calibration done; agentic variant next) — answering variants (simple, hybrid + reranker, agentic with LangGraph), answer checking
+- **M2** ✅ (variants incl. agentic, HyDE, verification, judge calibration) — answering variants (simple, hybrid + reranker, agentic with LangGraph), answer checking
   (citations / key facts / LLM judge calibrated against human labels), tracing.
 - **M2b** — scaling the corpus from 3 to 19 tax acts and measuring retrieval degradation.
 - **M3** — public demo with comparison mode and trace viewer.
