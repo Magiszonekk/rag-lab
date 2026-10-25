@@ -65,46 +65,52 @@ retrieval an LLM rewrites the question; results for the original and rewritten q
 rewriter never sees test data and article numbers are stripped from its output (otherwise we would be measuring
 the model's memory of the statute, not retrieval).
 
-| retrieval | recall@5, retrieval set (283) | colloquial (76) | recall@5, golden (53) | colloquial (11) | extra latency |
-|---|---|---|---|---|---|
-| hybrid | 0.880 (0.84–0.92) | 0.789 | 0.755 (0.64–0.87) | 0.455 | — |
-| + rewrite to statute language | 0.912 | 0.868 | 0.849 | 0.545 | ~2 s |
-| **+ HyDE** (hypothetical provision) | **0.922 (0.89–0.95)** | **0.908** | **0.887** | **0.727** | ~2 s |
-| + both | 0.926 | 0.908 | 0.906 | 0.818 | ~4 s |
+Rewriter: Claude Sonnet 5.
 
-HyDE vs plain hybrid: McNemar p = 0.008 (retrieval set) and p = 0.016 (golden). HyDE vs both: p = 1.0, so the
-cheaper HyDE goes into the answering pipeline.
+| retrieval | recall@5, retrieval set (283) | colloquial (76) | recall@5, golden (53) | colloquial (11) |
+|---|---|---|---|---|
+| hybrid | 0.880 (0.84–0.92) | 0.789 | 0.755 (0.64–0.87) | 0.455 |
+| + rewrite to statute language | 0.905 | 0.882 | 0.830 | 0.636 |
+| **+ HyDE** (hypothetical provision) | **0.912 (0.88–0.94)** | 0.895 | 0.868 (0.77–0.94) | 0.818 |
+| + both | 0.912 | 0.908 | **0.925 (0.85–0.98)** | **1.000** |
+
+- On the golden set the gain is significant (both vs hybrid: 10 : 1 discordant questions, McNemar p = 0.012).
+- On the larger retrieval set it is **not** (HyDE vs hybrid 16 : 7, p = 0.09), although colloquial questions
+  improve consistently.
+- **The effect depends on the rewriter.** With an earlier rewriter (GPT-5.6, kept as `*.gpt56luna.*` in
+  `results/`) HyDE was significant on the retrieval set too (p = 0.008). A query-rewriting gain is a property
+  of the rewriter + retriever pair, not of the technique.
 
 ## First results — answers (M2, in progress)
 
 Golden set v1: 53 answerable questions + 19 out-of-corpus. Same answering model, prompt and context builder for
-every variant; only retrieval differs. Judge: a model from a different family than the answerer, with a fixed
-scale (correct / partial / incorrect / refusal_ok / refusal_missing) and a reason. ~20 verdicts spot-checked by
-hand; a proper human calibration of the judge is still to do.
+every variant; only retrieval differs. **Answerer: Claude Sonnet 5. Judge: Nemotron 3 Ultra** (a different
+model family), with a fixed scale (correct / partial / incorrect / refusal_ok / refusal_missing) and a reason.
 
 | variant | correct (95% CI) | correct + partial | key facts | cites gold provision | faithful | correct refusals | false refusals | p50 latency |
 |---|---|---|---|---|---|---|---|---|
-| simple (vectors) | 0.717 (0.60–0.83) | 0.811 | 0.623 | 0.714 | 0.986 | 13/13 | 0.151 | 2.8 s |
-| hybrid (BM25 + vectors) | 0.792 (0.68–0.89) | 0.830 | 0.642 | 0.758 | 0.972 | 13/13 | 0.094 | 3.3 s |
-| **hybrid + HyDE** | **0.849 (0.74–0.94)** | **0.943** | **0.783** | **0.862** | **1.000** | 13/13 | **0.000** | 3.1 s* |
-| hybrid + HyDE + `verify=cite` | 0.849 | 0.887 | 0.745 | 0.862 | 0.972 | 13/13 | 0.057 | |
+| simple (vectors) | 0.755 (0.64–0.87) | 0.774 | 0.698 | 0.704 | 0.986 | 12/13 | 0.151 | 6.2 s |
+| hybrid (BM25 + vectors) | 0.811 (0.70–0.91) | 0.849 | 0.698 | 0.758 | 0.986 | 13/13 | 0.113 | 6.2 s |
+| **hybrid + HyDE** | **0.906 (0.81–0.98)** | **0.925** | **0.792** | **0.843** | 0.972 | 13/13 | **0.000** | 10.2 s |
+| hybrid + HyDE + `verify=cite` | 0.830 | 0.849 | 0.726 | 0.843 | 0.889 | 13/13 | 0.094 | |
 
-\*excluding the ~2 s HyDE call.
-
-- **Better retrieval → better answers**: HyDE vs hybrid on "correct or partial" 6 : 0 discordant pairs
-  (McNemar p = 0.031); on strictly "correct" the difference is not significant (p = 0.38) with 53 questions.
-- **Refusals work**: all 13 questions about other acts / non-tax topics were refused, with no answers from the
-  model's own knowledge.
-- **The remaining errors are retrieval misses, not hallucinations**: e.g. the 50% VAT deduction for mixed-use
-  cars (art. 86a ust. 1) still doesn't reach the top-5, and the system correctly says it can't answer.
+- **HyDE vs simple is significant** (10 : 2 on "correct", p = 0.039); **HyDE vs hybrid is not yet**
+  (6 : 1, p = 0.13) — 53 questions are too few to separate them.
+- **Refusals work**: the questions about other acts / non-tax topics were refused, with no answers from the
+  model's own knowledge. Only 3 HyDE answers are wrong; colloquial questions are 9/11 correct.
 - **Transitional provisions matter**: art. 41 VAT still says 22%; the 23% rate lives in a transitional article.
   The context builder attaches overriding transitional provisions with an explicit note. Without it the system
   cites the right article and gives the wrong rate, which no citation check can catch.
-- **`verify=cite` is cheap but blunt**: on this set it blocked only correct-ish answers (derived sums like
-  "2 × 92.67 = 185.34 zł", a paragraph cited from memory). LLM-level verification (`verify=llm`) is next.
-- **Judge fix, reported honestly**: the first judge version saw only the first 2,500 characters of each context
-  block, so it marked citations of later paragraphs of long articles as "not in context". Feeding it the full
-  context raised every variant by 2–4 pp (hybrid 0.755 → 0.792); all rows above use the fixed judge.
+- **`verify=cite` hurts**: it blocked 6 HyDE answers, 5 of them correct — every time a derived or restated
+  number ("2 × 92.67 = 185.34 zł", "5 lat", "180 dni") that doesn't appear verbatim in the cited text. It stays
+  off; sentence-level LLM verification (`verify=llm`) is next.
+- **Same conclusions on a second series** (GPT-5.6 answering, Claude judging; `results/*.gpt56luna.*`): HyDE
+  0.849, hybrid 0.792, simple 0.717. Numbers from different answerer/judge pairs are not mixed in one table.
+- **Judge fix, reported honestly**: an earlier judge version saw only the first 2,500 characters of each
+  context block and marked citations of later paragraphs as "not in context" (−2 to −4 pp for every variant).
+- **Judge calibration is pending**: a second judge from a third family on the same 216 answers, then a manual
+  review of every disagreement against the statute (`src/raglab/rag/calibrate.py`). Free-tier quotas of the
+  candidate second judges ran out mid-run; the run is resumable and only fills in missing verdicts.
 
 ## Test sets
 
