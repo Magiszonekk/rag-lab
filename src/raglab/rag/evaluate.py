@@ -43,6 +43,10 @@ def _cache_key(variant: str, question: str) -> str:
 def apply_verify(ans: dict[str, Any], level: str, question: str) -> dict[str, Any]:
     if level == "off" or ans.get("refused") or ans.get("error"):
         return ans
+    if level == "llm":
+        from raglab.rag.verify_llm import apply_llm
+
+        return apply_llm(ans, question)
     cc = check_cite(ans["answer"], ans["citations"], [c["address"] for c in ans["context"]], question)
     ans = {
         **ans,
@@ -165,11 +169,12 @@ def main(argv: list[str] | None = None) -> int:
     for variant in args.variants:
         for level in args.verify:
             name = f"{variant}/verify={level}"
-            jobs = []
-            for it in items:
-                raw = cache[_cache_key(variant, it["question"])]
-                a = apply_verify(raw, level, it["question"])
-                jobs.append((it, a))
+
+            def prep(it: dict[str, Any], variant: str = variant, level: str = level) -> tuple[dict[str, Any], Any]:
+                return it, apply_verify(cache[_cache_key(variant, it["question"])], level, it["question"])
+
+            with ThreadPoolExecutor(args.workers) as ex:
+                jobs = list(ex.map(prep, items))
 
             def score(job: tuple[dict[str, Any], dict[str, Any]]) -> dict[str, Any]:
                 it, a = job
@@ -225,6 +230,8 @@ def main(argv: list[str] | None = None) -> int:
                             "refused": r["answer"]["refused"],
                             "served_model": r["answer"].get("served_model"),
                             "cite_check": r["answer"].get("cite_check"),
+                            "llm_check": r["answer"].get("llm_check"),
+                            "verify_fixed": r["answer"].get("verify_fixed", False),
                             "key_facts": r["key_facts"],
                             "citation_recall": r["citation_recall"],
                             "judge": r["judge"],

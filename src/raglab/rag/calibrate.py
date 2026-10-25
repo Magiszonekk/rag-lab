@@ -18,8 +18,8 @@ import hashlib
 import json
 import random
 import sys
+import time
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from raglab.ingest.sources import REPO_ROOT
@@ -31,7 +31,10 @@ from raglab.rag.judge import JUDGE_VERSION, judge
 # trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1). Gemini 2.5 / 3-preview / 3.8 padły na dziennym
 # limicie Google po 1–14 ocenach (2026-10-25); gpt-oss-120b (groq) przeszedł próbę 12/12
 SECOND_JUDGE = ["openai/gpt-oss-120b"]
-CONFIGS = ["simple/verify=off", "hybrid/verify=off", "hyde/verify=off"]
+# Kalibracja na odpowiedziach wariantu głównego (72). Darmowy groq dla gpt-oss-120b: limit tokenów na minutę
+# i na dzień (~3 tys. tokenów na ocenę) — 216 ocen nie mieści się w dniu; 72 z odstępem MIN_INTERVAL_S tak.
+CONFIGS = ["hyde/verify=off"]
+MIN_INTERVAL_S = 25.0
 DETAILS = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
 SECOND = RUNS / "judge2_cache.jsonl"
 SHEET = REPO_ROOT / "data" / "eval" / "golden" / "judge_review_v1.SHEET.md"
@@ -90,11 +93,17 @@ def run() -> None:
 
     todo = [r for r in rows if key(r) not in done]
     print(f"drugi sędzia: {len(todo)} ocen do wykonania", file=sys.stderr)
-    with ThreadPoolExecutor(2) as ex, SECOND.open("a", encoding="utf-8") as f:
-        for r, j in zip(todo, ex.map(lambda r: judge(r["item"], r["answer"], llm), todo), strict=True):
+    with SECOND.open("a", encoding="utf-8") as f:
+        for i, r in enumerate(todo):
+            t0 = time.monotonic()
+            j = judge(r["item"], r["answer"], llm)
             if j["verdict"] != "error":
                 done[key(r)] = j
                 f.write(json.dumps({"key": key(r), "judge": j}, ensure_ascii=False) + "\n")
+                f.flush()
+            else:
+                print(f"  [{i + 1}/{len(todo)}] błąd: {j['reason'][:120]}", file=sys.stderr)
+            time.sleep(max(0.0, MIN_INTERVAL_S - (time.monotonic() - t0)))
     for r in rows:
         r["judge2"] = done.get(key(r), {"verdict": "error", "faithful": None, "reason": "", "judge_model": ""})
 
