@@ -143,9 +143,12 @@ def report() -> None:
         "judge_kappa": round(kappa(a, b), 3),
         "reviewed": len(rev),
     }
-    disputed = [
-        r for r in rev if COLLAPSE[pairs[(r["config"], r["id"])]["j1"]] != COLLAPSE[pairs[(r["config"], r["id"])]["j2"]]
-    ]
+
+    def _disputed(r: dict[str, Any]) -> bool:
+        p = pairs[(r["config"], r["id"])]
+        return collapse(p["j1"], p["refused"]) != collapse(p["j2"], p["refused"])
+
+    disputed = [r for r in rev if _disputed(r)]
     agreed = [r for r in rev if r not in disputed]
     for name, subset in (("disputed", disputed), ("agreed_sample", agreed)):
         for j in ("j1", "j2"):
