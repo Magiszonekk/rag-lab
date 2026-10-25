@@ -1,0 +1,94 @@
+/* RAG Lab — tokeny wyglądu.
+ * Źródło: house-v1 z galerii styles.cikowice.pl (jasny „nordic”: szron, mech; ciemny „garden”: butelkowa zieleń, krem).
+ * Miód (--honey) ma w tej aplikacji jedno znaczenie: przepis przejściowy / wartość zastąpiona. Nie używać go do ozdoby.
+ * Kontrast: jasny fg 14.8:1, muted 5.1:1, accent 5.6:1, honey 5.6:1; ciemny fg 15.7:1, muted 8.2:1.
+ */
+:root {
+  color-scheme: light;
+  --bg: #eef2f1;
+  --backdrop: #e5ebe9;
+  --surface: #fbfcfb;
+  --surface-2: #e2e9e7;
+  --well: #f3f6f5;
+  --fg: #17201c;
+  --fg-2: #33413b;
+  --muted: #5a6a63;
+  --border: #d3dcd9;
+  --border-strong: #b6c4bf;
+  --accent: #2f6b4f;
+  --accent-hover: #275a42;
+  --accent-fg: #f5f9f7;
+  --accent-soft: #dbe9e2;
+  --honey: #8a530e;
+  --honey-soft: #f4e8d5;
+  --honey-line: #e3cba3;
+  --danger: #a53025;
+  --danger-soft: #f6e2df;
+  --warn: #855409;
+  --warn-soft: #f6ecd4;
+  --frost: #3f6679;
+  --frost-soft: #dde7ee;
+  --ring-c: #2f6b4f;
+  --row-hover: rgba(23, 32, 28, 0.045);
+  --header-bg: rgba(238, 242, 241, 0.88);
+  --shadow: 0 1px 2px rgba(23, 32, 28, 0.06), 0 10px 26px -16px rgba(23, 32, 28, 0.24);
+  --shadow-pop: 0 2px 4px rgba(23, 32, 28, 0.07), 0 20px 44px -14px rgba(23, 32, 28, 0.3);
+  --selection: #cfe3d8;
+
+  --font-display: "Manrope Variable", "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree Variable", "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-law: "Source Serif 4 Variable", "Source Serif 4", Georgia, serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --text-2xs: 0.75rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-2xl: clamp(1.7rem, 1.2rem + 1.6vw, 2.35rem);
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+  --ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--ring-c);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 180ms;
+  --dur-slow: 420ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f1a16; --backdrop: #0b1411; --surface: #16241e; --surface-2: #1e302a; --well: #12201a;
+    --fg: #edf2ec; --fg-2: #cfd9d1; --muted: #a5b3a8; --border: #2b3f36; --border-strong: #3d5a4c;
+    --accent: #8fbf9e; --accent-hover: #a3cdb0; --accent-fg: #0d1a14; --accent-soft: #1d3329;
+    --honey: #e0a860; --honey-soft: #2f2517; --honey-line: #5a4426;
+    --danger: #eb8f85; --danger-soft: #331f1d; --warn: #e3c07a; --warn-soft: #322a19;
+    --frost: #9ec0d2; --frost-soft: #1b2b33;
+    --ring-c: #8fbf9e; --row-hover: rgba(237, 242, 236, 0.05); --header-bg: rgba(15, 26, 22, 0.88);
+    --shadow: 0 1px 0 rgba(237, 242, 236, 0.04) inset, 0 16px 36px -22px #010806;
+    --shadow-pop: 0 1px 0 rgba(237, 242, 236, 0.05) inset, 0 24px 48px -20px #010806;
+    --selection: #2c4a3c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1a16; --backdrop: #0b1411; --surface: #16241e; --surface-2: #1e302a; --well: #12201a;
+  --fg: #edf2ec; --fg-2: #cfd9d1; --muted: #a5b3a8; --border: #2b3f36; --border-strong: #3d5a4c;
+  --accent: #8fbf9e; --accent-hover: #a3cdb0; --accent-fg: #0d1a14; --accent-soft: #1d3329;
+  --honey: #e0a860; --honey-soft: #2f2517; --honey-line: #5a4426;
+  --danger: #eb8f85; --danger-soft: #331f1d; --warn: #e3c07a; --warn-soft: #322a19;
+  --frost: #9ec0d2; --frost-soft: #1b2b33;
+  --ring-c: #8fbf9e; --row-hover: rgba(237, 242, 236, 0.05); --header-bg: rgba(15, 26, 22, 0.88);
+  --shadow: 0 1px 0 rgba(237, 242, 236, 0.04) inset, 0 16px 36px -22px #010806;
+  --shadow-pop: 0 1px 0 rgba(237, 242, 236, 0.05) inset, 0 24px 48px -20px #010806;
+  --selection: #2c4a3c;
+}
+
+/* Pod reduced-motion wyłączamy przejścia; nieskończone animacje (spinner) zostają. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 1ms; --dur-slow: 1ms; }
+}
