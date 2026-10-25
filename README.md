@@ -165,6 +165,27 @@ the statute (`data/eval/golden/judge_review_v1.jsonl`): each judge was right in 
 An earlier judge version saw only the first 2,500 characters of each context block and marked citations of later
 paragraphs as "not in context" (−2 to −4 pp for every variant); fixed before all numbers above.
 
+## Demo backend (M3, in progress)
+
+- **API** (`src/raglab/api.py`, FastAPI): `/examples`, `/ask`, `/compare`, `/trace/<id>`, `/corpus`, `/eval/results`.
+  Ready-made examples (`web/public/examples.json`, 9 questions × 4 variants with traces and judge verdicts) work
+  without the backend. Live questions: per-IP and daily limits, answer cache, question length limit, a topic
+  filter, CORS only for the frontend domain.
+- **Model gateway (LiteLLM, pinned)** between the backend and any model: a demo key restricted to models billed by
+  API key (no consumer subscriptions), with a USD budget and RPM/TPM limits; a separate key for evaluation.
+  Checked before any public traffic (`python -m raglab.gateway test`): the demo key is refused for a model outside
+  its list (403), works for its own (200), an exhausted budget is refused (422 `budget_exceeded`), the RPM limit
+  returns 429. **Pitfall found**: LiteLLM doesn't know prices of models behind an OpenAI-compatible gateway, counts
+  their cost as 0, and the budget never triggers. Explicit `model_info` prices fix it.
+- **Every model call on the demo path goes through the demo key**: query rewriting, answering, agent planning and
+  verification. A test asserts this, so a helper step can't silently fall back to evaluation models.
+- **Traces** (`traces`, `trace_steps` in Postgres): retrieval, agent decisions, context, generation, verification;
+  personal data (PESEL, NIP, e-mail, phone) masked before saving; no gateway addresses in traces or responses.
+- **Law watch** (`python -m raglab.law_watch`, weekly GitHub Action): asks the Sejm ELI API whether a newer
+  consolidated text or an amendment that is already in force appeared after the corpus date; opens an issue,
+  never changes the corpus. First run: VAT up to date (next change 2027-01-01); PIT and the Tax Ordinance each
+  have 3 amendments in force since their consolidated texts (shown in `/corpus`).
+
 ## Test sets
 
 - `data/eval/retrieval_v1.jsonl` — 283 retrieval questions; generation, validation and review notes in
