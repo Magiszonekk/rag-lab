@@ -16,6 +16,7 @@ odpowiedź końcową pisze ten sam prompt co w pozostałych wariantach.
 
 from __future__ import annotations
 
+import re
 import time
 from typing import Any, TypedDict
 
@@ -56,6 +57,24 @@ DOTYCHCZASOWE KROKI:
 {log}"""
 
 
+def referenced(addr: str, blocks: list[Block]) -> bool:
+    """Czy adres wynika z kontekstu: ten sam artykuł co jakiś blok (inny ustęp) albo odesłanie w tekście.
+
+    Wariant `agentic-strict` pozwala pobierać tylko takie adresy — wtedy agent nie korzysta z pamięci modelu
+    o tym, gdzie w ustawie co jest (kontrola: ile zysku agenta to nawigacja po odesłaniach, a ile wiedza modelu).
+    """
+    m = re.match(r"^(VAT|PIT|Ordynacja) art\. (\S+)", addr.strip())
+    if not m:
+        return False
+    label, art = m.group(1), m.group(2)
+    for b in blocks:
+        if b.address.startswith(f"{label} art. {art} ") or b.address == f"{label} art. {art}":
+            return True
+        if b.address.startswith(label + " ") and re.search(rf"\bart\.\s*{re.escape(art)}(?![0-9a-ząćęłńóśźż])", b.text):
+            return True
+    return False
+
+
 class State(TypedDict):
     question: str
     blocks: list[Block]
@@ -88,8 +107,9 @@ def _merge(state: State, new: list[Block]) -> list[str]:
 
 
 class Agent:
-    def __init__(self, llm: LLM) -> None:
+    def __init__(self, llm: LLM, *, strict: bool = False) -> None:
         self.llm = llm
+        self.strict = strict
         g = StateGraph(State)
         g.add_node("retrieve", self.retrieve)
         g.add_node("plan", self.plan)
@@ -141,6 +161,9 @@ class Agent:
             found: list[Block] = []
             missing: list[str] = []
             for addr in [str(x) for x in (a.get("addresses") or [])][:MAX_ADDRESSES]:
+                if self.strict and not referenced(addr, state["blocks"]):
+                    missing.append(addr + " (brak odesłania w kontekście)")
+                    continue
                 b = block_for(addr)
                 if b is None:
                     missing.append(addr)
@@ -157,9 +180,9 @@ class Agent:
         return state
 
 
-def run(question: str, llm: LLM) -> Answer:
+def run(question: str, llm: LLM, *, strict: bool = False) -> Answer:
     t0 = time.monotonic()
-    agent = Agent(llm)
+    agent = Agent(llm, strict=strict)
     init: State = {"question": question, "blocks": [], "seen": set(), "log": [], "steps": 0,
                    "action": {}, "tokens": [0, 0]}  # fmt: skip
     st: State = agent.graph.invoke(init)  # type: ignore[assignment]
@@ -167,7 +190,7 @@ def run(question: str, llm: LLM) -> Answer:
     t1 = time.monotonic()
     user = f"PRZEPISY:\n\n{render_context(blocks)}\n\nPYTANIE UŻYTKOWNIKA:\n{question}"
     ctx = [{"address": b.address, "status": b.status, "note": b.note, "text": b.text} for b in blocks]
-    base: dict[str, Any] = dict(variant="agentic", question=question, context=ctx,
+    base: dict[str, Any] = dict(variant="agentic-strict" if strict else "agentic", question=question, context=ctx,
                                 retrieved=[b.address for b in blocks])  # fmt: skip
     try:
         c = llm.complete([{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": user}],

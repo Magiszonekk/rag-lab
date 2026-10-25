@@ -37,7 +37,7 @@ CITE_REFUSAL = "Nie mogę potwierdzić tej odpowiedzi w przepisach, które mam �
 
 def _cache_key(variant: str, question: str) -> str:
     extra = ""
-    if variant == "agentic":
+    if variant in ("agentic", "agentic-strict"):
         from raglab.rag.agentic import BUDGET, MAX_STEPS, PLAN_PROMPT
 
         extra = f"|{PLAN_PROMPT}|{MAX_STEPS}|{BUDGET}"
@@ -153,10 +153,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{variant}: {len(todo)} odpowiedzi do wygenerowania", file=sys.stderr)
 
         def gen(it: dict[str, Any], variant: str = variant) -> tuple[str, dict[str, Any]]:
-            if variant == "agentic":
+            if variant in ("agentic", "agentic-strict"):
                 from raglab.rag.agentic import run
 
-                return _cache_key(variant, it["question"]), run(it["question"], answer_llm).to_json()
+                a = run(it["question"], answer_llm, strict=variant == "agentic-strict").to_json()
+                return _cache_key(variant, it["question"]), a
             return _cache_key(variant, it["question"]), answer(it["question"], variant, answer_llm).to_json()
 
         if todo:

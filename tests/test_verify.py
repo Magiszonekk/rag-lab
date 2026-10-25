@@ -88,3 +88,14 @@ def test_llm_200_without_choices_is_retryable_error(monkeypatch) -> None:  # typ
     except LLMError as e:
         assert "bez choices" in str(e)
     assert len(calls) == 2
+
+
+def test_agent_strict_only_follows_references() -> None:
+    from raglab.rag.agentic import referenced
+    from raglab.rag.context import block_for
+
+    ctx = [b for b in (block_for("VAT art. 86a ust. 2"), block_for("VAT art. 113a")) if b]
+    assert referenced("VAT art. 86a ust. 1", ctx)  # inny ustęp artykułu z kontekstu
+    assert referenced("VAT art. 113 ust. 13", ctx)  # odesłanie w tekście art. 113a
+    assert not referenced("VAT art. 111 ust. 1", ctx)  # z pamięci modelu
+    assert not referenced("PCC art. 2", ctx)  # spoza korpusu
