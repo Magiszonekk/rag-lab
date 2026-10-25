@@ -28,8 +28,9 @@ from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_VERSION, judge
 
 # gemini-3.8-flash przez bramkę ~70 s na odpowiedź (zmierzone) — niepraktyczne dla ~200 ocen.
-# trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1); gemini-2.5-flash padł na limicie po 11 ocenach
-SECOND_JUDGE = ["gemini-3-flash-preview"]
+# trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1). gemini-2.5-flash i 3-flash-preview padły na
+# dziennym limicie Google (2026-10-25); 3.8-flash ma osobny limit, ale ~80 s na ocenę → 4 wątki
+SECOND_JUDGE = ["gemini-3.8-flash"]
 CONFIGS = ["simple/verify=off", "hybrid/verify=off", "hyde/verify=off"]
 DETAILS = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
 SECOND = RUNS / "judge2_cache.jsonl"
@@ -82,7 +83,7 @@ def run() -> None:
 
     todo = [r for r in rows if key(r) not in done]
     print(f"drugi sędzia: {len(todo)} ocen do wykonania", file=sys.stderr)
-    with ThreadPoolExecutor(2) as ex, SECOND.open("a", encoding="utf-8") as f:
+    with ThreadPoolExecutor(4) as ex, SECOND.open("a", encoding="utf-8") as f:
         for r, j in zip(todo, ex.map(lambda r: judge(r["item"], r["answer"], llm), todo), strict=True):
             if j["verdict"] != "error":
                 done[key(r)] = j
