@@ -143,7 +143,14 @@ def build_context(hits: list[Hit], *, k: int = 5, max_article_tokens: int = 1200
             break
         blocks.append(b)
         used += cost
+    return attach_overrides(blocks, seen_articles, used, budget)
 
+
+def attach_overrides(
+    blocks: list[Block], seen_articles: set[tuple[str, str]], used: int, budget: int = 6000
+) -> list[Block]:
+    """Dokłada przepisy przejściowe zastępujące wartości z przepisów w kontekście (i adnotuje zastępowane)."""
+    corpus = _corpus()
     # przepisy przejściowe zastępujące wartości z przepisów obecnych w kontekście
     ov = _overrides()
     extra: list[Block] = []
@@ -195,6 +202,32 @@ def build_context(hits: list[Hit], *, k: int = 5, max_article_tokens: int = 1200
                     f"UWAGA: wartość z tego przepisu jest obecnie zastąpiona — obowiązuje wartość z {e.address}"
                 )
     return blocks
+
+
+def block_for(addr: str, *, max_article_tokens: int = 1200) -> Block | None:
+    """Blok dla adresu podanego przez agenta („VAT art. 86a ust. 1”): cały artykuł, jeśli krótki, inaczej jednostka.
+
+    None, jeśli adres nie istnieje w korpusie.
+    """
+    from raglab.rag.verify import Corpus
+
+    corpus = _corpus()
+    labels = load_labels()
+    resolved = Corpus.get().resolve(addr)
+    if resolved is None:
+        return None
+    label, rest = resolved.split(" ", 1)
+    act_key = next((k for k, v in ACT_LABEL.items() if v == label), None)
+    m = re.match(r"art\. (\S+)", rest)
+    if act_key is None or m is None:
+        return None
+    art = corpus[act_key].article(m.group(1))
+    status = labels.get((act_key, art.number or ""), "in_force")
+    if est_tokens(render_unit(art)) <= max_article_tokens or resolved == f"{label} art. {art.number}":
+        return _article_block(act_key, art, status)
+    units = {u for u in Corpus.get().text if u == resolved or u.startswith(resolved + " ")}
+    text = Corpus.get().text[resolved]
+    return Block(address=resolved, act=act_key, article=art.number or "", text=text, status=status, units=units)
 
 
 def state_dates() -> dict[str, str]:

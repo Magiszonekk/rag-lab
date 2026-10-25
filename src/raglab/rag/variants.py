@@ -73,6 +73,7 @@ class Answer:
     completion_tokens: int
     latency_ms: dict[str, int] = field(default_factory=dict)
     error: str | None = None
+    trace: list[dict[str, Any]] = field(default_factory=list)  # kroki wariantu agentowego
 
     def to_json(self) -> dict[str, Any]:
         return asdict(self)
