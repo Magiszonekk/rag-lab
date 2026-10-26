@@ -13,6 +13,7 @@ Format odpowiedzi modelu (JSON): {"answer": "...", "citations": ["VAT art. 113 u
 
 from __future__ import annotations
 
+import os
 import time
 from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
@@ -30,7 +31,10 @@ from raglab.search.normalize import get_normalizer
 # Wszystkie tabele w README liczone jednym modelem odpowiadającym; zmiana modelu = przeliczenie całości.
 # Jeden model, BEZ zapasu z innej rodziny: zapas po cichu mieszał modele w jednej tabeli (2026-10-24: gemini-3.6
 # padł na limicie klucza Google, a ~1000 odpowiedzi poszło do GLM). Przy błędzie — wpis z błędem, ponowienie później.
-ANSWER_MODELS = ["claude-opus-5-5"]  # 2026-10-24: darmowe limity GPT/Gemini/OpenRouter wyczerpane
+# Model odpowiadający i embedding = parametry SERII (jedna tabela = jedna para). Domyślnie Opus 5.5 + mmlw;
+# zmiana przez RAGLAB_ANSWER_MODEL / RAGLAB_EMBED (mmlw-base | qwen3-8b) przed importem modułów.
+ANSWER_MODELS = [os.environ.get("RAGLAB_ANSWER_MODEL", "claude-opus-5-5")]
+EMBED = os.environ.get("RAGLAB_EMBED", "mmlw-base")
 
 SYSTEM_PROMPT = """Jesteś asystentem odpowiadającym na pytania o polskie prawo podatkowe WYŁĄCZNIE na podstawie
 przepisów podanych w sekcji PRZEPISY. Masz dostęp tylko do: ustawy o VAT, ustawy o PIT i Ordynacji podatkowej,
@@ -84,8 +88,16 @@ def _indexes() -> tuple[BM25Index, VectorIndex]:
     corpus = load_corpus()
     chunks = [c for act in corpus.values() for c in structural(act)]
     bm25 = BM25Index(chunks, get_normalizer("morfeusz2"))
-    vec = VectorIndex(chunks, Embedder("sdadas/mmlw-roberta-base", query_prefix="zapytanie: "))
-    return bm25, vec
+    emb: Any
+    if EMBED == "qwen3-8b":
+        from raglab.search.evaluate import EMBED_MODELS
+        from raglab.search.index import ApiEmbedder
+
+        name, qp, dp, provider = EMBED_MODELS["qwen3-8b"]  # type: ignore[misc]
+        emb = ApiEmbedder(name, provider=provider, query_prefix=qp, doc_prefix=dp)
+    else:
+        emb = Embedder("sdadas/mmlw-roberta-base", query_prefix="zapytanie: ")
+    return bm25, VectorIndex(chunks, emb)
 
 
 RETRIEVERS: dict[str, Callable[[str], list[Hit]]] = {

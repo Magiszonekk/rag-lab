@@ -17,13 +17,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import threading
 from typing import Any
 
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM, LLMError, parse_json, system_llm
 
-VERIFY_MODELS = ["claude-opus-5-5"]
+VERIFY_MODELS = [os.environ.get("RAGLAB_ANSWER_MODEL", "claude-opus-5-5")]
 CACHE = REPO_ROOT / "results" / "answers" / "verify_cache.jsonl"
 LLM_REFUSAL = "Nie mogę potwierdzić tej odpowiedzi w przepisach, które mam."
 

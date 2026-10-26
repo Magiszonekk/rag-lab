@@ -16,10 +16,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import random
 import sys
 import time
 from collections import Counter
+from pathlib import Path
 from typing import Any
 
 from raglab.ingest.sources import REPO_ROOT
@@ -28,18 +30,23 @@ from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_VERSION, judge
 
 # gemini-3.8-flash przez bramkę ~70 s na odpowiedź (zmierzone) — niepraktyczne dla ~200 ocen.
-# trzecia rodzina: ani Claude (odpowiada), ani DeepSeek (sędzia 1). Gemini 2.5 / 3-preview / 3.8 padły na dziennym
-# limicie Google po 1–14 ocenach (2026-10-25); gpt-oss-120b (groq) przeszedł próbę 12/12
-SECOND_JUDGE = ["openai/gpt-oss-120b"]
+# drugi sędzia (kalibracja): domyślnie Opus 5.5 — mocny czytelnik prawa, ale rodzina Claude, więc jego oceny
+# odpowiedzi Claude'a są potencjalnie stronnicze; mierzymy to (ocena odpowiedzi Opusa vs Sonneta) zamiast zakładać
+SECOND_JUDGE = [os.environ.get("RAGLAB_SECOND_JUDGE", "claude-opus-5-5")]
 # Kalibracja na odpowiedziach wariantu głównego (72). Darmowy groq dla gpt-oss-120b: limit tokenów na minutę
 # i na dzień (~3 tys. tokenów na ocenę) — 216 ocen nie mieści się w dniu; 72 z odstępem MIN_INTERVAL_S tak.
-CONFIGS = ["hyde/verify=off"]
-MIN_INTERVAL_S = 25.0
-DETAILS = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
+CONFIGS = os.environ.get("RAGLAB_CALIB_CONFIGS", "hyde/verify=off").split(",")
+MIN_INTERVAL_S = float(os.environ.get("RAGLAB_CALIB_INTERVAL", "25"))
+DETAILS = (
+    Path(os.environ["RAGLAB_CALIB_DETAILS"])
+    if os.environ.get("RAGLAB_CALIB_DETAILS")
+    else (REPO_ROOT / "results" / "answers_golden_v1.details.jsonl")
+)
 SECOND = RUNS / "judge2_cache.jsonl"
 SHEET = REPO_ROOT / "data" / "eval" / "golden" / "judge_review_v1.SHEET.md"
 REVIEW = REPO_ROOT / "data" / "eval" / "golden" / "judge_review_v1.jsonl"
-OUT = REPO_ROOT / "results" / "judge_calibration_v1.json"
+OUT = DETAILS.with_name(DETAILS.name.replace(".details.jsonl", ".calibration.json"))
+PAIRS = OUT.with_name(OUT.name.replace(".calibration.json", ".calib_pairs.json"))
 
 COLLAPSE = {"correct": "ok", "partial": "partial", "incorrect": "wrong", "refusal_missing": "wrong",
             "refusal_ok": "refusal_ok", "error": "error"}  # fmt: skip
@@ -137,12 +144,12 @@ def run() -> None:
     SHEET.write_text("\n".join(lines) + "\n", encoding="utf-8")
     json.dump([{"config": r["config"], "id": r["item"]["id"], "j1": r["judge1"]["verdict"],
                 "j2": r["judge2"]["verdict"], "refused": r["answer"]["refused"]} for r in rows],
-              (RUNS / "calib_pairs.json").open("w"), ensure_ascii=False)  # fmt: skip
+              PAIRS.open("w"), ensure_ascii=False)  # fmt: skip
     print(f"arkusz: {SHEET} ({len(sample)} pozycji)", file=sys.stderr)
 
 
 def report() -> None:
-    pairs = {(p["config"], p["id"]): p for p in json.loads((RUNS / "calib_pairs.json").read_text())}
+    pairs = {(p["config"], p["id"]): p for p in json.loads(PAIRS.read_text())}
     rev = [json.loads(x) for x in REVIEW.read_text(encoding="utf-8").splitlines() if x.strip()]
     valid = [p for p in pairs.values() if p["j1"] != "error" and p["j2"] != "error"]  # pary z oboma werdyktami
     a = [collapse(p["j1"], p["refused"]) for p in valid]

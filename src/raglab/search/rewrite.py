@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -24,7 +25,9 @@ from pathlib import Path
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM, LLMError, parse_json, system_llm
 
-REWRITE_MODELS = ["claude-opus-5-5"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
+REWRITE_MODELS = [
+    os.environ.get("RAGLAB_ANSWER_MODEL", "claude-opus-5-5")
+]  # jeden model, bez zapasu — patrz ANSWER_MODELS
 CACHE = REPO_ROOT / "data" / "cache" / "rewrite.jsonl"
 
 PROMPTS = {

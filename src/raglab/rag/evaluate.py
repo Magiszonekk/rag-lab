@@ -27,7 +27,7 @@ from typing import Any
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM
 from raglab.rag.judge import JUDGE_MODELS, JUDGE_VERSION, judge
-from raglab.rag.variants import ANSWER_MODELS, SYSTEM_PROMPT, answer
+from raglab.rag.variants import ANSWER_MODELS, EMBED, SYSTEM_PROMPT, answer
 from raglab.rag.verify import check_cite, citation_recall, key_facts_present
 
 GOLDEN = REPO_ROOT / "data" / "eval" / "golden" / "golden_v1.jsonl"
@@ -41,6 +41,8 @@ def _cache_key(variant: str, question: str) -> str:
         from raglab.rag.agentic import BUDGET, MAX_STEPS, PLAN_PROMPT
 
         extra = f"|{PLAN_PROMPT}|{MAX_STEPS}|{BUDGET}"
+    if EMBED != "mmlw-base":
+        extra += f"|embed={EMBED}"
     h = hashlib.sha1(f"{variant}|{ANSWER_MODELS}|{SYSTEM_PROMPT}|{question}{extra}".encode()).hexdigest()[:16]
     return h
 
@@ -180,6 +182,7 @@ def main(argv: list[str] | None = None) -> int:
         "testset": "golden_v1",
         "n": len(items),
         "answer_models": ANSWER_MODELS,
+        "embedding": EMBED,
         "judge_models": JUDGE_MODELS,
         "configs": {},
     }
@@ -230,9 +233,11 @@ def main(argv: list[str] | None = None) -> int:
                 f"p50 {s['latency_ms_p50']} ms  błędy {s['errors']}",
                 file=sys.stderr,
             )
-    out = REPO_ROOT / "results" / "answers_golden_v1.json"
+    series = f"{ANSWER_MODELS[0]}__{EMBED}__{JUDGE_MODELS[0].split('/')[-1].split(':')[0]}"
+    out = REPO_ROOT / "results" / "series" / f"answers_golden_v1.{series}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
-    detail = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
+    detail = out.with_suffix(".details.jsonl")
     with detail.open("w", encoding="utf-8") as f:
         for name, rows in all_rows.items():
             for r in rows:
