@@ -107,6 +107,8 @@ def test_demo_path_uses_only_demo_model(monkeypatch, api) -> None:  # type: igno
                             prompt_tokens=1, completion_tokens=1, latency_ms=1)  # fmt: skip
 
     monkeypatch.setattr(L.LLM, "complete", fake_complete)
+    monkeypatch.setenv("LLM_BASE_URL", "http://example.invalid/v1")  # w CI nie ma .env
+    monkeypatch.setenv("LLM_API_KEY", "x")
     demo = L.LLM(["demo-answer"])
     q = "Ile dni ma urząd na zwrot nadwyżki VAT? (test izolacji modeli demo)"
     a = api._answer(q, "hyde", "llm", demo)
