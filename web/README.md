@@ -3,6 +3,39 @@
 Statyczna aplikacja (SPA), budowana do `web/dist`. Hosting jeszcze nie wybrany: Azure Static Web Apps albo
 serwer domowy. Dlatego nic nie może zależeć od konkretnego hosta.
 
+## Uruchomienie
+
+```bash
+cd web
+npm ci
+npm run dev        # http://localhost:5173 (ten origin jest domyślnie w RAGLAB_CORS_ORIGINS)
+npm run build      # tsc + vite build → web/dist
+```
+
+- `VITE_API_URL=https://… npm run build` włącza pytania na żywo (Zapytaj, Porównaj). Bez tej zmiennej aplikacja
+  pokazuje tylko gotowe przykłady i mówi o tym w interfejsie.
+- `base: "./"` i routing po hashu (`#/porownaj?ex=g-vat-07`): `dist/` działa z dowolnej ścieżki i bez reguł
+  przepisywania adresów na serwerze. Na Azure SWA nie trzeba `navigationFallback`.
+- Wyniki (zakładki „Wyniki” i „Jak to działa”) są wczytywane **przy buildzie** z `../results/*.json`
+  (`answers_golden_v1`, `retrieval_v1`, `retrieval_v1_rewrite`, `retrieval_golden_rewrite`, `judge_calibration_v1`,
+  `law_watch`). Po nowej ewaluacji przebuduj frontend.
+- Fonty są lokalne (`@fontsource`), bez Google Fonts: Manrope (nagłówki), Figtree (tekst), Source Serif 4 (tekst
+  ustaw), DM Mono (kod).
+
+## Ekrany
+
+| hash | co pokazuje |
+|---|---|
+| `#/zapytaj?ex=&v=&verify=off` | pole pytania, wariant, przełącznik sprawdzania; odpowiedź z klikalnymi cytatami i panelem przepisów (adres, status, stan prawny, adnotacja o przepisie przejściowym) |
+| `#/porownaj?ex=` | 4 warianty obok siebie: werdykt sędziego, tokeny, czas, co dociągnął agent, zdania usunięte przy sprawdzaniu |
+| `#/slad?ex=&v=` | kroki: wyszukiwanie, decyzje agenta get/search (z `why`, `not_found`), kontekst, generowanie, weryfikacja |
+| `#/wyniki` | tabele z README z przedziałami ufności, testy McNemara, kalibracja sędziego, zastrzeżenia |
+| `#/o-projekcie` | jak to działa, korpus ze stanem prawnym i zmianami po dacie tekstu jednolitego |
+
+Odmowa przy pytaniu, na które jest odpowiedź w korpusie, ma etykietę „odmowa (pominięty przepis)”, choć sędzia
+ocenia ją jako `refusal_ok` (znany błąd sędziego, opisany w README). Przy pytaniach `out_of_corpus` ta sama
+ocena to „słuszna odmowa”.
+
 ## Dane
 
 - `public/examples.json`: gotowe przykłady (9 pytań × 4 warianty), generowane przez
