@@ -95,7 +95,10 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
         return bool(r["answer"]["refused"]) or r["judge"]["verdict"] in ("refusal_ok", "refusal_missing")
 
     false_ref = [1.0 if _refused(r) else 0.0 for r in ans_rows]
-    good_ref = [1.0 if r["answer"]["refused"] else 0.0 for r in ref_rows]
+    # słuszna odmowa = flaga `refused` ALBO sędzia (znający oczekiwane zachowanie „odmów”) uznał ją za poprawną.
+    # Sonnet 5.5 często odmawia słowami („nie mam tego w przepisach”) bez ustawienia flagi — sama flaga zaniżała.
+    good_ref = [1.0 if r["answer"]["refused"] or r["judge"]["verdict"] in ("refusal_ok", "correct") else 0.0
+                for r in ref_rows]  # fmt: skip
     ooc_ok = [1.0 if r["judge"]["verdict"] in ("refusal_ok", "correct") else 0.0 for r in ooc_other]
     tokens = [r["answer"]["prompt_tokens"] + r["answer"]["completion_tokens"] for r in rows]
     lat = sorted(sum(r["answer"]["latency_ms"].values()) for r in rows if r["answer"]["latency_ms"])
