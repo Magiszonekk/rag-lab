@@ -27,18 +27,22 @@ from typing import Any
 from raglab.corpus import load_corpus
 from raglab.ingest.sources import REPO_ROOT
 from raglab.search.chunking import Chunk, est_tokens, fixed, structural
-from raglab.search.index import BM25Index, Embedder, Hit, VectorIndex, demote_historical, rrf
+from raglab.search.index import ApiEmbedder, BM25Index, Embedder, Hit, VectorIndex, demote_historical, rrf
 from raglab.search.normalize import get_normalizer
 
 EVAL_DIR = REPO_ROOT / "data" / "eval"
 RESULTS_DIR = REPO_ROOT / "results"
 KS = (1, 3, 5, 10, 20)
-EMBED_MODELS = {
+# Qwen3-Embedding: instrukcja zadania tylko przy pytaniu (format z karty modelu), dokumenty bez prefiksu.
+QWEN3_TASK = "Given a question about Polish tax law, retrieve the statutory provision that answers it"
+EMBED_MODELS: dict[str, tuple[str, str, str] | tuple[str, str, str, str]] = {
     "mmlw-base": ("sdadas/mmlw-roberta-base", "zapytanie: ", ""),
+    # (model, prefiks pytania, prefiks dokumentu, provider przypięty w OpenRouter) — przez API
+    "qwen3-8b": ("qwen/qwen3-embedding-8b", f"Instruct: {QWEN3_TASK}\nQuery: ", "", "DeepInfra"),
 }
 
 
-_CACHE_OBJS: list[Embedder] = []
+_CACHE_OBJS: list[Embedder | ApiEmbedder] = []
 GOLD_WORDS: dict[str, int] = {}  # adres → liczba słów jednostki z potomkami (wypełniane w main)
 
 
@@ -126,10 +130,16 @@ def load_items(version: str) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
-def _with_rewrite(q: str, strategy: str, bm25: Callable[..., BM25Index], vec: Callable[..., VectorIndex]) -> list[Hit]:
+def _with_rewrite(
+    q: str,
+    strategy: str,
+    bm25: Callable[..., BM25Index],
+    vec: Callable[..., VectorIndex],
+    model: str = "mmlw-base",
+) -> list[Hit]:
     from raglab.search.rewrite import rewrite
 
-    b, v = bm25("structural", "morfeusz2"), vec("structural", "mmlw-base")
+    b, v = bm25("structural", "morfeusz2"), vec("structural", model)
     rankings = [b.search(q, 50), v.search(q, 50)]
     for s in strategy.split("+"):
         rq = rewrite(q, s)
@@ -163,8 +173,14 @@ def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
     def vec(kind: str, model: str) -> VectorIndex:
         key = f"vec:{kind}:{model}"
         if key not in cache:
-            name, qp, dp = EMBED_MODELS[model]
-            emb = Embedder(name, query_prefix=qp, doc_prefix=dp)
+            spec = EMBED_MODELS[model]
+            emb: Embedder | ApiEmbedder
+            if len(spec) == 4:
+                name, qp, dp, provider = spec
+                emb = ApiEmbedder(name, provider=provider, query_prefix=qp, doc_prefix=dp)
+            else:
+                name, qp, dp = spec[:3]
+                emb = Embedder(name, query_prefix=qp, doc_prefix=dp)
             _CACHE_OBJS.append(emb)
             cache[key] = VectorIndex(chunks(kind), emb)
         return cache[key]  # type: ignore[return-value]
@@ -205,6 +221,14 @@ def build_configs(names: list[str]) -> dict[str, Callable[[str], list[Hit]]]:
         "hybrid-rewrite": lambda: lambda q: _with_rewrite(q, "rewrite", bm25, vec),
         "hybrid-hyde": lambda: lambda q: _with_rewrite(q, "hyde", bm25, vec),
         "hybrid-rewrite-hyde": lambda: lambda q: _with_rewrite(q, "rewrite+hyde", bm25, vec),
+        # porównanie modeli embeddingowych (D12): Qwen3-Embedding-8B przez API, provider przypięty
+        "vec-qwen3-8b": lambda: lambda q: vec("structural", "qwen3-8b").search(q, 20),
+        "hybrid-rrf-qwen3-8b": lambda: (
+            lambda q: rrf(
+                bm25("structural", "morfeusz2").search(q, 50), vec("structural", "qwen3-8b").search(q, 50), top=20
+            )
+        ),
+        "hybrid-hyde-qwen3-8b": lambda: lambda q: _with_rewrite(q, "hyde", bm25, vec, "qwen3-8b"),
         "fixed-bm25-morfeusz2": lambda: lambda q: bm25("fixed", "morfeusz2").search(q, 20),
         "fixed-vec-mmlw-base": lambda: lambda q: vec("fixed", "mmlw-base").search(q, 20),
         "fixed128-bm25-morfeusz2": lambda: lambda q: bm25("fixed128", "morfeusz2").search(q, 20),
