@@ -23,6 +23,22 @@ STATE = {"vat": "2026-08-26", "pit": "2026-04-01", "op": "2026-04-21"}
 
 # --- poprawki z przeglądu (id → zmiany pól) -------------------------------------------------------
 PATCH: dict[str, dict[str, Any] | None] = {
+    # v1.1 (2026-10-27, przegląd sporów sędziów w serii Qwen): wzorzec „Nie, żaden wyjątek nie obejmuje freelancera”
+    # pomijał przepis epizodyczny VAT art. 145m — od 1.04 do 31.12.2026 faktury papierowe/elektroniczne są dozwolone,
+    # jeśli sprzedaż nimi udokumentowana w miesiącu ≤ 10 000 zł. Stan korpusu: 2026-08-26 → okres trwa. Obie serie
+    # (Sonnet 5.5, Opus 5.5) odpowiedziały poprawnie, sędzia trzymał się błędnego wzorca.
+    "g-vat-20": {
+        "answers": ["VAT art. 106ga ust. 1", "VAT art. 145m ust. 1"],
+        "required_all": True,
+        "reference_answer": "Co do zasady nie — podatnicy są obowiązani wystawiać faktury ustrukturyzowane w KSeF "
+        "(art. 106ga ust. 1), a wyjątki z art. 106ga ust. 2 nie obejmują zwykłego freelancera fakturującego firmy. "
+        "Jednak w okresie od 1 kwietnia do 31 grudnia 2026 r. (przepis epizodyczny art. 145m ust. 1) można wystawiać "
+        "faktury papierowe lub elektroniczne poza KSeF, jeżeli łączna wartość sprzedaży wraz z podatkiem "
+        "udokumentowana nimi w danym miesiącu nie przekracza 10 000 zł; po przekroczeniu prawo się traci (ust. 2).",
+        "key_facts": ["Krajowego Systemu e-Faktur", "10 000 zł", "31 grudnia 2026"],
+        "expected_behavior": "answer",
+        "notes": "v1.1: wzorzec poprawiony — pominięty przepis epizodyczny art. 145m.",
+    },
     # art. 41 ust. 1 też jest poprawnym miejscem dla wyszukiwania (stawka podstawowa), ale wzorzec liczbowy to 23%
     # z art. 146ef; system, który zacytuje tylko art. 41 i poda 22%, oblewa key_facts — i o to chodzi.
     "g-vat-01": {

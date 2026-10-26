@@ -12,10 +12,10 @@
  "configs": {
   "simple/verify=off": {
    "answerable_correct": {
-    "mean": 0.943,
+    "mean": 0.925,
     "ci95": [
-     0.868,
-     1.0
+     0.849,
+     0.981
     ],
     "n": 53
    },
@@ -28,18 +28,18 @@
     "n": 53
    },
    "key_facts": {
-    "mean": 0.858,
+    "mean": 0.846,
     "ci95": [
-     0.764,
-     0.934
+     0.748,
+     0.925
     ],
     "n": 53
    },
    "citation_recall": {
-    "mean": 0.934,
+    "mean": 0.925,
     "ci95": [
-     0.877,
-     0.981
+     0.858,
+     0.972
     ],
     "n": 53
    },
@@ -76,8 +76,8 @@
     "n": 6
    },
    "verdicts": {
-    "correct": 53,
-    "partial": 2,
+    "correct": 52,
+    "partial": 3,
     "refusal_ok": 16,
     "refusal_missing": 1
    },
@@ -88,9 +88,9 @@
   },
   "simple/verify=llm": {
    "answerable_correct": {
-    "mean": 0.925,
+    "mean": 0.906,
     "ci95": [
-     0.849,
+     0.83,
      0.981
     ],
     "n": 53
@@ -104,18 +104,18 @@
     "n": 53
    },
    "key_facts": {
-    "mean": 0.858,
+    "mean": 0.846,
     "ci95": [
-     0.764,
-     0.934
+     0.748,
+     0.925
     ],
     "n": 53
    },
    "citation_recall": {
-    "mean": 0.934,
+    "mean": 0.925,
     "ci95": [
-     0.877,
-     0.981
+     0.858,
+     0.972
     ],
     "n": 53
    },
@@ -152,8 +152,8 @@
     "n": 6
    },
    "verdicts": {
-    "correct": 51,
-    "partial": 4,
+    "correct": 50,
+    "partial": 5,
     "refusal_ok": 15,
     "incorrect": 1,
     "refusal_missing": 1
@@ -181,10 +181,10 @@
     "n": 53
    },
    "key_facts": {
-    "mean": 0.821,
+    "mean": 0.833,
     "ci95": [
-     0.708,
-     0.915
+     0.726,
+     0.918
     ],
     "n": 53
    },
@@ -256,10 +256,10 @@
     "n": 53
    },
    "key_facts": {
-    "mean": 0.821,
+    "mean": 0.833,
     "ci95": [
-     0.708,
-     0.915
+     0.726,
+     0.918
     ],
     "n": 53
    },
@@ -323,18 +323,18 @@
     "n": 53
    },
    "answerable_correct_or_partial": {
-    "mean": 0.943,
+    "mean": 0.962,
     "ci95": [
-     0.868,
+     0.906,
      1.0
     ],
     "n": 53
    },
    "key_facts": {
-    "mean": 0.868,
+    "mean": 0.881,
     "ci95": [
-     0.774,
-     0.943
+     0.789,
+     0.953
     ],
     "n": 53
    },
@@ -381,8 +381,8 @@
    "verdicts": {
     "correct": 52,
     "refusal_ok": 15,
-    "partial": 3,
-    "incorrect": 2
+    "partial": 4,
+    "incorrect": 1
    },
    "tokens_per_question": 4604,
    "latency_ms_p50": 6451,
@@ -399,18 +399,18 @@
     "n": 53
    },
    "answerable_correct_or_partial": {
-    "mean": 0.943,
+    "mean": 0.962,
     "ci95": [
-     0.868,
+     0.906,
      1.0
     ],
     "n": 53
    },
    "key_facts": {
-    "mean": 0.868,
+    "mean": 0.881,
     "ci95": [
-     0.774,
-     0.943
+     0.789,
+     0.953
     ],
     "n": 53
    },
@@ -457,8 +457,7 @@
    "verdicts": {
     "correct": 52,
     "refusal_ok": 15,
-    "partial": 4,
-    "incorrect": 1
+    "partial": 5
    },
    "tokens_per_question": 4604,
    "latency_ms_p50": 6451,
@@ -467,14 +466,6 @@
   },
   "agentic-strict/verify=off": {
    "answerable_correct": {
-    "mean": 0.962,
-    "ci95": [
-     0.906,
-     1.0
-    ],
-    "n": 53
-   },
-   "answerable_correct_or_partial": {
     "mean": 0.981,
     "ci95": [
      0.943,
@@ -482,11 +473,19 @@
     ],
     "n": 53
    },
-   "key_facts": {
-    "mean": 0.887,
+   "answerable_correct_or_partial": {
+    "mean": 1.0,
     "ci95": [
-     0.792,
-     0.953
+     1.0,
+     1.0
+    ],
+    "n": 53
+   },
+   "key_facts": {
+    "mean": 0.899,
+    "ci95": [
+     0.818,
+     0.965
     ],
     "n": 53
    },
@@ -531,9 +530,8 @@
     "n": 6
    },
    "verdicts": {
-    "correct": 55,
+    "correct": 56,
     "partial": 2,
-    "incorrect": 1,
     "refusal_ok": 13,
     "refusal_missing": 1
    },
@@ -544,14 +542,6 @@
   },
   "agentic-strict/verify=llm": {
    "answerable_correct": {
-    "mean": 0.962,
-    "ci95": [
-     0.906,
-     1.0
-    ],
-    "n": 53
-   },
-   "answerable_correct_or_partial": {
     "mean": 0.981,
     "ci95": [
      0.943,
@@ -559,11 +549,19 @@
     ],
     "n": 53
    },
-   "key_facts": {
-    "mean": 0.887,
+   "answerable_correct_or_partial": {
+    "mean": 1.0,
     "ci95": [
-     0.792,
-     0.953
+     1.0,
+     1.0
+    ],
+    "n": 53
+   },
+   "key_facts": {
+    "mean": 0.899,
+    "ci95": [
+     0.818,
+     0.965
     ],
     "n": 53
    },
@@ -608,10 +606,10 @@
     "n": 6
    },
    "verdicts": {
-    "correct": 54,
+    "correct": 55,
     "partial": 3,
-    "incorrect": 2,
-    "refusal_ok": 13
+    "refusal_ok": 13,
+    "incorrect": 1
    },
    "tokens_per_question": 11800,
    "latency_ms_p50": 10557,

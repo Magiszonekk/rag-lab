@@ -114,6 +114,41 @@ flag or in plain words ("the provision isn't in my materials"). Counting only th
   The context builder attaches overriding transitional provisions with an explicit note. Without it the system
   cites the right article and gives the wrong rate, which no citation check can catch.
 
+### Answer model comparison: Sonnet 5.5 vs Opus 5.5 (embedding Qwen3-8B)
+
+Retrieval embedding switched to `qwen/qwen3-embedding-8b` (OpenRouter, provider pinned): alone it finds the gold
+provision in the top-5 for 94% of retrieval questions vs 84% for the local `mmlw-roberta-base` (32 : 4,
+p < 0.0001). The same model answers, rewrites (HyDE), plans the agent and verifies; judge: Nemotron 3 Ultra.
+Golden set v1.1 (one reference answer fixed, see below). Results in `results/series/`.
+
+| variant | Sonnet 5.5 | Opus 5.5 | Sonnet : Opus (McNemar) |
+|---|---|---|---|
+| simple (vectors) | 0.887 (0.79–0.96) | 0.925 (0.85–0.98) | 2 : 4, p = 0.69 |
+| hybrid (BM25 + vectors) | 0.868 (0.76–0.94) | 0.868 (0.76–0.94) | 1 : 1, p = 1.0 |
+| hybrid + HyDE | 0.925 (0.85–0.98) | 0.887 (0.79–0.96) | 4 : 2, p = 0.69 |
+| **agentic, strict** | **0.962 (0.91–1.00)** | **0.981 (0.94–1.00)** | 1 : 2, p = 1.0 |
+
+- **No measurable difference between Sonnet 5.5 and Opus 5.5** on this task: they disagree on 2–6 of 53
+  questions, in both directions. When the model only has to read the provisions it was given, the larger model buys
+  nothing measurable here.
+- **A better embedding does most of the work the retrieval tricks used to do.** With Qwen3-8B the plain vector
+  variant is within noise of HyDE and the agent; adding BM25 (hybrid) is slightly *worse* and refuses more often
+  (11% vs 2–4% false refusals). With `mmlw-roberta-base`, hybrid and HyDE were clear wins.
+- Correct refusals: 13/13 in every variant of both series. Sonnet 5.5 often refuses in words without setting the
+  refusal flag, so correct refusals are now counted from the judge verdict too (the flag alone gave 10/13).
+
+**Second judge (Opus 5.5) on the HyDE and agentic answers of both series**: agreement with Nemotron 90% / 87%,
+Cohen's κ = 0.76 / 0.70 — clearly better than the earlier GPT-OSS calibration (κ = 0.52). **Self-preference was
+measured, not assumed**: Opus-as-judge rated Opus's own answers exactly as Nemotron did (0.925 vs 0.925) and
+Sonnet's answers 0.9 pp higher — no sign it favours its own model. The 13 correct/partial disagreements were
+reviewed against the statute: borderline calls in both directions (an omitted condition vs extra detail), no
+systematic bias of either judge.
+
+**Golden set v1.1**: reviewing these disagreements showed the reference answer for the KSeF question was wrong. It
+said "no exception covers a freelancer" and missed the temporary provision art. 145m VAT (paper invoices allowed
+until 31.12.2026 for up to 10 000 zł a month). Both models cited it correctly and the judge marked them wrong
+for it. The reference was fixed (`golden_build.py`, v1.1) and only that question was re-judged.
+
 ### Agentic variant
 
 A LangGraph loop: `retrieve` (hybrid + HyDE, as above) → `plan` ⇄ `tools` → `answer`. In `plan` the model sees

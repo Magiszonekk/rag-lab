@@ -203,7 +203,11 @@ def main(argv: list[str] | None = None) -> int:
             def score(job: tuple[dict[str, Any], dict[str, Any]]) -> dict[str, Any]:
                 it, a = job
                 jkey = hashlib.sha1(
-                    json.dumps([JUDGE_VERSION, it["id"], a["answer"], a["refused"]], ensure_ascii=False).encode()
+                    json.dumps(
+                        [JUDGE_VERSION, it["id"], a["answer"], a["refused"]]
+                        + ([it["reference_answer"]] if "v1.1" in (it.get("notes") or "") else []),
+                        ensure_ascii=False,
+                    ).encode()
                 ).hexdigest()
                 j = jcache.get(jkey) or judge(it, a, judge_llm)
                 return {
