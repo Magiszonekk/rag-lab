@@ -3,7 +3,7 @@
 > 🇵🇱 Przejrzysty RAG na polskich ustawach podatkowych (VAT, PIT, Ordynacja podatkowa): kilka wariantów
 > wyszukiwania na tych samych danych, porównanych liczbami, z podglądem każdego kroku. Projekt w budowie.
 
-**Status: M1 and M2 done (retrieval, test sets, answering variants incl. agentic, verification, judge calibration); public demo (M3) next.** Not tax advice — a technical demo.
+**Status: M1–M3 done. Live demo: https://rag.cikowice.pl.** Next: scaling to 19 acts (M2b), Azure as code (M4). Not tax advice — a technical demo.
 
 ## Idea
 
@@ -165,7 +165,13 @@ the statute (`data/eval/golden/judge_review_v1.jsonl`): each judge was right in 
 An earlier judge version saw only the first 2,500 characters of each context block and marked citations of later
 paragraphs as "not in context" (−2 to −4 pp for every variant); fixed before all numbers above.
 
-## Demo backend (M3, in progress)
+## Live demo
+
+**https://rag.cikowice.pl**: ready-made examples (all variants side by side, traces, results) plus live questions.
+Live answers run on a free model behind the gateway (DeepSeek V4.1 Flash), so they take 20–60 s and fall back to
+the examples when its quota runs out. The evaluated numbers above come from Claude Sonnet 5.
+
+## Demo backend (M3)
 
 - **API** (`src/raglab/api.py`, FastAPI): `/examples`, `/ask`, `/compare`, `/trace/<id>`, `/corpus`, `/eval/results`.
   Ready-made examples (`web/public/examples.json`, 9 questions × 4 variants with traces and judge verdicts) work

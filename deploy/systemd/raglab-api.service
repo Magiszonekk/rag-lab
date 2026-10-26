@@ -1,0 +1,20 @@
+[Unit]
+Description=rag.cikowice.pl — RAG Lab API (FastAPI :3026, WireGuard only, publicznie przez nginx OVH api.rag.cikowice.pl)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Desktop/rag-lab
+# PYTHONPATH z sesji Hermesa wskazuje na obce site-packages — wyczyść
+Environment=PYTHONPATH=
+Environment=HF_HUB_OFFLINE=1
+Environment=RAGLAB_LIVE_ENABLED=1
+Environment=RAGLAB_CORS_ORIGINS=https://rag.cikowice.pl
+ExecStart=%h/Desktop/rag-lab/.venv/bin/uvicorn raglab.api:app --host 10.8.0.4 --port 3026 --workers 1 --proxy-headers --forwarded-allow-ips 10.8.0.1
+Restart=on-failure
+RestartSec=5
+MemoryMax=3G
+
+[Install]
+WantedBy=default.target

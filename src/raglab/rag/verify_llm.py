@@ -93,7 +93,7 @@ def verify_llm(ans: dict[str, Any], question: str, llm: LLM | None = None) -> di
     prompt = PROMPT.format(question=question, answer=ans["answer"], citations=", ".join(ans["citations"]),
                            context=ctx[:40000])  # fmt: skip
     try:
-        c = llm.complete([{"role": "user", "content": prompt}], max_tokens=6000, temperature=0.0)
+        c = llm.complete([{"role": "user", "content": prompt}], max_tokens=8000, temperature=0.0)
         if c.served_model != expected:
             raise ValueError(f"odpowiedział inny model: {c.served_model}")
         d = parse_json(c.text)

@@ -113,6 +113,9 @@ export function AnswerCard({
       {showVerify && v && v.verdict === "pass" && (
         <p className="verify-ok"><Icon name="verify" size={15} /> Weryfikacja: każde zdanie ma oparcie w przytoczonych przepisach.</p>
       )}
+      {showVerify && v && v.verdict === "unchecked" && (
+        <p className="verify-ok"><Icon name="verify" size={15} /> Weryfikacja chwilowo niedostępna (limit modelu) — odpowiedź niesprawdzona.</p>
+      )}
 
       <footer className="answer-foot">
         <Metrics a={answer} />

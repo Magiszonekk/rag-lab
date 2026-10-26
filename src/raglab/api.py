@@ -131,7 +131,11 @@ def _answer_inner(question: str, variant: str, verify: str, llm: LLM) -> dict[st
     if verify == "llm" and not a.get("error"):
         from raglab.rag.verify_llm import apply_llm
 
-        a = apply_llm(a, question)
+        checked = apply_llm(a, question)
+        # weryfikacja zawiodła (pusta odpowiedź / limit modelu) → odpowiedź oznaczona jako niesprawdzona,
+        # zamiast „model niedostępny” przy gotowej odpowiedzi
+        unchecked = {**a, "llm_check": {"verdict": "unchecked", "unsupported": []}}
+        a = unchecked if checked.get("error") else checked
     elif verify == "cite":
         a = apply_verify(a, "cite", question)
     return a
@@ -207,28 +211,43 @@ def trace(trace_id: str) -> dict[str, Any]:
     return t
 
 
-@app.post("/ask")
-def ask(body: AskIn, req: Request) -> dict[str, Any]:
-    if body.variant not in VARIANTS or body.verify not in ("off", "cite", "llm"):
-        raise HTTPException(400, "nieznany wariant albo poziom verify")
-    if not LIVE:
-        raise HTTPException(503, "Pytania na żywo są chwilowo wyłączone — zobacz gotowe przykłady.")
-    q = " ".join(body.question.split())
-    if not looks_like_tax(q):
-        return {"trace_id": None, "answer": "Odpowiadam tylko na pytania o polskie prawo podatkowe (VAT, PIT, "
-                "Ordynacja podatkowa).", "refused": True, "citations": [], "context": [], "steps": []}  # fmt: skip
-    key = hashlib.sha1(f"{body.variant}|{body.verify}|{q.lower()}".encode()).hexdigest()
+def _live_answer(q: str, variant: str, verify: str, llm: LLM) -> dict[str, Any]:
+    key = hashlib.sha1(f"{variant}|{verify}|{q.lower()}".encode()).hexdigest()
     if key in _cache:
         return {**_cache[key], "cached": True}
-    _check_limits(_client_ip(req))
-    llm = _demo_llm()
-    a = _answer(q, body.variant, body.verify, llm)
+    a = _answer(q, variant, verify, llm)
     tid = traces.new_id()
-    traces.save(tid, "live", body.variant, body.verify, a)
+    traces.save(tid, "live", variant, verify, a)
     out = _public(a, tid)
     if not a.get("error"):
         _cache[key] = out
     return out
+
+
+def _off_topic() -> dict[str, Any]:
+    return {"trace_id": None, "answer": "Odpowiadam tylko na pytania o polskie prawo podatkowe (VAT, PIT, Ordynacja "
+            "podatkowa).", "refused": True, "citations": [], "context": [], "steps": []}  # fmt: skip
+
+
+def _precheck(question: str, verify: str, req: Request, cost: int) -> tuple[str, LLM | None]:
+    if verify not in ("off", "cite", "llm"):
+        raise HTTPException(400, "nieznany poziom verify")
+    if not LIVE:
+        raise HTTPException(503, "Pytania na żywo są chwilowo wyłączone — zobacz gotowe przykłady.")
+    q = " ".join(question.split())
+    if not looks_like_tax(q):
+        return q, None
+    for _ in range(cost):
+        _check_limits(_client_ip(req))
+    return q, _demo_llm()
+
+
+@app.post("/ask")
+def ask(body: AskIn, req: Request) -> dict[str, Any]:
+    if body.variant not in VARIANTS:
+        raise HTTPException(400, "nieznany wariant albo poziom verify")
+    q, llm = _precheck(body.question, body.verify, req, 1)
+    return _off_topic() if llm is None else _live_answer(q, body.variant, body.verify, llm)
 
 
 class CompareIn(BaseModel):
@@ -238,8 +257,12 @@ class CompareIn(BaseModel):
 
 @app.post("/compare")
 def compare(body: CompareIn, req: Request) -> dict[str, Any]:
-    # porównanie na żywo = 4 odpowiedzi → liczy się jak 4 pytania w limicie
-    out = {}
-    for v in VARIANTS:
-        out[v] = ask(AskIn(question=body.question, variant=v, verify=body.verify), req)
-    return out
+    # 4 odpowiedzi = 4 pytania w limicie, sprawdzane z góry; warianty równolegle (agent ~20–30 s)
+    from concurrent.futures import ThreadPoolExecutor
+
+    q, llm = _precheck(body.question, body.verify, req, len(VARIANTS))
+    if llm is None:
+        return {v: _off_topic() for v in VARIANTS}
+    demo = llm
+    with ThreadPoolExecutor(len(VARIANTS)) as ex:
+        return dict(zip(VARIANTS, ex.map(lambda v: _live_answer(q, v, body.verify, demo), VARIANTS), strict=True))
