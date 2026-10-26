@@ -30,7 +30,7 @@ from raglab.search.normalize import get_normalizer
 # Wszystkie tabele w README liczone jednym modelem odpowiadającym; zmiana modelu = przeliczenie całości.
 # Jeden model, BEZ zapasu z innej rodziny: zapas po cichu mieszał modele w jednej tabeli (2026-10-24: gemini-3.6
 # padł na limicie klucza Google, a ~1000 odpowiedzi poszło do GLM). Przy błędzie — wpis z błędem, ponowienie później.
-ANSWER_MODELS = ["claude-sonnet-5"]  # 2026-10-24: darmowe limity GPT/Gemini/OpenRouter wyczerpane
+ANSWER_MODELS = ["claude-opus-5-5"]  # 2026-10-24: darmowe limity GPT/Gemini/OpenRouter wyczerpane
 
 SYSTEM_PROMPT = """Jesteś asystentem odpowiadającym na pytania o polskie prawo podatkowe WYŁĄCZNIE na podstawie
 przepisów podanych w sekcji PRZEPISY. Masz dostęp tylko do: ustawy o VAT, ustawy o PIT i Ordynacji podatkowej,

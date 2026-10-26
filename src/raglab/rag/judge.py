@@ -1,6 +1,6 @@
 """Sędzia LLM (koncept D7, warstwa 2): ocena odpowiedzi względem wzorca i przepisów.
 
-Sędzia jest z INNEJ rodziny niż model odpowiadający (odpowiada Claude → ocenia Nemotron), z jawną skalą
+Sędzia jest z INNEJ rodziny niż model odpowiadający (odpowiada Claude Opus → ocenia DeepSeek), z jawną skalą
 i uzasadnieniem. Kalibracja z człowiekiem — `judge_calibration.md` (D7).
 """
 
@@ -11,9 +11,9 @@ from typing import Any
 from raglab.llm import LLM, LLMError, parse_json
 
 # inna rodzina niż model odpowiadający (Claude); bez zapasu. gpt-oss (groq) padł na dziennym limicie 2026-10-24.
-JUDGE_MODELS = ["nvidia/nemotron-3-ultra-550b-a55b:free"]
+JUDGE_MODELS = ["deepseek-v4.1-flash-free"]
 # zmiana promptu / kontekstu sędziego → nowa wersja → werdykty z cache przestają obowiązywać
-JUDGE_VERSION = "4-nemotron-ultra"
+JUDGE_VERSION = "5-deepseek-v4.1-flash"
 
 JUDGE_PROMPT = """Oceniasz odpowiedź systemu RAG na pytanie o polskie prawo podatkowe. System może korzystać
 WYŁĄCZNIE z przepisów, które dostał w kontekście (VAT, PIT, Ordynacja podatkowa). Masz wzorcową odpowiedź

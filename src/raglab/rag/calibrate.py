@@ -28,7 +28,7 @@ from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_VERSION, judge
 
 # gemini-3.8-flash przez bramkę ~70 s na odpowiedź (zmierzone) — niepraktyczne dla ~200 ocen.
-# trzecia rodzina: ani Claude (odpowiada), ani Nemotron (sędzia 1). Gemini 2.5 / 3-preview / 3.8 padły na dziennym
+# trzecia rodzina: ani Claude (odpowiada), ani DeepSeek (sędzia 1). Gemini 2.5 / 3-preview / 3.8 padły na dziennym
 # limicie Google po 1–14 ocenach (2026-10-25); gpt-oss-120b (groq) przeszedł próbę 12/12
 SECOND_JUDGE = ["openai/gpt-oss-120b"]
 # Kalibracja na odpowiedziach wariantu głównego (72). Darmowy groq dla gpt-oss-120b: limit tokenów na minutę

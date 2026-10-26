@@ -164,6 +164,8 @@ def main(argv: list[str] | None = None) -> int:
             gen(todo[0])  # rozgrzanie indeksów w wątku głównym
         with ThreadPoolExecutor(args.workers) as ex, cache_path.open("a", encoding="utf-8") as f:
             for key, a in ex.map(gen, todo):
+                if not a.get("error") and a.get("served_model") != ANSWER_MODELS[0]:
+                    a = {**a, "error": f"podmiana modelu: odpowiedział {a.get('served_model')}"}
                 if a.get("error"):
                     print(f"  błąd: {a['error'][:150]}", file=sys.stderr)
                     cache[key] = a  # liczy się jako błąd, ale bez zapisu — ponowienie w następnym przebiegu

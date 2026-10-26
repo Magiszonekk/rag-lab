@@ -24,7 +24,7 @@ from pathlib import Path
 from raglab.ingest.sources import REPO_ROOT
 from raglab.llm import LLM, LLMError, parse_json, system_llm
 
-REWRITE_MODELS = ["claude-sonnet-5"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
+REWRITE_MODELS = ["claude-opus-5-5"]  # jeden model, bez zapasu — patrz ANSWER_MODELS
 CACHE = REPO_ROOT / "data" / "cache" / "rewrite.jsonl"
 
 PROMPTS = {
