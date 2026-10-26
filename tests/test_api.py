@@ -88,7 +88,7 @@ def test_law_watch_logic_with_fake_api(monkeypatch) -> None:  # type: ignore[no-
     assert rep["stale"] is True
 
 
-def test_demo_path_uses_only_demo_model(monkeypatch, api) -> None:  # type: ignore[no-untyped-def]
+def test_demo_path_uses_only_demo_model(monkeypatch, api, tmp_path) -> None:  # type: ignore[no-untyped-def]
     """Każde wywołanie modelu w ścieżce /ask idzie przez klienta bramki demo (HyDE, odpowiedź, weryfikacja)."""
     import raglab.llm as L
 
@@ -107,6 +107,23 @@ def test_demo_path_uses_only_demo_model(monkeypatch, api) -> None:  # type: igno
                             prompt_tokens=1, completion_tokens=1, latency_ms=1)  # fmt: skip
 
     monkeypatch.setattr(L.LLM, "complete", fake_complete)
+    # cache przepisań i weryfikacji → pliki tymczasowe (nie zaśmiecać prawdziwych wyników ewaluacji)
+    import raglab.rag.verify_llm as VL
+    import raglab.search.rewrite as RW
+
+    monkeypatch.setattr(RW, "CACHE", tmp_path / "rewrite.jsonl")
+    monkeypatch.setattr(RW, "_mem", None)
+    monkeypatch.setattr(VL, "CACHE", tmp_path / "verify.jsonl")
+    monkeypatch.setattr(VL, "_mem", None)
+    # bez embeddingów (w CI ich nie ma — liczenie korpusu na CPU trwa kilkanaście minut): obie „nogi” hybrydy = BM25
+    import raglab.rag.variants as V
+    from raglab.corpus import load_corpus
+    from raglab.search.chunking import structural
+    from raglab.search.index import BM25Index
+    from raglab.search.normalize import get_normalizer
+
+    bm = BM25Index([c for a in load_corpus().values() for c in structural(a)], get_normalizer("morfeusz2"))
+    monkeypatch.setattr(V, "_indexes", lambda: (bm, bm))
     monkeypatch.setenv("LLM_BASE_URL", "http://example.invalid/v1")  # w CI nie ma .env
     monkeypatch.setenv("LLM_API_KEY", "x")
     demo = L.LLM(["demo-answer"])
