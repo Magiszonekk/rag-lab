@@ -18,6 +18,7 @@ spec:
       restartPolicy: Never
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       automountServiceAccountToken: false
+      {{- include "raglab.podIdentity" . | nindent 6 }}
       containers:
         - name: eval
           image: {{ include "raglab.image" . }}

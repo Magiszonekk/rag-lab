@@ -21,6 +21,7 @@ spec:
       {{- end }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       automountServiceAccountToken: false
+      {{- include "raglab.podIdentity" . | nindent 6 }}
       initContainers:
         # korpus buduje Job ingestu; API czeka, aż pliki pojawią się na wolumenie (pierwsza instalacja)
         - name: wait-for-corpus

@@ -117,6 +117,22 @@ secrets:
     LLM_EVAL_GATEWAY_KEY: ""
     OPENROUTER_API_KEY: ""
 
+# Azure (M4): sekrety z Key Vault przez sterownik CSI i workload identity (bez kluczy w klastrze poza Secretem
+# synchronizowanym przez CSI). Włączone w values-azure.yaml; lokalnie i w kind wyłączone.
+azure:
+  keyVault:
+    enabled: false
+    name: ""              # nazwa Key Vault (output Terraform: key_vault_name)
+    tenantId: ""
+    clientId: ""          # tożsamość podów (output Terraform: workload_client_id)
+    # nazwy sekretów w Key Vault (myślniki) → klucze w Secrecie Kubernetesa (podkreślenia)
+    secrets:
+      POSTGRES-PASSWORD: POSTGRES_PASSWORD
+      LITELLM-MASTER-KEY: LITELLM_MASTER_KEY
+      LLM-DEMO-API-KEY: LLM_DEMO_API_KEY
+      LLM-API-KEY: LLM_API_KEY
+      OPENROUTER-API-KEY: OPENROUTER_API_KEY
+
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 10001

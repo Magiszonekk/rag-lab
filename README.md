@@ -298,9 +298,10 @@ in `.env` (see `.env.example`).
 - **M3** ✅ public demo with comparison mode, trace viewer and streamed answers.
 - **M3b** ✅ Helm chart (API, Postgres + pgvector, LiteLLM, ingest Job, law-watch CronJob, eval Job),
   installed and tested in kind in CI.
-- **M4** — the same chart on Azure, provisioned with Terraform: AKS, ACR, Key Vault, workload identity, state in
-  Azure Storage; GitHub Actions with OIDC (plan on PR → approval → apply → evaluate → destroy). Models stay behind
-  the LiteLLM gateway, because swapping the provider is configuration.
+- **M4** (code ready, first run pending approval): the same chart on Azure, provisioned with Terraform. Includes
+  AKS with Cilium network policy, ACR, Key Vault via the CSI driver with workload identity, and state in Azure
+  Storage. GitHub Actions log in with OIDC, using a read-only identity for `plan` on PRs and a write identity only
+  from an approval-gated environment. Models stay behind the LiteLLM gateway. See [`infra/README.md`](infra/README.md).
 
 ## License
 

@@ -69,6 +69,7 @@ app.kubernetes.io/component: {{ .component }}
 - {name: data, mountPath: /app/results/answers, subPath: answers}
 - {name: data, mountPath: /app/results/series, subPath: series}
 - {name: tmp, mountPath: /tmp}
+{{- include "raglab.kvMount" . }}
 {{- end -}}
 
 {{- define "raglab.dataVolumes" -}}
@@ -76,4 +77,29 @@ app.kubernetes.io/component: {{ .component }}
   persistentVolumeClaim: {claimName: {{ include "raglab.fullname" . }}-data}
 - name: tmp
   emptyDir: {sizeLimit: 512Mi}
+{{- include "raglab.kvVolume" . }}
+{{- end -}}
+
+{{/* Azure Key Vault: ServiceAccount z workload identity + wolumen CSI (synchronizuje Secret) */}}
+{{- define "raglab.podIdentity" -}}
+{{- if .Values.azure.keyVault.enabled }}
+serviceAccountName: raglab
+{{- end }}
+{{- end -}}
+
+
+{{- define "raglab.kvMount" -}}
+{{- if .Values.azure.keyVault.enabled }}
+- {name: kv, mountPath: /mnt/secrets, readOnly: true}
+{{- end }}
+{{- end -}}
+
+{{- define "raglab.kvVolume" -}}
+{{- if .Values.azure.keyVault.enabled }}
+- name: kv
+  csi:
+    driver: secrets-store.csi.k8s.io
+    readOnly: true
+    volumeAttributes: {secretProviderClass: {{ include "raglab.fullname" . }}-kv}
+{{- end }}
 {{- end -}}

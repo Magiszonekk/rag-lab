@@ -1,0 +1,40 @@
+{{- if .Values.azure.keyVault.enabled }}
+# Workload identity: ServiceAccount powiązany z tożsamością Azure (federacja z OIDC issuerem klastra, Terraform).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: raglab
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+  annotations:
+    azure.workload.identity/client-id: {{ required "azure.keyVault.clientId" .Values.azure.keyVault.clientId | quote }}
+automountServiceAccountToken: false
+---
+# Sterownik CSI pobiera sekrety z Key Vault i synchronizuje je do Secretu `secrets.existingSecret`
+# (zmienne środowiskowe podów działają jak lokalnie). Secret istnieje, dopóki jakiś pod montuje wolumen CSI.
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: {{ include "raglab.fullname" . }}-kv
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    clientID: {{ .Values.azure.keyVault.clientId | quote }}
+    keyvaultName: {{ required "azure.keyVault.name" .Values.azure.keyVault.name | quote }}
+    tenantId: {{ required "azure.keyVault.tenantId" .Values.azure.keyVault.tenantId | quote }}
+    objects: |
+      array:
+      {{- range $kv, $_ := .Values.azure.keyVault.secrets }}
+        - |
+          objectName: {{ $kv }}
+          objectType: secret
+      {{- end }}
+  secretObjects:
+    - secretName: {{ required "secrets.existingSecret (nazwa Secretu z Key Vault)" .Values.secrets.existingSecret }}
+      type: Opaque
+      data:
+      {{- range $kv, $k8s := .Values.azure.keyVault.secrets }}
+        - {objectName: {{ $kv }}, key: {{ $k8s }}}
+      {{- end }}
+{{- end }}

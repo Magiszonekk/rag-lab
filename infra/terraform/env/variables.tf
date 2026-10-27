@@ -1,0 +1,43 @@
+variable "subscription_id" {
+  type = string
+}
+
+variable "location" {
+  type    = string
+  default = "swedencentral"
+  # Poland Central: na subskrypcji trial zablokowane wszystkie małe rozmiary VM (NotAvailableForSubscription,
+  # sprawdzone 2026-10-27 przez Microsoft.Compute/skus); Sweden Central ma je dostępne
+}
+
+variable "name" {
+  type    = string
+  default = "raglab"
+}
+
+variable "kubernetes_version" {
+  type        = string
+  default     = null # null = domyślna wersja AKS w regionie
+  description = "Wersja Kubernetesa (np. 1.36); null = domyślna."
+}
+
+variable "node_vm_size" {
+  type        = string
+  default     = "Standard_B2as_v2"
+  description = "1 węzeł 2 vCPU / 8 GB (API trzyma w RAM torch + model wektorów); najtańszy 8 GB w Sweden Central."
+}
+
+variable "node_count" {
+  type    = number
+  default = 1
+}
+
+variable "api_admin_ips" {
+  type        = list(string)
+  default     = []
+  description = "CIDR-y z dostępem do API serwera Kubernetesa (pusto = bez ograniczenia; CI dodaje swój adres)."
+}
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

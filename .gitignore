@@ -13,3 +13,11 @@ data/cache/
 results/eval_run.log
 results/answers/
 data/eval/golden/judge_review_v1.SHEET.md
+# Terraform: katalogi providerów, stan lokalny bootstrapu (zawiera identyfikatory), plany
+infra/terraform/**/.terraform/
+infra/terraform/**/*.tfstate
+infra/terraform/**/*.tfstate.*
+infra/terraform/**/tfplan
+infra/terraform/**/plan.txt
+infra/terraform/**/summary.txt
+infra/terraform/**/*.tfvars

@@ -22,6 +22,7 @@ spec:
           restartPolicy: Never
           securityContext: {{- toYaml .Values.podSecurityContext | nindent 12 }}
           automountServiceAccountToken: false
+          {{- include "raglab.podIdentity" . | nindent 10 }}
           containers:
             - name: law-watch
               image: {{ include "raglab.image" . }}

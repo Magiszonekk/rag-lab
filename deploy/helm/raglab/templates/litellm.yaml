@@ -26,6 +26,7 @@ spec:
         checksum/config: {{ .Files.Get "files/litellm-config.yaml" | sha256sum }}
     spec:
       automountServiceAccountToken: false
+      {{- include "raglab.podIdentity" . | nindent 6 }}
       securityContext:
         seccompProfile: {type: RuntimeDefault}
       containers:
@@ -64,9 +65,11 @@ spec:
             timeoutSeconds: 10
           volumeMounts:
             - {name: config, mountPath: /app/config.yaml, subPath: config.yaml, readOnly: true}
+            {{- include "raglab.kvMount" . | nindent 12 }}
       volumes:
         - name: config
           configMap: {name: {{ include "raglab.fullname" . }}-litellm}
+        {{- include "raglab.kvVolume" . | nindent 8 }}
 ---
 apiVersion: v1
 kind: Service

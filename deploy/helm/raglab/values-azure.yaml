@@ -1,0 +1,29 @@
+# Nakładka dla AKS (M4). Wartości z outputów Terraform podaje workflow `azure` przez --set:
+#   image.repository, azure.keyVault.{name,tenantId,clientId}, ingress.host, litellm.upstreamBaseUrl
+image:
+  pullPolicy: IfNotPresent
+
+api:
+  embed: mmlw-base          # lokalny model wektorów w obrazie: bez klucza OpenRouter na Azure
+  liveEnabled: true
+  perDay: 100
+  corsOrigins: "https://rag.cikowice.pl"
+
+ingress:
+  enabled: true
+  className: webapprouting.kubernetes.azure.com   # nginx zarządzany przez AKS (web_app_routing)
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
+
+data:
+  storageClass: managed-csi       # Azure Disk (Standard SSD)
+postgres:
+  storageClass: managed-csi
+
+secrets:
+  existingSecret: raglab-kv       # synchronizowany z Key Vault przez sterownik CSI
+
+azure:
+  keyVault:
+    enabled: true

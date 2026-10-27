@@ -29,6 +29,7 @@ spec:
         checksum/init: {{ .Files.Glob "files/db-init/*.sql" | toString | sha256sum }}
     spec:
       automountServiceAccountToken: false
+      {{- include "raglab.podIdentity" . | nindent 6 }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 999          # użytkownik postgres w obrazie pgvector/pgvector
@@ -60,11 +61,13 @@ spec:
             - {name: pgdata, mountPath: /var/lib/postgresql/data}
             - {name: init, mountPath: /docker-entrypoint-initdb.d, readOnly: true}
             - {name: run, mountPath: /var/run/postgresql}
+            {{- include "raglab.kvMount" . | nindent 12 }}
       volumes:
         - name: init
           configMap: {name: {{ include "raglab.fullname" . }}-postgres-init}
         - name: run
           emptyDir: {}
+        {{- include "raglab.kvVolume" . | nindent 8 }}
   volumeClaimTemplates:
     - metadata: {name: pgdata}
       spec:

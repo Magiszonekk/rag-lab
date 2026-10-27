@@ -1,0 +1,237 @@
+# M4 (koncept D17): RAG Lab na Azure — Terraform (AKS, ACR, Key Vault, workload identity) + ten sam chart Helm.
+#
+# - pull request zmieniający infra/terraform/** → `terraform plan` jako komentarz (tylko odczyt, bez zatwierdzenia);
+# - ręcznie (workflow_dispatch) → apply → obraz do ACR → helm upgrade → test → opcjonalnie ewaluacja → opcjonalnie
+#   destroy. Każdy krok zmieniający Azure działa w environment `azure`, który wymaga zatwierdzenia właściciela.
+#
+# Logowanie do Azure: OIDC (azure/login z tożsamością federacyjną z infra/terraform/bootstrap) — bez sekretów Azure
+# w repo. Zmienne repo (vars.*): AZURE_PLAN_CLIENT_ID (PR, odczyt), AZURE_CLIENT_ID (environment azure), AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, TFSTATE_*.
+# Sekrety environmentu `azure` (secrets.*): LLM_API_KEY (klucz bramki modeli), LLM_UPSTREAM_URL.
+
+name: azure
+
+on:
+  pull_request:
+    paths: ["infra/terraform/**", ".github/workflows/azure.yml"]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "apply = postaw/zaktualizuj i wdroż; destroy = usuń całe środowisko"
+        type: choice
+        options: [apply, destroy]
+        default: apply
+      run_eval:
+        description: "po wdrożeniu uruchom Job ewaluacji (próba 12 pytań)"
+        type: boolean
+        default: false
+      destroy_after:
+        description: "na końcu usuń środowisko (deploy → test → [ewaluacja] → destroy)"
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write       # token OIDC dla azure/login
+  contents: read
+  pull-requests: write  # komentarz z planem
+
+concurrency:
+  group: azure-env      # jedno środowisko → nigdy dwa przebiegi naraz (blokada stanu też by to złapała)
+  cancel-in-progress: false
+
+env:
+  TF_IN_AUTOMATION: "1"
+  TF_INPUT: "0"
+  ARM_USE_OIDC: "true"
+  ARM_USE_AZUREAD: "true"
+  ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  TF_VAR_subscription_id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  TF_DIR: infra/terraform/env
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ vars.AZURE_PLAN_CLIENT_ID }}   # tożsamość tylko do odczytu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v4
+        with: {terraform_version: "1.17.0", terraform_wrapper: false}
+      - name: fmt + validate (bez Azure)
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform fmt -check -recursive ..
+          terraform init -backend=false
+          terraform validate
+      - uses: azure/login@v3
+        if: vars.AZURE_PLAN_CLIENT_ID != ''
+        with:
+          client-id: ${{ vars.AZURE_PLAN_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: plan
+        if: vars.AZURE_PLAN_CLIENT_ID != ''
+        id: plan
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform init -reconfigure \
+            -backend-config="resource_group_name=${{ vars.TFSTATE_RESOURCE_GROUP }}" \
+            -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}" \
+            -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}"
+          terraform plan -lock=false -no-color -out=tfplan | tee plan.txt
+          terraform show -no-color tfplan | grep -E "^Plan:|No changes" | tail -1 > summary.txt || true
+      - name: komentarz z planem
+        if: vars.AZURE_PLAN_CLIENT_ID != ''
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            const dir = process.env.TF_DIR;
+            const plan = fs.readFileSync(`${dir}/plan.txt`, 'utf8');
+            const summary = fs.readFileSync(`${dir}/summary.txt`, 'utf8').trim();
+            const tail = plan.length > 60000 ? plan.slice(-60000) : plan;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+              body: `### terraform plan (\`${dir}\`)\n**${summary}**\n<details><summary>plan</summary>\n\n\`\`\`\n${tail}\n\`\`\`\n</details>`,
+            });
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'apply'
+    runs-on: ubuntu-latest
+    environment: azure        # wymaga zatwierdzenia (reguła environmentu w GitHubie)
+    timeout-minutes: 60
+    outputs:
+      api_host: ${{ steps.out.outputs.api_host }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v4
+        with: {terraform_version: "1.17.0", terraform_wrapper: false}
+      - uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: terraform apply
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ vars.TFSTATE_RESOURCE_GROUP }}" \
+            -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}" \
+            -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}"
+          terraform apply -auto-approve -lock-timeout=5m
+          terraform output -json > ../../../tf.json
+
+      - id: out
+        name: outputy Terraform
+        run: |
+          for k in resource_group aks_name acr_name acr_login_server key_vault_name workload_client_id tenant_id; do
+            echo "$k=$(jq -r ".${k}.value" tf.json)" >> "$GITHUB_OUTPUT"
+            echo "TF_$k=$(jq -r ".${k}.value" tf.json)" >> "$GITHUB_ENV"
+          done
+
+      # klucz bramki modeli (z sekretów environmentu) do Key Vault — reszta haseł powstała w Terraformie
+      - name: klucze modeli → Key Vault
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          az keyvault secret set --vault-name "$TF_key_vault_name" --name LLM-API-KEY --value "$LLM_API_KEY" -o none
+          # OpenRouter (embedding Qwen) nie jest używany na Azure (api.embed=mmlw-base); pusty wpis dla CSI
+          az keyvault secret show --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY -o none 2>/dev/null \
+            || az keyvault secret set --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY --value "unused" -o none
+
+      - name: obraz API → ACR
+        run: |
+          az acr build --registry "$TF_acr_name" --image "raglab-api:${GITHUB_SHA::12}" --build-arg WITH_MMLW=1 .
+
+      - name: kubeconfig (Entra ID)
+        uses: azure/use-kubelogin@v1.3
+        with: {kubelogin-version: v0.2.22}
+      - run: |
+          az aks get-credentials -g "$TF_resource_group" -n "$TF_aks_name" --overwrite-existing
+          kubelogin convert-kubeconfig -l azurecli
+          kubectl get nodes -o wide
+
+      - uses: azure/setup-helm@v5
+      - name: helm upgrade --install
+        env:
+          LLM_UPSTREAM_URL: ${{ secrets.LLM_UPSTREAM_URL }}
+        run: |
+          # publiczny adres API: host z adresu IP kontrolera ingress (nip.io) albo własna domena (vars.API_HOST)
+          helm upgrade --install raglab deploy/helm/raglab -n raglab --create-namespace \
+            -f deploy/helm/raglab/values-azure.yaml \
+            --set image.repository="$TF_acr_login_server/raglab-api" --set image.tag="${GITHUB_SHA::12}" \
+            --set azure.keyVault.name="$TF_key_vault_name" \
+            --set azure.keyVault.tenantId="$TF_tenant_id" \
+            --set azure.keyVault.clientId="$TF_workload_client_id" \
+            --set litellm.upstreamBaseUrl="$LLM_UPSTREAM_URL" \
+            --set ingress.host="${{ vars.API_HOST || 'raglab.invalid' }}" \
+            --wait --wait-for-jobs --timeout 25m
+          kubectl -n raglab get pods,jobs,ingress -o wide
+
+      - name: helm test
+        run: helm test raglab -n raglab --logs
+
+      - name: klucz demo w LiteLLM (wartość z Key Vault, limity jak na serwerze domowym)
+        run: |
+          kubectl -n raglab exec deploy/raglab-api -c api -- python - <<'EOF'
+          import os, httpx
+          base, master, demo = os.environ["RAGLAB_LITELLM_URL"], open("/mnt/secrets/LITELLM-MASTER-KEY").read(), os.environ["LLM_DEMO_API_KEY"]
+          h = {"Authorization": f"Bearer {master}"}
+          r = httpx.post(f"{base}/key/info", headers=h, params={"key": demo}, timeout=30)
+          if r.status_code != 200:
+              r = httpx.post(f"{base}/key/generate", headers=h, timeout=30, json={
+                  "key": demo, "key_alias": "rag-lab-demo-azure", "models": ["demo-answer"],
+                  "max_budget": 5.0, "budget_duration": "30d", "rpm_limit": 20, "tpm_limit": 200_000})
+              r.raise_for_status()
+          print("klucz demo w bramce:", r.status_code)
+          EOF
+
+      - name: ewaluacja (Job, próba)
+        if: inputs.run_eval
+        env:
+          LLM_UPSTREAM_URL: ${{ secrets.LLM_UPSTREAM_URL }}
+        run: |
+          helm upgrade raglab deploy/helm/raglab -n raglab --reuse-values --set eval.enabled=true \
+            --wait --wait-for-jobs --timeout 50m
+          kubectl -n raglab logs "job/raglab-eval-$(helm history raglab -n raglab -o json | jq '.[-1].revision')" --tail 40
+
+      - name: diagnostyka przy błędzie
+        if: failure()
+        run: |
+          kubectl -n raglab get pods,jobs,pvc,ingress -o wide || true
+          kubectl -n raglab describe pods | tail -120 || true
+          kubectl -n raglab logs -l app.kubernetes.io/component=api --all-containers --tail 60 || true
+
+  destroy:
+    if: >-
+      always() && github.event_name == 'workflow_dispatch' &&
+      (inputs.action == 'destroy' || (inputs.destroy_after && needs.deploy.result != 'skipped'))
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    environment: azure
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v4
+        with: {terraform_version: "1.17.0", terraform_wrapper: false}
+      - uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: terraform destroy
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ vars.TFSTATE_RESOURCE_GROUP }}" \
+            -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}" \
+            -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}"
+          terraform destroy -auto-approve -lock-timeout=5m
+      - name: nic nie zostało
+        run: |
+          left=$(az resource list --tag project=rag-lab --query "[?tags.stack=='env'] | length(@)" -o tsv)
+          echo "zasoby środowiska po destroy: $left"
+          test "$left" = "0"
