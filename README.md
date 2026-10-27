@@ -203,8 +203,10 @@ paragraphs as "not in context" (−2 to −4 pp for every variant); fixed before
 ## Live demo
 
 **https://rag.cikowice.pl**: ready-made examples (all variants side by side, traces, results) plus live questions.
-Live answers run on a free model behind the gateway (DeepSeek V4.1 Flash), so they take 20–60 s and fall back to
-the examples when its quota runs out. The evaluated numbers above come from Claude Sonnet 5.
+Live answers: retrieval with Qwen3-Embedding-8B (local `mmlw-roberta-base` as automatic fallback when the
+embedding API fails), answering with a free model behind the gateway: Gemini 3 Flash, falling back to DeepSeek
+V4.1 Flash and Nemotron 3 Ultra on errors or rate limits. Typically 15–45 s per answer; the ready-made examples
+work without the backend. The evaluated numbers above come from Claude models.
 
 ## Demo backend (M3)
 

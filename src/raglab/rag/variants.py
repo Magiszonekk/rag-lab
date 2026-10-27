@@ -97,7 +97,43 @@ def _indexes() -> tuple[BM25Index, VectorIndex]:
         emb = ApiEmbedder(name, provider=provider, query_prefix=qp, doc_prefix=dp)
     else:
         emb = Embedder("sdadas/mmlw-roberta-base", query_prefix="zapytanie: ")
-    return bm25, VectorIndex(chunks, emb)
+    vec = VectorIndex(chunks, emb)
+    if EMBED != "mmlw-base" and os.environ.get("RAGLAB_EMBED_FALLBACK") == "1":
+        fb = FallbackVector(vec, chunks)
+        fb.backup()  # mmlw ładowany przy starcie (~10 s), nie dopiero przy pierwszym błędzie API
+        return bm25, fb  # type: ignore[return-value]
+    return bm25, vec
+
+
+class FallbackVector:
+    """Wektory z zapasem: API (Qwen) → przy błędzie lokalny mmlw (demo nie może paść, gdy OpenRouter nie odpowiada).
+
+    Tylko dla demo (RAGLAB_EMBED_FALLBACK=1). W ewaluacji zapas jest wyłączony — mieszałby embeddingi w jednej
+    tabeli; tam błąd API ma przerwać pytanie, nie zmienić po cichu metodę.
+    """
+
+    def __init__(self, primary: VectorIndex, chunks: list[Any]) -> None:
+        self.primary = primary
+        self.chunks = chunks
+        self._backup: VectorIndex | None = None
+        self.last_used = EMBED
+
+    def backup(self) -> VectorIndex:
+        if self._backup is None:
+            self._backup = VectorIndex(self.chunks, Embedder("sdadas/mmlw-roberta-base", query_prefix="zapytanie: "))
+        return self._backup
+
+    def search(self, query: str, k: int = 20) -> list[Hit]:
+        try:
+            hits = self.primary.search(query, k)
+            self.last_used = EMBED
+            return hits
+        except Exception as e:  # sieć, limit, provider — wszystko poza błędem programistycznym w samym zapasie
+            import logging
+
+            logging.getLogger("raglab").warning("embedding %s niedostępny (%s) — zapas mmlw", EMBED, type(e).__name__)
+            self.last_used = "mmlw-base (zapas)"
+            return self.backup().search(query, k)
 
 
 RETRIEVERS: dict[str, Callable[[str], list[Hit]]] = {

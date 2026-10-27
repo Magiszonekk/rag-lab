@@ -87,7 +87,14 @@ def test() -> int:
     slow = _gen(key_alias="rag-lab-test-rpm", models=["demo-answer"], rpm_limit=1)
     codes = [_chat(slow, "demo-answer").status_code for _ in range(3)]
     results.append(("limit RPM odrzuca nadmiar", 429 in codes, codes))
-    for k in (broke, slow):
+    # zapas: model główny pada → LiteLLM przechodzi na demo-answer-fallback-* (klucz nie ma do nich dostępu wprost)
+    fbk = _gen(key_alias="rag-lab-test-fallback", models=["demo-broken-test"])
+    r = _chat(fbk, "demo-broken-test")
+    results.append(("padnięty model główny → zapas odpowiada", r.status_code == 200
+                    and r.headers.get("x-litellm-attempted-fallbacks", "0") != "0", r.status_code))  # fmt: skip
+    r = _chat(demo, "demo-answer-fallback-1")
+    results.append(("demo → zapas wprost odrzucony", r.status_code in (401, 403), r.status_code))
+    for k in (broke, slow, fbk):
         httpx.post(f"{_base()}/key/delete", headers=_admin(), json={"keys": [k]}, timeout=30)
 
     ok = True

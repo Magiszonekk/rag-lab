@@ -18,6 +18,30 @@ model_list:
     model_info:
       input_cost_per_token: 0.0000003
       output_cost_per_token: 0.0000025
+  # główny model demo: DEMO_UPSTREAM_MODEL (2026-10-27: gemini-3-flash-preview — agent p50 ~20 s; DeepSeek V4.1 Flash
+  # był 3–5× wolniejszy). Zapas z innych źródeł limitów: DeepSeek (opencode), Nemotron (OpenRouter free).
+  - model_name: demo-answer-fallback-1
+    litellm_params:
+      model: openai/deepseek-v4.1-flash-free
+      api_base: os.environ/LLM_BASE_URL
+      api_key: os.environ/LLM_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000003
+      output_cost_per_token: 0.0000025
+  - model_name: demo-answer-fallback-2
+    litellm_params:
+      model: openai/nvidia/nemotron-3-ultra-550b-a55b:free
+      api_base: os.environ/LLM_BASE_URL
+      api_key: os.environ/LLM_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000003
+      output_cost_per_token: 0.0000025
+  # tylko do testu zapasów (gateway test): model, którego upstream nie zna → zawsze błąd
+  - model_name: demo-broken-test
+    litellm_params:
+      model: openai/nie-istnieje-raglab-test
+      api_base: os.environ/LLM_BASE_URL
+      api_key: os.environ/LLM_API_KEY
   # --- ewaluacja: modele z upstreamu, łącznie z subskrypcyjnymi (ruch tylko właściciela) ---
   - model_name: eval-answer
     litellm_params:
@@ -32,6 +56,12 @@ model_list:
 
 litellm_settings:
   drop_params: true
+  # demo: przy 429/błędzie modelu głównego — zapas (w demo liczy się dostępność; ewaluacja nie używa grupy demo)
+  fallbacks:
+    - demo-answer: ["demo-answer-fallback-1", "demo-answer-fallback-2"]
+    - demo-broken-test: ["demo-answer-fallback-1", "demo-answer-fallback-2"]
+  num_retries: 1
+  request_timeout: 90
   # nie wysyłać nic poza bramkę (telemetria, callbacki)
   telemetry: false
 

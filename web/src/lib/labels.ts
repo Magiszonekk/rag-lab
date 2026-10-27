@@ -1,7 +1,7 @@
 import type { Category, Verdict, VariantId } from "./types";
 
 export const VARIANT_INFO: Record<VariantId, { name: string; short: string; how: string }> = {
-  simple: { name: "Prosty", short: "wektory", how: "Top-5 fragmentów z wyszukiwania wektorowego (mmlw-roberta-base)." },
+  simple: { name: "Prosty", short: "wektory", how: "Top-5 fragmentów z wyszukiwania wektorowego (Qwen3-Embedding-8B; gotowe przykłady: mmlw-roberta-base)." },
   hybrid: { name: "Hybrydowy", short: "BM25 + wektory", how: "BM25 na lematach (Morfeusz 2) i wektory, łączone przez RRF." },
   hyde: { name: "HyDE", short: "hybryda + hipotetyczny przepis", how: "Model pisze hipotetyczny przepis, szukamy nim i pytaniem jednocześnie." },
   "agentic-strict": { name: "Agentowy", short: "HyDE + do 3 kroków get/search", how: "Agent widzi zebrane przepisy i może dociągnąć brakujący ustęp albo szukać ponownie. Tylko adresy wynikające z kontekstu." },

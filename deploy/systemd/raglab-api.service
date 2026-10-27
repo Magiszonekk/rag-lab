@@ -10,6 +10,9 @@ WorkingDirectory=%h/Desktop/rag-lab
 Environment=PYTHONPATH=
 Environment=HF_HUB_OFFLINE=1
 Environment=RAGLAB_LIVE_ENABLED=1
+# wyszukiwanie: Qwen3-Embedding-8B (OpenRouter, DeepInfra przypięty); przy błędzie API zapas lokalny mmlw
+Environment=RAGLAB_EMBED=qwen3-8b
+Environment=RAGLAB_EMBED_FALLBACK=1
 Environment=RAGLAB_CORS_ORIGINS=https://rag.cikowice.pl
 ExecStart=%h/Desktop/rag-lab/.venv/bin/uvicorn raglab.api:app --host 10.8.0.4 --port 3026 --workers 1 --proxy-headers --forwarded-allow-ips 10.8.0.1
 Restart=on-failure

@@ -132,3 +132,21 @@ def test_demo_path_uses_only_demo_model(monkeypatch, api, tmp_path) -> None:  # 
     assert calls and set(calls) == {"demo-answer"}, calls
     assert a.get("error") is None and a["llm_check"]["verdict"] == "pass"
     assert L.system_llm() is None  # kontekst wyczyszczony po odpowiedzi
+
+
+def test_embedding_fallback_to_local_when_api_fails() -> None:
+    from raglab.rag.variants import FallbackVector
+    from raglab.search.chunking import Chunk  # noqa: F401
+    from raglab.search.index import Hit
+
+    class Broken:
+        def search(self, q: str, k: int = 20) -> list[Hit]:
+            raise RuntimeError("OpenRouter 503")
+
+    class Local:
+        def search(self, q: str, k: int = 20) -> list[Hit]:
+            return []
+
+    fb = FallbackVector(Broken(), [])  # type: ignore[arg-type]
+    fb._backup = Local()  # type: ignore[assignment]
+    assert fb.search("stawka VAT") == [] and fb.last_used.startswith("mmlw")
