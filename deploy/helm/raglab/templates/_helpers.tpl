@@ -103,3 +103,27 @@ serviceAccountName: raglab
     volumeAttributes: {secretProviderClass: {{ include "raglab.fullname" . }}-kv}
 {{- end }}
 {{- end -}}
+
+{{/* kontener tunelu WireGuard (wireproxy) do bramki modeli — w podzie LiteLLM i w Jobie ewaluacji */}}
+{{- define "raglab.tunnelContainer" -}}
+- name: tunnel
+  image: {{ .Values.litellm.tunnel.image }}
+  args: ["--config", "/etc/wireproxy/config", "--info", "127.0.0.1:9080"]
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65532
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: {drop: [ALL]}
+  resources: {{- toYaml .Values.litellm.tunnel.resources | nindent 4 }}
+  volumeMounts:
+    - {name: wg, mountPath: /etc/wireproxy, readOnly: true}
+{{- end -}}
+
+{{- define "raglab.tunnelVolume" -}}
+- name: wg
+  secret:
+    secretName: {{ include "raglab.secretName" . }}
+    items: [{key: WIREGUARD_CONF, path: config}]
+    defaultMode: 0444
+{{- end -}}

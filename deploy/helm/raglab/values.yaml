@@ -99,6 +99,17 @@ litellm:
   port: 4000
   upstreamBaseUrl: ""     # np. adres bramki modeli osiągalny z klastra; pusty = bramka bez upstreamu (tylko health)
   demoUpstreamModel: openai/claude-sonnet-5-5
+  # Tunel WireGuard do bramki modeli (decyzja 2026-10-27: modele zostają poza Azure). Kontener wireproxy
+  # (WireGuard w przestrzeni użytkownika — bez NET_ADMIN i bez modułu jądra) obok LiteLLM wystawia bramkę na
+  # 127.0.0.1:<localPort> poda; upstreamBaseUrl wskazuje wtedy na http://127.0.0.1:<localPort>/v1.
+  # Konfiguracja WireGuard (klucz prywatny peera) w Secrecie, klucz `WIREGUARD_CONF` (Key Vault na Azure).
+  tunnel:
+    enabled: false
+    image: ghcr.io/windtf/wireproxy@sha256:d5b0c7e002febe8529a5b7f86b92fa3031869c041fecb2f6ab44a47e6ccabf9f
+    localPort: 8317
+    resources:
+      requests: {cpu: 10m, memory: 16Mi}
+      limits: {cpu: 200m, memory: 64Mi}
   resources:
     requests: {cpu: 100m, memory: 384Mi}
     limits: {cpu: "1", memory: 1Gi}
@@ -116,6 +127,7 @@ secrets:
     LLM_DEMO_API_KEY: ""
     LLM_EVAL_GATEWAY_KEY: ""
     OPENROUTER_API_KEY: ""
+    WIREGUARD_CONF: ""      # konfiguracja wireproxy (litellm.tunnel), tylko do testów lokalnych
 
 # Azure (M4): sekrety z Key Vault przez sterownik CSI i workload identity (bez kluczy w klastrze poza Secretem
 # synchronizowanym przez CSI). Włączone w values-azure.yaml; lokalnie i w kind wyłączone.
@@ -132,6 +144,7 @@ azure:
       LLM-DEMO-API-KEY: LLM_DEMO_API_KEY
       LLM-API-KEY: LLM_API_KEY
       OPENROUTER-API-KEY: OPENROUTER_API_KEY
+      WIREGUARD-CONF: WIREGUARD_CONF
 
 podSecurityContext:
   runAsNonRoot: true

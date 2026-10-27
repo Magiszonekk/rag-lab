@@ -6,7 +6,8 @@
 #
 # Logowanie do Azure: OIDC (azure/login z tożsamością federacyjną z infra/terraform/bootstrap) — bez sekretów Azure
 # w repo. Zmienne repo (vars.*): AZURE_PLAN_CLIENT_ID (PR, odczyt), AZURE_CLIENT_ID (environment azure), AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, TFSTATE_*.
-# Sekrety environmentu `azure` (secrets.*): LLM_API_KEY (klucz bramki modeli), LLM_UPSTREAM_URL.
+# Sekrety environmentu `azure` (secrets.*): LLM_API_KEY (klucz bramki modeli), WIREGUARD_CONF (peer tunelu do bramki
+# modeli: pod LiteLLM łączy się z nią przez WireGuard — wireproxy, bez NET_ADMIN; na OVH peer ma dostęp tylko do 1 portu).
 
 name: azure
 
@@ -132,12 +133,16 @@ jobs:
             echo "TF_$k=$(jq -r ".${k}.value" tf.json)" >> "$GITHUB_ENV"
           done
 
-      # klucz bramki modeli (z sekretów environmentu) do Key Vault — reszta haseł powstała w Terraformie
-      - name: klucze modeli → Key Vault
+      # klucz bramki modeli i konfiguracja tunelu (sekrety environmentu) do Key Vault — reszta haseł z Terraformu
+      - name: klucze modeli i tunel → Key Vault
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          WIREGUARD_CONF: ${{ secrets.WIREGUARD_CONF }}
         run: |
           az keyvault secret set --vault-name "$TF_key_vault_name" --name LLM-API-KEY --value "$LLM_API_KEY" -o none
+          printf '%s' "$WIREGUARD_CONF" > "$RUNNER_TEMP/wg.conf"
+          az keyvault secret set --vault-name "$TF_key_vault_name" --name WIREGUARD-CONF --file "$RUNNER_TEMP/wg.conf" -o none
+          rm -f "$RUNNER_TEMP/wg.conf"
           # OpenRouter (embedding Qwen) nie jest używany na Azure (api.embed=mmlw-base); pusty wpis dla CSI
           az keyvault secret show --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY -o none 2>/dev/null \
             || az keyvault secret set --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY --value "unused" -o none
@@ -156,8 +161,6 @@ jobs:
 
       - uses: azure/setup-helm@v5
       - name: helm upgrade --install
-        env:
-          LLM_UPSTREAM_URL: ${{ secrets.LLM_UPSTREAM_URL }}
         run: |
           # publiczny adres API: host z adresu IP kontrolera ingress (nip.io) albo własna domena (vars.API_HOST)
           helm upgrade --install raglab deploy/helm/raglab -n raglab --create-namespace \
@@ -166,13 +169,19 @@ jobs:
             --set azure.keyVault.name="$TF_key_vault_name" \
             --set azure.keyVault.tenantId="$TF_tenant_id" \
             --set azure.keyVault.clientId="$TF_workload_client_id" \
-            --set litellm.upstreamBaseUrl="$LLM_UPSTREAM_URL" \
             --set ingress.host="${{ vars.API_HOST || 'raglab.invalid' }}" \
             --wait --wait-for-jobs --timeout 25m
           kubectl -n raglab get pods,jobs,ingress -o wide
 
       - name: helm test
         run: helm test raglab -n raglab --logs
+
+      - name: tunel do bramki modeli działa (z podu LiteLLM)
+        run: |
+          kubectl -n raglab exec deploy/raglab-litellm -c litellm -- python -c "import urllib.request as u;print('bramka modeli:', u.urlopen(u.Request('http://127.0.0.1:8317/v1/models', headers={'Authorization': 'Bearer x'}), timeout=15).status)" \
+            || kubectl -n raglab exec deploy/raglab-litellm -c litellm -- python -c "import urllib.request as u, urllib.error as e
+          try: u.urlopen('http://127.0.0.1:8317/v1/models', timeout=15)
+          except e.HTTPError as x: print('bramka modeli odpowiada przez tunel:', x.code)"
 
       - name: klucz demo w LiteLLM (wartość z Key Vault, limity jak na serwerze domowym)
         run: |
@@ -191,8 +200,6 @@ jobs:
 
       - name: ewaluacja (Job, próba)
         if: inputs.run_eval
-        env:
-          LLM_UPSTREAM_URL: ${{ secrets.LLM_UPSTREAM_URL }}
         run: |
           helm upgrade raglab deploy/helm/raglab -n raglab --reuse-values --set eval.enabled=true \
             --wait --wait-for-jobs --timeout 50m

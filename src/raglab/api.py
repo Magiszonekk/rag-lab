@@ -111,9 +111,7 @@ def _demo_llm() -> LLM:
     base, key, model = (os.environ.get(k) for k in ("LLM_DEMO_BASE_URL", "LLM_DEMO_API_KEY", "LLM_DEMO_MODEL"))
     if not (base and key and model):
         raise HTTPException(503, "Pytania na żywo są chwilowo wyłączone — zobacz gotowe przykłady.")
-    llm = LLM([model], timeout=90.0)
-    llm.base, llm._key = base.rstrip("/"), key
-    return llm
+    return LLM([model], timeout=90.0, base=base, key=key)
 
 
 def _answer(

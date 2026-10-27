@@ -21,6 +21,12 @@ data:
 postgres:
   storageClass: managed-csi
 
+litellm:
+  # modele przez tunel WireGuard do bramki modeli (konfiguracja peera w Key Vault: WIREGUARD-CONF)
+  upstreamBaseUrl: http://127.0.0.1:8317/v1
+  tunnel:
+    enabled: true
+
 secrets:
   existingSecret: raglab-kv       # synchronizowany z Key Vault przez sterownik CSI
 

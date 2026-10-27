@@ -87,10 +87,21 @@ def use_system_llm(llm: LLM | None) -> contextvars.Token[LLM | None]:
 
 
 class LLM:
-    def __init__(self, models: list[str], *, timeout: float = 120.0, attempts: int = 3, backoff: float = 1.0) -> None:
+    def __init__(
+        self,
+        models: list[str],
+        *,
+        timeout: float = 120.0,
+        attempts: int = 3,
+        backoff: float = 1.0,
+        base: str | None = None,
+        key: str | None = None,
+    ) -> None:
         load_env()
-        self.base = os.environ["LLM_BASE_URL"].rstrip("/")
-        self._key = os.environ["LLM_API_KEY"]
+        # base/key jawnie (bramka demo) albo z LLM_BASE_URL / LLM_API_KEY (ewaluacja); w klastrze demo nie ma
+        # zmiennych ewaluacji, więc nie mogą być wymagane, gdy podano własne
+        self.base = (base or os.environ["LLM_BASE_URL"]).rstrip("/")
+        self._key = key or os.environ["LLM_API_KEY"]
         self.models = models
         self.client = httpx.Client(timeout=timeout)
         # darmowe modele: chwilowe 429 (limit na minutę) — więcej prób i dłuższe czekanie (backoff * 2**próba)

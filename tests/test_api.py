@@ -224,3 +224,15 @@ def test_search_bm25_without_llm(api) -> None:  # type: ignore[no-untyped-def]
     assert d["mode"] == "bm25" and len(d["hits"]) == 3
     assert all(h["id"] and h["header"] for h in d["hits"])
     assert client.get("/search", params={"q": "a"}).status_code == 400
+
+
+def test_demo_llm_without_eval_env(monkeypatch, api) -> None:  # type: ignore[no-untyped-def]
+    # w klastrze API ma tylko zmienne bramki demo — brak LLM_BASE_URL / LLM_API_KEY (ewaluacji) nie może wywracać /ask
+    monkeypatch.setattr("raglab.llm.load_env", lambda *a, **k: None)
+    for k in ("LLM_BASE_URL", "LLM_API_KEY"):
+        monkeypatch.delenv(k, raising=False)
+    monkeypatch.setenv("LLM_DEMO_BASE_URL", "http://gateway.invalid/v1/")
+    monkeypatch.setenv("LLM_DEMO_API_KEY", "sk-test")
+    monkeypatch.setenv("LLM_DEMO_MODEL", "demo-answer")
+    llm = api._demo_llm()
+    assert llm.base == "http://gateway.invalid/v1" and llm.models == ["demo-answer"]
