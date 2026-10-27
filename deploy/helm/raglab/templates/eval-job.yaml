@@ -13,9 +13,12 @@ spec:
   ttlSecondsAfterFinished: 604800
   template:
     metadata:
-      labels: {{- include "raglab.selector" (dict "ctx" . "component" "eval") | nindent 8 }}
+      labels:
+        {{- include "raglab.selector" (dict "ctx" . "component" "eval") | nindent 8 }}
+        {{- include "raglab.dataLabel" . | nindent 8 }}
     spec:
       restartPolicy: Never
+      {{- include "raglab.dataAffinity" . | nindent 6 }}
       securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       automountServiceAccountToken: false
       {{- include "raglab.podIdentity" . | nindent 6 }}

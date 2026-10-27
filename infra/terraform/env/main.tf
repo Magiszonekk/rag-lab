@@ -202,3 +202,22 @@ resource "azurerm_role_assignment" "workload_kv" {
   principal_id         = azurerm_user_assigned_identity.workload.principal_id
   principal_type       = "ServicePrincipal"
 }
+
+# --- frontend demo: Azure Static Web Apps (plan Free) -----------------------------------------------------------
+# Statyczny build `web/` (Vite) wdrażany przez workflow tokenem wdrożeniowym (`api_key`); VITE_API_URL = https://api_host.
+# SWA Free jest tylko w kilku regionach (West Europe najbliżej), niezależnie od regionu klastra.
+resource "azurerm_static_web_app" "web" {
+  name                = "swa-${var.name}-${local.suffix}"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.web_location
+  sku_tier            = "Free"
+  sku_size            = "Free"
+  tags                = local.tags
+}
+
+locals {
+  # publiczny adres API: etykieta DNS na IP load balancera kontrolera ingress (ustawia ją workflow w
+  # NginxIngressController) → <etykieta>.<region>.cloudapp.azure.com; certyfikat Let's Encrypt przez cert-manager
+  api_dns_label = "${var.name}-${local.suffix}"
+  api_host      = "${local.api_dns_label}.${var.location}.cloudapp.azure.com"
+}

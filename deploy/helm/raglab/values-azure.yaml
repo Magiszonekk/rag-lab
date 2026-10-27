@@ -20,6 +20,14 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffering: "off"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
+    # certyfikat Let's Encrypt (HTTP-01) przez cert-manager; ClusterIssuer `letsencrypt` zakłada workflow
+    cert-manager.io/cluster-issuer: letsencrypt
+    # limit zapytań na IP jak odczyty na serwerze domowym (60/min); pytania ogranicza API (dziennie i na IP/godz.)
+    nginx.ingress.kubernetes.io/limit-rpm: "60"
+  # host i tls[].hosts podaje workflow (--set ingress.host=…, ingress.tls[0].hosts[0]=…)
+  tls:
+    - secretName: raglab-tls
+      hosts: []
 
 data:
   storageClass: managed-csi       # Azure Disk (Standard SSD)

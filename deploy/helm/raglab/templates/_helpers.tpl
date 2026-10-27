@@ -127,3 +127,22 @@ serviceAccountName: raglab
     items: [{key: WIREGUARD_CONF, path: config}]
     defaultMode: 0444
 {{- end -}}
+
+{{/* Pody z wolumenem danych (RWO) na jednym węźle: na klastrze z >1 węzłem API i Job ingestu trafiłyby na różne
+     węzły i dysk Azure (ReadWriteOnce) nie podłączyłby się do drugiego (Multi-Attach). Pierwszy pod spełnia regułę sam. */}}
+{{- define "raglab.dataLabel" -}}
+raglab.io/data-volume: "rwo"
+{{- end -}}
+
+{{- define "raglab.dataAffinity" -}}
+{{- if .Values.data.colocate }}
+affinity:
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: {{ .Release.Name }}
+            {{- include "raglab.dataLabel" . | nindent 12 }}
+        topologyKey: kubernetes.io/hostname
+{{- end }}
+{{- end -}}

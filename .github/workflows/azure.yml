@@ -106,6 +106,7 @@ jobs:
     timeout-minutes: 90
     outputs:
       api_host: ${{ steps.out.outputs.api_host }}
+      web_host: ${{ steps.out.outputs.web_host }}
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v4
@@ -129,7 +130,8 @@ jobs:
       - id: out
         name: outputy Terraform
         run: |
-          for k in resource_group aks_name acr_name acr_login_server key_vault_name workload_client_id tenant_id; do
+          for k in resource_group aks_name acr_name acr_login_server key_vault_name workload_client_id tenant_id \
+                   api_dns_label api_host web_host; do
             echo "$k=$(jq -r ".${k}.value" tf.json)" >> "$GITHUB_OUTPUT"
             echo "TF_$k=$(jq -r ".${k}.value" tf.json)" >> "$GITHUB_ENV"
           done
@@ -186,16 +188,46 @@ jobs:
           kubectl get nodes -o wide
 
       - uses: azure/setup-helm@v5
+
+      # publiczny adres API: etykieta DNS na IP load balancera kontrolera ingress → $TF_api_host (cloudapp.azure.com);
+      # kontroler ingress dodatku AKS ma domyślnie min. 2 repliki po 500m CPU — 1 wystarczy dla demo
+      - name: ingress — adres DNS i skala
+        run: |
+          for _ in $(seq 1 30); do kubectl get nginxingresscontroller default >/dev/null 2>&1 && break; sleep 10; done
+          kubectl patch nginxingresscontroller default --type merge -p \
+            "{\"spec\":{\"loadBalancerAnnotations\":{\"service.beta.kubernetes.io/azure-dns-label-name\":\"$TF_api_dns_label\"},\"scaling\":{\"minReplicas\":1,\"maxReplicas\":2}}}"
+
+      # TLS dla API: cert-manager + Let's Encrypt (HTTP-01 przez ten sam ingress)
+      - name: cert-manager
+        run: |
+          helm repo add jetstack https://charts.jetstack.io && helm repo update jetstack
+          helm upgrade --install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.21.3 \
+            --set crds.enabled=true \
+            --set resources.requests.cpu=10m --set webhook.resources.requests.cpu=10m --set cainjector.resources.requests.cpu=10m \
+            --wait --timeout 10m
+          kubectl apply -f - <<'EOF'
+          apiVersion: cert-manager.io/v1
+          kind: ClusterIssuer
+          metadata: {name: letsencrypt}
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              privateKeySecretRef: {name: letsencrypt-account}
+              solvers:
+                - http01:
+                    ingress: {ingressClassName: webapprouting.kubernetes.azure.com}
+          EOF
+
       - name: helm upgrade --install
         run: |
-          # publiczny adres API: host z adresu IP kontrolera ingress (nip.io) albo własna domena (vars.API_HOST)
           helm upgrade --install raglab deploy/helm/raglab -n raglab --create-namespace \
             -f deploy/helm/raglab/values-azure.yaml \
             --set image.repository="$TF_acr_login_server/raglab-api" --set image.tag="${GITHUB_SHA::12}" \
             --set azure.keyVault.name="$TF_key_vault_name" \
             --set azure.keyVault.tenantId="$TF_tenant_id" \
             --set azure.keyVault.clientId="$TF_workload_client_id" \
-            --set ingress.host="${{ vars.API_HOST || 'raglab.invalid' }}" \
+            --set ingress.host="$TF_api_host" --set "ingress.tls[0].hosts[0]=$TF_api_host" \
+            --set-string api.corsOrigins="https://$TF_web_host\\,https://rag.cikowice.pl" \
             --wait --wait-for-jobs --timeout 40m   # Job ingestu liczy wektory korpusu (Qwen przez API: minuty; mmlw na 2 vCPU: ~17 min)
           kubectl -n raglab get pods,jobs,ingress -o wide
 
@@ -234,13 +266,17 @@ jobs:
           EOF
 
       # dowód działania całej ścieżki: ingress → API → wektory Qwen → LiteLLM → tunel → bramka modeli → odpowiedź
-      - name: pytanie przez publiczny ingress (koniec do końca)
+      - name: pytanie przez publiczne API (HTTPS, koniec do końca)
         run: |
-          ip=$(kubectl -n raglab get ingress raglab-api -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          host="${{ vars.API_HOST || 'raglab.invalid' }}"
-          curl -fsS -m 30 -H "Host: $host" "http://$ip/health"; echo
-          curl -fsS -m 240 -H "Host: $host" -H 'Content-Type: application/json' -X POST "http://$ip/ask/stream" \
-            -d '{"question":"Ile wynosi podstawowa stawka VAT?","variant":"simple"}' > ask.ndjson
+          for _ in $(seq 1 30); do
+            [ "$(kubectl -n raglab get certificate raglab-tls -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}')" = True ] && break
+            sleep 10
+          done
+          kubectl -n raglab get certificate
+          for _ in $(seq 1 30); do curl -fsS -m 20 "https://$TF_api_host/health" && break; sleep 10; done; echo
+          curl -fsS -m 240 -H 'Content-Type: application/json' -H "Origin: https://$TF_web_host" -X POST "https://$TF_api_host/ask/stream" \
+            -d '{"question":"Ile wynosi podstawowa stawka VAT?","variant":"simple"}' -D headers.txt > ask.ndjson
+          grep -i "access-control-allow-origin" headers.txt
           python3 - <<'EOF'
           import json, sys
           ev = [json.loads(l) for l in open("ask.ndjson") if l.strip()]
@@ -250,6 +286,23 @@ jobs:
           print((res.get("answer") or "")[:300])
           sys.exit(1 if res.get("error") or not res.get("answer") else 0)
           EOF
+
+      # frontend demo na Azure Static Web Apps, z adresem API w klastrze (build Vite: VITE_API_URL)
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: npm, cache-dependency-path: web/package-lock.json}
+      - name: frontend → Static Web Apps
+        env:
+          VITE_API_URL: https://${{ steps.out.outputs.api_host }}
+        run: |
+          cd web && npm ci --no-audit --no-fund && npm run build
+          token=$(cd ../${{ env.TF_DIR }} && terraform output -raw web_deploy_token)
+          echo "::add-mask::$token"
+          npx --yes @azure/static-web-apps-cli@2 deploy ./dist --deployment-token "$token" --env production
+          for _ in $(seq 1 20); do curl -fsS -m 20 "https://$TF_web_host/" | grep -q '<div id="root"' && break; sleep 10; done
+          js=$(curl -fsS "https://$TF_web_host/" | grep -o 'assets/index-[^"]*\.js' | head -1)
+          curl -fsS "https://$TF_web_host/$js" | grep -q "$TF_api_host" || { echo "::error::frontend bez adresu API"; exit 1; }
+          echo "frontend: https://$TF_web_host → API https://$TF_api_host"
+          echo "### Demo na Azure: https://$TF_web_host (API: https://$TF_api_host)" >> "$GITHUB_STEP_SUMMARY"
 
       - name: ewaluacja (Job, próba)
         if: inputs.run_eval

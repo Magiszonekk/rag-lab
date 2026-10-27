@@ -12,7 +12,9 @@ spec:
     matchLabels: {{- include "raglab.selector" (dict "ctx" . "component" "api") | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "raglab.selector" (dict "ctx" . "component" "api") | nindent 8 }}
+      labels:
+        {{- include "raglab.selector" (dict "ctx" . "component" "api") | nindent 8 }}
+        {{- include "raglab.dataLabel" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
@@ -66,6 +68,8 @@ spec:
       {{- end }}
       {{- with .Values.api.affinity }}
       affinity: {{- toYaml . | nindent 8 }}
+      {{- else }}
+      {{- include "raglab.dataAffinity" . | nindent 6 }}
       {{- end }}
 ---
 apiVersion: v1

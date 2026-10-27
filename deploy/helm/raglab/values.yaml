@@ -46,6 +46,7 @@ data:
   size: 2Gi
   storageClass: ""        # pusty = domyślna klasa klastra
   accessMode: ReadWriteOnce
+  colocate: true          # API, Joby i CronJob z tym wolumenem na jednym węźle (podAffinity) — wymagane przy >1 węźle
 
 ingest:
   # Job (hook post-install/post-upgrade): pobranie PDF-ów z API Sejmu (sha256 z data/sources.toml) i budowa korpusu

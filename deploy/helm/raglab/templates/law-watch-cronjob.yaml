@@ -17,9 +17,12 @@ spec:
       activeDeadlineSeconds: 600
       template:
         metadata:
-          labels: {{- include "raglab.selector" (dict "ctx" . "component" "law-watch") | nindent 12 }}
+          labels:
+            {{- include "raglab.selector" (dict "ctx" . "component" "law-watch") | nindent 12 }}
+            {{- include "raglab.dataLabel" . | nindent 12 }}
         spec:
           restartPolicy: Never
+          {{- include "raglab.dataAffinity" . | nindent 10 }}
           securityContext: {{- toYaml .Values.podSecurityContext | nindent 12 }}
           automountServiceAccountToken: false
           {{- include "raglab.podIdentity" . | nindent 10 }}

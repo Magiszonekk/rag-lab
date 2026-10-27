@@ -43,3 +43,9 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "web_location" {
+  type        = string
+  default     = "westeurope"
+  description = "Region Static Web App (plan Free jest tylko w: westeurope, centralus, eastus2, westus2, eastasia)."
+}
