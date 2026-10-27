@@ -205,8 +205,10 @@ paragraphs as "not in context" (−2 to −4 pp for every variant); fixed before
 **https://rag.cikowice.pl**: ready-made examples (all variants side by side, traces, results) plus live questions.
 Live answers: retrieval with Qwen3-Embedding-8B (local `mmlw-roberta-base` as automatic fallback when the
 embedding API fails), answering with Claude Sonnet 5.5 behind the gateway, falling back to free models (Gemini 3
-Flash, DeepSeek V4.1 Flash) on errors or rate limits. The default variant is the plain vector one (about 6 s);
-the agent is one click away (about 10 s typical, up to ~30 s). Limits: 100 questions a day, 10 an hour per IP,
+Flash, DeepSeek V4.1 Flash) on errors or rate limits. The default variant is the plain vector one; the agent is one
+click away. Answers stream as they are written (`POST /ask/stream`, NDJSON: retrieved provisions, agent steps,
+answer text, final result), so the first words appear after ~5 s instead of waiting for the whole answer.
+Sentence-by-sentence verification is opt-in (it is a second full model call, about +8 s). Limits: 100 questions a day, 10 an hour per IP,
 plus RPM/TPM and a USD budget on the gateway key. The ready-made examples work without the backend.
 
 ## Demo backend (M3)

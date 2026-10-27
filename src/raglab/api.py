@@ -17,14 +17,17 @@ import contextlib
 import hashlib
 import json
 import os
+import queue
 import threading
 import time
 from collections import defaultdict, deque
+from collections.abc import Callable
 from datetime import date
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from raglab import traces
@@ -38,6 +41,7 @@ RESULTS = REPO_ROOT / "results"
 VARIANTS = ("simple", "hybrid", "hyde", "agentic-strict")
 MAX_QUESTION = 600
 PER_IP_HOUR = int(os.environ.get("RAGLAB_PER_IP_HOUR", "10"))
+NDJSON = "application/x-ndjson"
 PER_DAY = int(os.environ.get("RAGLAB_PER_DAY", "200"))
 LIVE = os.environ.get("RAGLAB_LIVE_ENABLED", "0") == "1"
 TAX_HINTS = (
@@ -97,8 +101,8 @@ def looks_like_tax(q: str) -> bool:
 
 class AskIn(BaseModel):
     question: str = Field(min_length=5, max_length=MAX_QUESTION)
-    variant: str = "agentic-strict"
-    verify: str = "llm"
+    variant: str = "simple"
+    verify: str = "off"  # sprawdzanie zdanie po zdaniu na żądanie (+~8 s)
 
 
 def _demo_llm() -> LLM:
@@ -111,19 +115,23 @@ def _demo_llm() -> LLM:
     return llm
 
 
-def _answer(question: str, variant: str, verify: str, llm: LLM) -> dict[str, Any]:
+def _answer(
+    question: str, variant: str, verify: str, llm: LLM, on_verify: Callable[[], None] | None = None
+) -> dict[str, Any]:
     from raglab.llm import use_system_llm
 
     token = use_system_llm(llm)  # HyDE, agent, weryfikacja — wszystko przez bramkę demo
     try:
-        return _answer_inner(question, variant, verify, llm)
+        return _answer_inner(question, variant, verify, llm, on_verify)
     finally:
         from raglab.llm import _system_llm
 
         _system_llm.reset(token)
 
 
-def _answer_inner(question: str, variant: str, verify: str, llm: LLM) -> dict[str, Any]:
+def _answer_inner(
+    question: str, variant: str, verify: str, llm: LLM, on_verify: Callable[[], None] | None = None
+) -> dict[str, Any]:
     from raglab.rag.evaluate import apply_verify
 
     if variant.startswith("agentic"):
@@ -137,6 +145,8 @@ def _answer_inner(question: str, variant: str, verify: str, llm: LLM) -> dict[st
     if verify == "llm" and not a.get("error"):
         from raglab.rag.verify_llm import apply_llm
 
+        if on_verify is not None:
+            on_verify()
         checked = apply_llm(a, question)
         # weryfikacja zawiodła (pusta odpowiedź / limit modelu) → odpowiedź oznaczona jako niesprawdzona,
         # zamiast „model niedostępny” przy gotowej odpowiedzi
@@ -217,11 +227,13 @@ def trace(trace_id: str) -> dict[str, Any]:
     return t
 
 
-def _live_answer(q: str, variant: str, verify: str, llm: LLM) -> dict[str, Any]:
+def _live_answer(
+    q: str, variant: str, verify: str, llm: LLM, on_verify: Callable[[], None] | None = None
+) -> dict[str, Any]:
     key = hashlib.sha1(f"{variant}|{verify}|{q.lower()}".encode()).hexdigest()
     if key in _cache:
         return {**_cache[key], "cached": True}
-    a = _answer(q, variant, verify, llm)
+    a = _answer(q, variant, verify, llm, on_verify)
     tid = traces.new_id()
     traces.save(tid, "live", variant, verify, a)
     out = _public(a, tid)
@@ -248,6 +260,83 @@ def _precheck(question: str, verify: str, req: Request, cost: int) -> tuple[str,
     return q, _demo_llm()
 
 
+@app.post("/ask/stream")
+def ask_stream(body: AskIn, req: Request) -> StreamingResponse:
+    """To samo co /ask, ale jako NDJSON: postęp (kontekst, kroki agenta), tekst odpowiedzi na bieżąco, wynik końcowy.
+
+    Zdarzenia: {"type": "stage"|"context"|"step"|"answer"|"done", ...}. "answer" niesie CAŁY dotychczasowy tekst
+    (po ponowieniu zapytania może się skrócić). "done" = dokładnie to, co zwraca /ask.
+    """
+    if body.variant not in VARIANTS:
+        raise HTTPException(400, "nieznany wariant albo poziom verify")
+    q, llm = _precheck(body.question, body.verify, req, 1)
+    events: queue.Queue[dict[str, Any] | None] = queue.Queue()
+
+    def line(e: dict[str, Any]) -> bytes:
+        return (json.dumps(e, ensure_ascii=False) + "\n").encode()
+
+    if llm is None:
+        return StreamingResponse(iter([line({"type": "done", "result": _off_topic()})]), media_type=NDJSON)
+    demo = llm
+    last: dict[str, Any] = {"text": "", "t": 0.0}
+
+    def flush() -> None:
+        if last.get("pending") is not None and last["pending"] != last["text"]:
+            last["text"] = last["pending"]
+            events.put({"type": "answer", "text": last["text"]})
+
+    def on_progress(kind: str, data: dict[str, Any]) -> None:
+        if kind == "answer_raw":
+            from raglab.llm import partial_answer
+
+            text = partial_answer(data["raw"])
+            last["pending"] = text
+            now = time.monotonic()
+            # co najwyżej ~12 zdarzeń/s; reset (krótszy tekst) zawsze; reszta dochodzi w flush() przed „done”
+            if text != last["text"] and (len(text) < len(last["text"]) or now - last["t"] > 0.08):
+                last.update(text=text, t=now)
+                events.put({"type": "answer", "text": text})
+        elif kind == "context":
+            events.put({"type": "context", "addresses": [c["address"] for c in data["context"]]})
+        else:
+            events.put({"type": kind, **{k: v for k, v in data.items() if k != "context"}})
+
+    def verify_started() -> None:
+        flush()
+        events.put({"type": "stage", "stage": "verify"})
+
+    def work() -> None:
+        from raglab.llm import _progress, use_progress
+
+        tok = use_progress(on_progress)
+        try:
+            events.put({"type": "stage", "stage": "search"})
+            out = _live_answer(q, body.variant, body.verify, demo, on_verify=verify_started)
+            flush()
+            events.put({"type": "done", "result": out})
+        except Exception as e:
+            events.put({"type": "done", "result": {"error": "Model chwilowo niedostępny — spróbuj później.",
+                                                   "detail": type(e).__name__}})  # fmt: skip
+        finally:
+            _progress.reset(tok)
+            events.put(None)
+
+    threading.Thread(target=work, daemon=True).start()
+
+    def gen() -> Any:
+        while True:
+            try:
+                e = events.get(timeout=15)
+            except queue.Empty:
+                yield b"\n"  # podtrzymanie połączenia (proxy) w czasie długich kroków
+                continue
+            if e is None:
+                return
+            yield line(e)
+
+    return StreamingResponse(gen(), media_type=NDJSON, headers={"X-Accel-Buffering": "no", "Cache-Control": "no-cache"})
+
+
 @app.post("/ask")
 def ask(body: AskIn, req: Request) -> dict[str, Any]:
     if body.variant not in VARIANTS:
@@ -258,7 +347,7 @@ def ask(body: AskIn, req: Request) -> dict[str, Any]:
 
 class CompareIn(BaseModel):
     question: str = Field(min_length=5, max_length=MAX_QUESTION)
-    verify: str = "llm"
+    verify: str = "off"
 
 
 @app.post("/compare")

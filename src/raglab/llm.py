@@ -10,8 +10,10 @@ import contextvars
 import json
 import os
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import httpx
 
@@ -50,6 +52,32 @@ class LLMError(RuntimeError):
 _system_llm: contextvars.ContextVar[LLM | None] = contextvars.ContextVar("raglab_system_llm", default=None)
 
 
+# Strumień dla demo: callback dostaje SKUMULOWANY surowy tekst odpowiedzi końcowej (po ponowieniu zaczyna od nowa,
+# więc odbiorca po prostu podmienia tekst) oraz zdarzenia postępu (kontekst, kroki agenta, weryfikacja).
+# Ewaluacja zostawia None — wtedy zwykłe zapytania bez streamingu, wyniki bez zmian.
+_progress: contextvars.ContextVar[Callable[[str, dict[str, Any]], None] | None] = contextvars.ContextVar(
+    "raglab_progress", default=None
+)
+
+
+def progress(kind: str, **data: Any) -> None:
+    cb = _progress.get()
+    if cb is not None:
+        cb(kind, data)
+
+
+def use_progress(cb: Callable[[str, dict[str, Any]], None] | None) -> contextvars.Token[Any]:
+    return _progress.set(cb)
+
+
+def answer_stream() -> Callable[[str], None] | None:
+    """Callback strumienia tekstu odpowiedzi końcowej (tylko gdy ktoś słucha postępu)."""
+    cb = _progress.get()
+    if cb is None:
+        return None
+    return lambda raw: cb("answer_raw", {"raw": raw})
+
+
 def system_llm() -> LLM | None:
     return _system_llm.get()
 
@@ -76,6 +104,7 @@ class LLM:
         max_tokens: int = 1500,
         temperature: float = 0.7,
         json_mode: bool = False,
+        on_text: Callable[[str], None] | None = None,
     ) -> Completion:
         last_err = ""
         for model in self.models:
@@ -89,6 +118,18 @@ class LLM:
                 if json_mode:
                     body["response_format"] = {"type": "json_object"}
                 t0 = time.monotonic()
+                if on_text is not None:
+                    try:
+                        return self._stream(body, model, on_text, t0)
+                    except _Retry as e:
+                        last_err = f"{model}: {e}"
+                        if "cooldown" in str(e):
+                            break
+                        time.sleep(self.backoff * 2**attempt)
+                        continue
+                    except _Fatal as e:
+                        last_err = f"{model}: {e}"
+                        break
                 try:
                     r = self.client.post(
                         f"{self.base}/chat/completions",
@@ -129,6 +170,95 @@ class LLM:
                     latency_ms=int((time.monotonic() - t0) * 1000),
                 )
         raise LLMError(f"żaden model nie odpowiedział; ostatni błąd: {last_err}")
+
+    def _stream(self, body: dict[str, object], model: str, on_text: Callable[[str], None], t0: float) -> Completion:
+        """Zapytanie ze `stream: true` (SSE). on_text dostaje skumulowany tekst; błąd przed końcem → ponowienie."""
+        body = {**body, "stream": True, "stream_options": {"include_usage": True}}
+        parts: list[str] = []
+        served: str = model
+        usage: dict[str, Any] = {}
+        on_text("")  # ponowienie: odbiorca czyści poprzedni częściowy tekst
+        try:
+            with self.client.stream("POST", f"{self.base}/chat/completions",
+                                    headers={"Authorization": f"Bearer {self._key}"}, json=body) as r:  # fmt: skip
+                if r.status_code in RETRYABLE:
+                    raise _Retry(f"HTTP {r.status_code} {r.read().decode(errors='replace')[:120]}")
+                if r.status_code != 200:
+                    raise _Fatal(f"HTTP {r.status_code} {r.read().decode(errors='replace')[:120]}")
+                for line in r.iter_lines():
+                    if not line.startswith("data:"):
+                        continue
+                    data = line[5:].strip()
+                    if data == "[DONE]":
+                        break
+                    try:
+                        d = json.loads(data)
+                    except ValueError:
+                        continue
+                    if "error" in d and not d.get("choices"):
+                        raise _Retry(f"błąd w strumieniu: {str(d['error'])[:120]}")
+                    served = str(d.get("model") or served)
+                    usage = d.get("usage") or usage
+                    for ch in d.get("choices") or []:
+                        piece = (ch.get("delta") or {}).get("content")
+                        if piece:
+                            parts.append(piece)
+                            on_text("".join(parts))
+        except httpx.HTTPError as e:
+            raise _Retry(type(e).__name__) from e
+        text = "".join(parts).strip()
+        if not text:
+            raise _Fatal("pusta odpowiedź")
+        return Completion(text=text, requested_model=model, served_model=served,
+                          prompt_tokens=int(usage.get("prompt_tokens", 0)),
+                          completion_tokens=int(usage.get("completion_tokens", 0)),
+                          latency_ms=int((time.monotonic() - t0) * 1000))  # fmt: skip
+
+
+class _Retry(Exception):
+    pass
+
+
+class _Fatal(Exception):
+    pass
+
+
+def partial_answer(raw: str) -> str:
+    """Wartość pola "answer" z NIEDOKOŃCZONEGO JSON-a odpowiedzi (do wyświetlania na bieżąco).
+
+    Model zwraca {"answer": "...", "citations": [...], ...}; dekoduje znaki do pierwszego niezamkniętego
+    cudzysłowu, z sekwencjami ucieczki. Niedokończona sekwencja na końcu jest pomijana do następnego kawałka.
+    """
+    i = raw.find('"answer"')
+    if i < 0:
+        return ""
+    j = raw.find('"', raw.find(":", i + 8) + 1)
+    if j < 0:
+        return ""
+    out: list[str] = []
+    k = j + 1
+    esc = {"n": "\n", "t": "\t", "r": "", '"': '"', "\\": "\\", "/": "/", "b": "", "f": ""}
+    while k < len(raw):
+        c = raw[k]
+        if c == '"':
+            break
+        if c == "\\":
+            if k + 1 >= len(raw):
+                break
+            n = raw[k + 1]
+            if n == "u":
+                if k + 6 > len(raw):
+                    break
+                if all(h in "0123456789abcdefABCDEF" for h in raw[k + 2 : k + 6]):
+                    out.append(chr(int(raw[k + 2 : k + 6], 16)))
+                k += 6
+                continue
+            out.append(esc.get(n, n))
+            k += 2
+            continue
+        out.append(c)
+        k += 1
+    return "".join(out)
 
 
 def parse_json(text: str) -> object:

@@ -21,7 +21,7 @@ from functools import lru_cache
 from typing import Any
 
 from raglab.corpus import load_corpus
-from raglab.llm import LLM, LLMError, parse_json
+from raglab.llm import LLM, LLMError, answer_stream, parse_json, progress
 from raglab.rag.context import Block, build_context, state_dates
 from raglab.search.chunking import structural
 from raglab.search.index import BM25Index, Embedder, Hit, VectorIndex, demote_historical, rrf
@@ -167,11 +167,13 @@ def answer(question: str, variant: str, llm: LLM, *, k: int = 5) -> Answer:
     user = f"PRZEPISY:\n\n{render_context(blocks)}\n\nPYTANIE UŻYTKOWNIKA:\n{question}"
     ctx = [{"address": b.address, "status": b.status, "note": b.note, "text": b.text} for b in blocks]
     base = dict(variant=variant, question=question, context=ctx, retrieved=[h.chunk.id for h in hits[:k]])
+    progress("context", context=ctx)
     try:
         c = llm.complete(
             [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": user}],
             max_tokens=6000,  # modele z rozumowaniem: przy 2500 zdarzał się ucięty JSON
             temperature=0.0,
+            on_text=answer_stream(),
         )
         d = parse_json(c.text)
         if not isinstance(d, dict):

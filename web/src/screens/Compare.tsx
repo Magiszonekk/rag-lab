@@ -91,7 +91,7 @@ function Column({
 
 export function CompareScreen({ data, api, params }: { data: ExamplesFile; api: ApiState; params: URLSearchParams }) {
   const exId = params.get("ex") ?? "g-vat-07";
-  const verify = params.get("verify") !== "off";
+  const verify = params.get("verify") === "on";
   const ex = data.examples.find((e) => e.id === exId) ?? data.examples[0];
   const live = api.kind === "live";
   const [question, setQuestion] = useState("");
@@ -151,8 +151,8 @@ export function CompareScreen({ data, api, params }: { data: ExamplesFile; api: 
       {err && <Notice tone="danger">{err}</Notice>}
 
       <div className="cmp-picker">
-        <ExamplePicker examples={data.examples} value={showLive ? null : ex.id} onChange={(id) => { setMode("example"); setOpens({}); setParams("porownaj", { ex: id, verify: verify ? undefined : "off" }); }} compact />
-        <Switch checked={verify} onChange={(v) => setParams("porownaj", { ex: ex.id, verify: v ? undefined : "off" })} label="Pokaż wynik sprawdzania" />
+        <ExamplePicker examples={data.examples} value={showLive ? null : ex.id} onChange={(id) => { setMode("example"); setOpens({}); setParams("porownaj", { ex: id, verify: verify ? "on" : undefined }); }} compact />
+        <Switch checked={verify} onChange={(v) => setParams("porownaj", { ex: ex.id, verify: v ? "on" : undefined })} label="Pokaż wynik sprawdzania" />
       </div>
 
       <div className="question-line">

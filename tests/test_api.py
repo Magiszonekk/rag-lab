@@ -164,3 +164,52 @@ def test_topic_filter_passes_every_eval_question() -> None:
     assert [q for q in qs if not looks_like_tax(q)] == []
     assert looks_like_tax("Czy fryzjer musi mieć kasę fiskalną?")
     assert not looks_like_tax("Podaj przepis na sernik")
+
+
+def test_partial_answer_from_unfinished_json() -> None:
+    from raglab.llm import partial_answer
+
+    assert partial_answer("") == ""
+    assert partial_answer('{"answer": "Termin wyn') == "Termin wyn"
+    assert partial_answer('{"answer": "Stawka \\"8%\\" i\\nnowa linia') == 'Stawka "8%" i\nnowa linia'
+    assert partial_answer('{"answer": "pół\\u00') == "pół"  # niedokończona sekwencja \u — czekamy na resztę
+    assert partial_answer('{"answer": "\\u017c", "citations": ["VAT art. 87"]}') == "ż"
+    assert partial_answer('```json\n{"answer": "x"}') == "x"
+
+
+def test_stream_endpoint_emits_progress_text_and_final(monkeypatch, api) -> None:  # type: ignore[no-untyped-def]
+    """/ask/stream: kontekst → tekst odpowiedzi narastająco → done z tym samym wynikiem co /ask."""
+    import json
+
+    import raglab.llm as L
+
+    def fake_answer(question, variant, verify, llm, on_verify=None):  # type: ignore[no-untyped-def]
+        L.progress("context", context=[{"address": "VAT art. 87 ust. 2"}])
+        cb = L.answer_stream()
+        assert cb is not None
+        raw = '{"answer": "Termin wynosi 40 dni.", "citations": ["VAT art. 87 ust. 2"]}'
+        for i in range(10, len(raw) + 1, 10):
+            cb(raw[:i])
+        return {"answer": "Termin wynosi 40 dni.", "citations": ["VAT art. 87 ust. 2"], "refused": False,
+                "context": [], "served_model": "demo-answer"}  # fmt: skip
+
+    monkeypatch.setattr(api, "LIVE", True)
+    monkeypatch.setattr(api, "_answer", fake_answer)
+    monkeypatch.setattr(api, "_demo_llm", lambda: object())
+    monkeypatch.setattr(api.traces, "save", lambda *a, **k: None)
+    monkeypatch.setattr(api, "_check_limits", lambda ip: None)
+    r = TestClient(api.app).post("/ask/stream", json={"question": "Ile dni na zwrot nadwyżki VAT? (stream)"})
+    ev = [json.loads(x) for x in r.text.splitlines() if x.strip()]
+    kinds = [e["type"] for e in ev]
+    assert kinds[0] == "stage" and "context" in kinds and kinds[-1] == "done"
+    texts = [e["text"] for e in ev if e["type"] == "answer"]
+    assert texts and texts[-1] == "Termin wynosi 40 dni."
+    assert ev[-1]["result"]["answer"] == "Termin wynosi 40 dni."
+    assert L._progress.get() is None  # kontekst postępu nie wycieka poza wątek zapytania
+
+
+def test_eval_path_does_not_stream() -> None:
+    """Bez słuchacza postępu (ewaluacja) answer_stream() = None → zwykłe zapytania, wyniki bez zmian."""
+    from raglab.llm import answer_stream
+
+    assert answer_stream() is None

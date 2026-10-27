@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ExamplesFile, VariantAnswer, VariantId } from "../lib/types";
 import { VARIANTS } from "../lib/types";
-import { ask, ApiError, type ApiState } from "../lib/api";
+import { askStream, ApiError, type ApiState, type StreamEvent } from "../lib/api";
 import { setParams, href } from "../lib/route";
 import { VARIANT_INFO } from "../lib/labels";
 import { AnswerCard, agentAdded } from "../components/AnswerCard";
@@ -19,7 +19,7 @@ export function liveNotice(api: ApiState): string | null {
 export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiState; params: URLSearchParams }) {
   const exId = params.get("ex") ?? data.examples[1]?.id ?? data.examples[0].id;
   const variant = (VARIANTS.includes(params.get("v") as VariantId) ? params.get("v") : "simple") as VariantId;
-  const verify = params.get("verify") !== "off";
+  const verify = params.get("verify") === "on"; // sprawdzanie zdanie po zdaniu na żądanie (+~8 s)
   const live = api.kind === "live";
 
   const [mode, setMode] = useState<"example" | "live">("example");
@@ -27,6 +27,7 @@ export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiS
   const [liveAnswer, setLiveAnswer] = useState<VariantAnswer | null>(null);
   const [liveMeta, setLiveMeta] = useState<{ variant: VariantId; verify: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState<{ stage: string; text: string; found: number } | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [open, setOpen] = useState<number | null>(null);
 
@@ -38,7 +39,7 @@ export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiS
   useEffect(() => setOpen(null), [exId, variant, liveAnswer]);
 
   const upd = (p: Partial<{ ex: string; v: VariantId; verify: boolean }>) =>
-    setParams("zapytaj", { ex: p.ex ?? exId, v: p.v ?? variant, verify: (p.verify ?? verify) ? undefined : "off" });
+    setParams("zapytaj", { ex: p.ex ?? exId, v: p.v ?? variant, verify: (p.verify ?? verify) ? "on" : undefined });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,8 +47,20 @@ export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiS
     if (!live || q.length < 5 || busy) return;
     setBusy(true);
     setErr(null);
+    setProgress({ stage: "Szukam przepisów w ustawach…", text: "", found: 0 });
+    const onEvent = (e: StreamEvent) =>
+      setProgress((p) => {
+        const cur = p ?? { stage: "", text: "", found: 0 };
+        if (e.type === "answer") return { ...cur, text: e.text, stage: "Piszę odpowiedź…" };
+        if (e.type === "context") return { ...cur, found: e.addresses.length, stage: `Mam ${e.addresses.length} przepisów, piszę odpowiedź…` };
+        if (e.type === "step" && e.step === "get") return { ...cur, stage: `Agent dociąga: ${(e.added ?? []).join(", ") || "brakujący przepis"}…` };
+        if (e.type === "step" && e.step === "search") return { ...cur, stage: `Agent szuka ponownie: „${e.query ?? ""}”…` };
+        if (e.type === "step") return { ...cur, stage: "Agent czyta znalezione przepisy…" };
+        if (e.type === "stage" && e.stage === "verify") return { ...cur, stage: "Sprawdzam zdanie po zdaniu…" };
+        return cur;
+      });
     try {
-      const a = await ask(q, variant, verify);
+      const a = await askStream(q, variant, verify, onEvent);
       if (a.error) throw new ApiError(500, a.error);
       setLiveAnswer(a);
       setLiveMeta({ variant, verify });
@@ -57,6 +70,7 @@ export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiS
       setErr((x as Error).message + (status === 429 || status === 503 ? "" : " Gotowe przykłady poniżej działają bez serwera."));
     } finally {
       setBusy(false);
+      setProgress(null);
     }
   }
 
@@ -101,6 +115,12 @@ export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiS
         </form>
 
         {notice && <Notice icon="info">{notice}</Notice>}
+        {busy && progress && (
+          <article className="answer-card" aria-live="polite" aria-busy="true">
+            <p className="hint-line"><span className="spinner" /> {progress.stage}</p>
+            {progress.text && <div className="answer-text"><p>{progress.text}</p></div>}
+          </article>
+        )}
         {err && <Notice tone="danger">{err}</Notice>}
       </section>
 
@@ -130,11 +150,6 @@ export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiS
             </div>
           )}
         </div>
-        {!showLive && !verify && (
-          <p className="hint-line">
-            Gotowe przykłady zapisano z włączonym sprawdzaniem. Po wyłączeniu przełącznika ukrywamy tylko jego wynik; pełne porównanie z weryfikacją i bez jest w zakładce Wyniki.
-          </p>
-        )}
         <div className="answer-grid">
           <AnswerCard
             answer={answer}

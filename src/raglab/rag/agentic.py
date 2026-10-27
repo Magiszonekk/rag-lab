@@ -22,7 +22,7 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, StateGraph
 
-from raglab.llm import LLM, LLMError, parse_json
+from raglab.llm import LLM, LLMError, answer_stream, parse_json, progress
 from raglab.rag.context import Block, attach_overrides, block_for, build_context
 from raglab.rag.variants import RETRIEVERS, SYSTEM_PROMPT, Answer, render_context
 from raglab.search.chunking import est_tokens
@@ -126,6 +126,7 @@ class Agent:
         state["blocks"] = build_context(hits, k=5)
         state["seen"] = {(b.act, b.article) for b in state["blocks"]}
         state["log"].append({"step": "retrieve", "added": [b.address for b in state["blocks"]]})
+        progress("step", step="retrieve", added=[b.address for b in state["blocks"]])
         return state
 
     def plan(self, state: State) -> State:
@@ -172,11 +173,13 @@ class Agent:
             added = _merge(state, found)
             state["log"].append({"step": "get", "asked": a.get("addresses"), "added": added,
                                  "not_found": missing, "why": a.get("why")})  # fmt: skip
+            progress("step", step="get", added=added, why=a.get("why"))
         else:
             q = str(a.get("query") or state["question"])
             hits = RETRIEVERS["hybrid"](q)
             added = _merge(state, build_context(hits, k=3))
             state["log"].append({"step": "search", "query": q, "added": added, "why": a.get("why")})
+            progress("step", step="search", query=q, added=added, why=a.get("why"))
         return state
 
 
@@ -192,9 +195,10 @@ def run(question: str, llm: LLM, *, strict: bool = False) -> Answer:
     ctx = [{"address": b.address, "status": b.status, "note": b.note, "text": b.text} for b in blocks]
     base: dict[str, Any] = dict(variant="agentic-strict" if strict else "agentic", question=question, context=ctx,
                                 retrieved=[b.address for b in blocks])  # fmt: skip
+    progress("context", context=ctx)
     try:
         c = llm.complete([{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": user}],
-                         max_tokens=6000, temperature=0.0)  # fmt: skip
+                         max_tokens=6000, temperature=0.0, on_text=answer_stream())  # fmt: skip
         d = parse_json(c.text)
         if not isinstance(d, dict):
             raise ValueError("odpowiedź nie jest obiektem JSON")
