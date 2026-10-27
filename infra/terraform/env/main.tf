@@ -205,7 +205,7 @@ resource "azurerm_role_assignment" "workload_kv" {
 
 # --- frontend demo: Azure Static Web Apps (plan Free) -----------------------------------------------------------
 # Statyczny build `web/` (Vite) wdrażany przez workflow tokenem wdrożeniowym (`api_key`); VITE_API_URL = https://api_host.
-# SWA Free jest tylko w kilku regionach (West Europe najbliżej), niezależnie od regionu klastra.
+# SWA Free jest tylko w kilku regionach (var.web_location), niezależnie od regionu klastra.
 resource "azurerm_static_web_app" "web" {
   name                = "swa-${var.name}-${local.suffix}"
   resource_group_name = azurerm_resource_group.main.name

@@ -46,6 +46,9 @@ variable "tags" {
 
 variable "web_location" {
   type        = string
-  default     = "westeurope"
-  description = "Region Static Web App (plan Free jest tylko w: westeurope, centralus, eastus2, westus2, eastasia)."
+  # plan Free jest tylko w westeurope, centralus, eastus2, westus2, eastasia; West Europe odrzuca nowych klientów triala
+  # (RequestDisallowedByAzure: region not accepting new customers, 2026-10-27), pozostałe cztery przyjmują.
+  # Treść i tak idzie z globalnego CDN SWA — region dotyczy tylko zasobu zarządzającego.
+  default     = "centralus"
+  description = "Region zasobu Static Web App."
 }
