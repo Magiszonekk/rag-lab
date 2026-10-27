@@ -219,7 +219,8 @@ jobs:
 
       - name: klucz demo w LiteLLM (wartość z Key Vault, limity jak na serwerze domowym)
         run: |
-          kubectl -n raglab exec deploy/raglab-api -c api -- python - <<'EOF'
+          # -i: bez niego kubectl nie przekazuje stdin i `python -` wykonuje pusty skrypt (krok „przechodził”, klucza nie było)
+          kubectl -n raglab exec -i deploy/raglab-api -c api -- python - <<'EOF'
           import os, httpx
           base, master, demo = os.environ["RAGLAB_LITELLM_URL"], open("/mnt/secrets/LITELLM-MASTER-KEY").read(), os.environ["LLM_DEMO_API_KEY"]
           h = {"Authorization": f"Bearer {master}"}
@@ -230,6 +231,24 @@ jobs:
                   "max_budget": 5.0, "budget_duration": "30d", "rpm_limit": 20, "tpm_limit": 200_000})
               r.raise_for_status()
           print("klucz demo w bramce:", r.status_code)
+          EOF
+
+      # dowód działania całej ścieżki: ingress → API → wektory Qwen → LiteLLM → tunel → bramka modeli → odpowiedź
+      - name: pytanie przez publiczny ingress (koniec do końca)
+        run: |
+          ip=$(kubectl -n raglab get ingress raglab-api -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          host="${{ vars.API_HOST || 'raglab.invalid' }}"
+          curl -fsS -m 30 -H "Host: $host" "http://$ip/health"; echo
+          curl -fsS -m 240 -H "Host: $host" -H 'Content-Type: application/json' -X POST "http://$ip/ask/stream" \
+            -d '{"question":"Ile wynosi podstawowa stawka VAT?","variant":"simple"}' > ask.ndjson
+          python3 - <<'EOF'
+          import json, sys
+          ev = [json.loads(l) for l in open("ask.ndjson") if l.strip()]
+          res = next((e.get("result") for e in ev if e.get("type") == "done"), None) or {}
+          cites = [c.get("address") if isinstance(c, dict) else c for c in (res.get("citations") or [])]
+          print("błąd:", res.get("error"), "| cytaty:", cites[:3])
+          print((res.get("answer") or "")[:300])
+          sys.exit(1 if res.get("error") or not res.get("answer") else 0)
           EOF
 
       - name: ewaluacja (Job, próba)
