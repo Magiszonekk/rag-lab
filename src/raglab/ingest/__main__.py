@@ -56,12 +56,37 @@ def report(act: Act) -> dict[str, object]:
     }
 
 
+READY_FILE = REPO_ROOT / "data" / "cache" / "embed.ready"
+
+
+def embed() -> int:
+    """Wektory całego korpusu do cache na dysku — ten sam kod i model co API (`variants._indexes`).
+
+    Pierwsze pytanie na świeżym wolumenie liczyłoby je samo (~17 min dla 5 tys. fragmentów na 2 CPU). Po zapisie
+    cache powstaje `embed.ready` (model + liczba wektorów); API w klastrze czeka na niego w initContainerze.
+    """
+    import time
+
+    from raglab.rag.variants import EMBED, _indexes
+
+    t = time.time()
+    _, vec = _indexes()
+    n = len(getattr(vec, "chunks", []))
+    READY_FILE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = READY_FILE.with_suffix(".part")
+    tmp.write_text(json.dumps({"embed": EMBED, "vectors": n}), encoding="utf-8")
+    tmp.replace(READY_FILE)
+    print(json.dumps({"embed": EMBED, "vectors": n, "seconds": round(time.time() - t, 1)}))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="raglab.ingest")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("fetch")
     b = sub.add_parser("build")
     b.add_argument("keys", nargs="*")
+    sub.add_parser("embed", help="policz embeddingi korpusu do cache (Job ingestu: API startuje z gotowym cache)")
     s = sub.add_parser("show")
     s.add_argument("key")
     s.add_argument("article")
@@ -91,6 +116,8 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
             print(json.dumps(rep, ensure_ascii=False))
         return 0
+    if args.cmd == "embed":
+        return embed()
     act = build_act(get_source(args.key))
     print(render(act.article(args.article)))
     return 0

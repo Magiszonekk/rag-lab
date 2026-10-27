@@ -24,7 +24,16 @@ spec:
           image: {{ include "raglab.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # katalogi na świeżym wolumenie (dowiązania data/raw, data/corpus, data/cache w obrazie wskazują na /data)
-          command: ["sh", "-c", "mkdir -p /data/raw /data/corpus /data/cache /data/answers /data/series && python -m raglab.ingest fetch && python -m raglab.ingest build > /dev/null && ls -la /data/corpus"]
+          command: ["sh", "-c", "mkdir -p /data/raw /data/corpus /data/cache /data/answers /data/series && python -m raglab.ingest fetch && python -m raglab.ingest build > /dev/null && ls -la /data/corpus{{ if .Values.ingest.embed }} && python -m raglab.ingest embed{{ end }}"]
+          {{- if .Values.ingest.embed }}
+          env:
+            - name: RAGLAB_EMBED
+              value: {{ .Values.api.embed | quote }}
+            - name: OPENROUTER_API_KEY
+              valueFrom: {secretKeyRef: {name: {{ include "raglab.secretName" . }}, key: OPENROUTER_API_KEY, optional: true}}
+            - {name: OMP_NUM_THREADS, value: {{ .Values.ingest.embedThreads | quote }}}
+            - {name: MKL_NUM_THREADS, value: {{ .Values.ingest.embedThreads | quote }}}
+          {{- end }}
           securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
           resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
           volumeMounts: {{- include "raglab.dataMounts" . | nindent 12 }}

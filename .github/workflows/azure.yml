@@ -8,6 +8,7 @@
 # w repo. Zmienne repo (vars.*): AZURE_PLAN_CLIENT_ID (PR, odczyt), AZURE_CLIENT_ID (environment azure), AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, TFSTATE_*.
 # Sekrety environmentu `azure` (secrets.*): LLM_API_KEY (klucz bramki modeli), WIREGUARD_CONF (peer tunelu do bramki
 # modeli: pod LiteLLM łączy się z nią przez WireGuard — wireproxy, bez NET_ADMIN; na OVH peer ma dostęp tylko do 1 portu).
+# OPENROUTER_API_KEY (embedding wyszukiwania Qwen3-Embedding-8B; API i Job ingestu dostają go z Key Vault).
 
 name: azure
 
@@ -102,7 +103,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.action == 'apply'
     runs-on: ubuntu-latest
     environment: azure        # wymaga zatwierdzenia (reguła environmentu w GitHubie)
-    timeout-minutes: 60
+    timeout-minutes: 90
     outputs:
       api_host: ${{ steps.out.outputs.api_host }}
     steps:
@@ -138,14 +139,17 @@ jobs:
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           WIREGUARD_CONF: ${{ secrets.WIREGUARD_CONF }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
+          for s in LLM_API_KEY WIREGUARD_CONF OPENROUTER_API_KEY; do
+            [ -n "${!s}" ] || { echo "::error::brak sekretu $s w environmencie azure"; exit 1; }
+          done
           az keyvault secret set --vault-name "$TF_key_vault_name" --name LLM-API-KEY --value "$LLM_API_KEY" -o none
           printf '%s' "$WIREGUARD_CONF" > "$RUNNER_TEMP/wg.conf"
           az keyvault secret set --vault-name "$TF_key_vault_name" --name WIREGUARD-CONF --file "$RUNNER_TEMP/wg.conf" -o none
           rm -f "$RUNNER_TEMP/wg.conf"
-          # OpenRouter (embedding Qwen) nie jest używany na Azure (api.embed=mmlw-base); pusty wpis dla CSI
-          az keyvault secret show --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY -o none 2>/dev/null \
-            || az keyvault secret set --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY --value "unused" -o none
+          # embedding wyszukiwania Qwen3-Embedding-8B (api.embed=qwen3-8b w values-azure.yaml)
+          az keyvault secret set --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY --value "$OPENROUTER_API_KEY" -o none
 
       - name: obraz API → ACR
         run: |
@@ -170,7 +174,7 @@ jobs:
             --set azure.keyVault.tenantId="$TF_tenant_id" \
             --set azure.keyVault.clientId="$TF_workload_client_id" \
             --set ingress.host="${{ vars.API_HOST || 'raglab.invalid' }}" \
-            --wait --wait-for-jobs --timeout 25m
+            --wait --wait-for-jobs --timeout 40m   # Job ingestu liczy wektory korpusu (Qwen przez API: minuty; mmlw na 2 vCPU: ~17 min)
           kubectl -n raglab get pods,jobs,ingress -o wide
 
       - name: helm test

@@ -101,7 +101,7 @@ jobs:
           kind load docker-image raglab-api:ci --name raglab
           helm install raglab deploy/helm/raglab -n raglab --create-namespace \
             --set image.repository=raglab-api --set image.tag=ci --set image.pullPolicy=Never \
-            --set api.resources.requests.memory=512Mi \
+            --set api.resources.requests.memory=512Mi --set ingest.embed=false \
             --wait --wait-for-jobs --timeout 15m
 
       - name: Helm test (health + BM25 + corpus)

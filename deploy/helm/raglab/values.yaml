@@ -24,7 +24,7 @@ api:
   resources:
     requests: {cpu: 250m, memory: 1Gi}
     limits: {cpu: "2", memory: 3Gi}        # torch + mmlw + macierz embeddingów; szczyt zmierzony na serwerze ~1,1 GB
-  # pierwsze pytanie liczy embeddingi korpusu, gdy nie ma ich w cache na wolumenie — stąd luźny startupProbe
+  # wektory korpusu liczy Job ingestu (ingest.embed); bez niego pierwsze pytanie liczy je samo — luźny startupProbe
   startupProbe: {failureThreshold: 60, periodSeconds: 5}
   nodeSelector: {}
   tolerations: []
@@ -51,10 +51,15 @@ ingest:
   # Job (hook post-install/post-upgrade): pobranie PDF-ów z API Sejmu (sha256 z data/sources.toml) i budowa korpusu
   enabled: true
   backoffLimit: 2
-  activeDeadlineSeconds: 900
+  # embed: po budowie korpusu policz wektory (api.embed) do cache na wolumenie; API czeka na `embed.ready`.
+  # Bez tego pierwsze pytanie na świeżym klastrze liczy je samo (~17 min dla mmlw na 2 CPU, zmierzone w kind).
+  # Wyłącz, gdy obraz nie ma modelu (CI: WITH_MMLW=0).
+  embed: true
+  embedThreads: 2         # wątki torch = limit CPU (więcej wątków niż rdzeni w limicie = przycinanie przez CFS)
+  activeDeadlineSeconds: 3600
   resources:
     requests: {cpu: 250m, memory: 512Mi}
-    limits: {cpu: "1", memory: 1536Mi}
+    limits: {cpu: "2", memory: 3Gi}       # mmlw + torch przy embeddingu korpusu: ~2 GB (zmierzone w kind)
 
 lawWatch:
   # CronJob: czy po dacie stanu prawnego korpusu weszły zmiany ustaw (API Sejmu); raport czyta /corpus

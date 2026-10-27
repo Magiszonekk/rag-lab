@@ -77,5 +77,6 @@ Then in GitHub:
 1. **Variables**: `AZURE_CLIENT_ID`, `AZURE_PLAN_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`,
    `TFSTATE_RESOURCE_GROUP`, `TFSTATE_STORAGE_ACCOUNT`, `TFSTATE_CONTAINER`.
 2. **Environment `azure`** with *Required reviewers* and deployments from `main` only, plus secrets `LLM_API_KEY`
-   (model gateway key) and `WIREGUARD_CONF` (the tunnel peer's wireproxy config).
+   (model gateway key), `WIREGUARD_CONF` (the tunnel peer's wireproxy config) and `OPENROUTER_API_KEY` (retrieval
+   embedding `qwen/qwen3-embedding-8b`, provider pinned; the local `mmlw-roberta-base` in the image is the fallback).
 3. Actions → *azure* → *Run workflow* (`apply`, optionally `run_eval`, `destroy_after`).

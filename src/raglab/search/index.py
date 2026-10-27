@@ -23,6 +23,17 @@ from raglab.search.normalize import Normalizer
 CACHE_DIR = REPO_ROOT / "data" / "cache"
 
 
+def _atomic_save(matrix_path: Path, keys_path: Path, matrix: np.ndarray, keys: list[str]) -> None:
+    """Zapis cache przez plik tymczasowy + rename: w klastrze Job ingestu i API mogą go czytać/pisać naraz."""
+    tmp = matrix_path.with_name(matrix_path.name + ".part")
+    with open(tmp, "wb") as f:
+        np.save(f, matrix)
+    tmp_keys = keys_path.with_name(keys_path.name + ".part")
+    tmp_keys.write_text(json.dumps(keys))
+    tmp.replace(matrix_path)
+    tmp_keys.replace(keys_path)
+
+
 @dataclass
 class Hit:
     chunk: Chunk
@@ -108,8 +119,7 @@ class Embedder:
             return
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
         keys = list(self._cache)
-        np.save(self.cache_path, np.stack([self._cache[k] for k in keys]))
-        self.keys_path.write_text(json.dumps(keys))
+        _atomic_save(self.cache_path, self.keys_path, np.stack([self._cache[k] for k in keys]), keys)
         self._dirty = False
 
 
@@ -225,8 +235,7 @@ class ApiEmbedder:
             return
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
         keys = list(self._cache)
-        np.save(self.cache_path, np.stack([self._cache[k] for k in keys]))
-        self.keys_path.write_text(json.dumps(keys))
+        _atomic_save(self.cache_path, self.keys_path, np.stack([self._cache[k] for k in keys]), keys)
         self._dirty = False
 
 

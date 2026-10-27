@@ -4,7 +4,12 @@ image:
   pullPolicy: IfNotPresent
 
 api:
-  embed: mmlw-base          # lokalny model wektorów w obrazie: bez klucza OpenRouter na Azure
+  # wyszukiwanie jak w demo i w serii wyników: Qwen3-Embedding-8B przez OpenRouter (provider przypięty), klucz z Key Vault
+  # (OPENROUTER-API-KEY). Wektory korpusu liczy Job ingestu przez API (minuty zamiast ~17 min mmlw na CPU).
+  embed: qwen3-8b
+  # bez zapasu mmlw: zapas liczy przy starcie API wektory całego korpusu lokalnie (~17 min CPU na 2 vCPU, każdy nowy pod);
+  # gdy OpenRouter nie odpowiada, pytanie kończy się błędem zamiast cichej zmiany metody wyszukiwania
+  embedFallback: false
   liveEnabled: true
   perDay: 100
   corsOrigins: "https://rag.cikowice.pl"

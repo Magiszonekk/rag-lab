@@ -23,11 +23,11 @@ spec:
       automountServiceAccountToken: false
       {{- include "raglab.podIdentity" . | nindent 6 }}
       initContainers:
-        # korpus buduje Job ingestu; API czeka, aż pliki pojawią się na wolumenie (pierwsza instalacja)
+        # korpus (i przy ingest.embed cache wektorów) buduje Job ingestu; API czeka na pliki na wolumenie
         - name: wait-for-corpus
           image: {{ include "raglab.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["sh", "-c", "until [ -f /data/corpus/op.json ] && [ -f /data/corpus/vat.json ] && [ -f /data/corpus/pit.json ]; do echo czekam na korpus; sleep 5; done"]
+          command: ["sh", "-c", "until [ -f /data/corpus/op.json ] && [ -f /data/corpus/vat.json ] && [ -f /data/corpus/pit.json ]{{ if and .Values.ingest.enabled .Values.ingest.embed }} && [ -f /data/cache/embed.ready ]{{ end }}; do echo czekam na korpus i wektory; sleep 5; done"]
           securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
           resources: {requests: {cpu: 10m, memory: 32Mi}, limits: {cpu: 100m, memory: 64Mi}}
           volumeMounts: [{name: data, mountPath: /data}]
