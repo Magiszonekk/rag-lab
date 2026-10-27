@@ -232,6 +232,35 @@ plus RPM/TPM and a USD budget on the gateway key. The ready-made examples work w
   never changes the corpus. First run: VAT up to date (next change 2027-01-01); PIT and the Tax Ordinance each
   have 3 amendments in force since their consolidated texts (shown in `/corpus`).
 
+## Kubernetes (Helm chart)
+
+`deploy/helm/raglab` installs the whole stack in a cluster. CI runs it in [kind](https://kind.sigs.k8s.io/) on
+every push, and M4 reuses the same chart on AKS.
+
+| component | kind | notes |
+|---|---|---|
+| API | Deployment + Service (+ Ingress) | readiness = a BM25 query works (corpus loaded), not just a live process; `Recreate` because the data volume is RWO |
+| Postgres + pgvector | StatefulSet | traces + the LiteLLM database; init SQL shared with Docker Compose; can be switched off for a managed Postgres (`postgres.enabled=false`) |
+| LiteLLM gateway | Deployment | the same `config.yaml` as Docker Compose (one file) |
+| corpus ingest | Job per release revision | downloads the statutes from the Sejm API (SHA-256 checked) and builds the corpus on the data volume; the API init container waits for it |
+| law watch | CronJob | daily check for amendments in force after the corpus date; `/corpus` reads its report |
+| answer evaluation | Job, on demand | `--set eval.enabled=true`; golden set → variants → judge, results on the volume |
+
+Without any keys the release serves BM25 search, ready-made examples, results and the corpus, while live
+questions return 503. Keys come from an existing Secret (`secrets.existingSecret`, on AKS from Key Vault) and are
+never in values. Hardening: non-root UID, read-only root filesystem, dropped capabilities, `RuntimeDefault`
+seccomp, resource requests and limits on every pod, no service-account token. NetworkPolicies let only the API
+take traffic from outside the release. Checked in kind: a stray pod reaches the API but times out on Postgres and
+LiteLLM.
+
+```bash
+docker build -t raglab-api:dev .
+kind create cluster --name raglab && kind load docker-image raglab-api:dev --name raglab
+helm install raglab deploy/helm/raglab -n raglab --create-namespace \
+  --set image.repository=raglab-api --set image.tag=dev --set image.pullPolicy=Never --wait --wait-for-jobs
+helm test raglab -n raglab --logs     # health + BM25 query + 3-act corpus + examples
+```
+
 ## Test sets
 
 - `data/eval/retrieval_v1.jsonl` — 283 retrieval questions; generation, validation and review notes in
@@ -266,9 +295,12 @@ in `.env` (see `.env.example`).
 - **M2** ✅ (variants incl. agentic, HyDE, verification, judge calibration) — answering variants (simple, hybrid + reranker, agentic with LangGraph), answer checking
   (citations / key facts / LLM judge calibrated against human labels), tracing.
 - **M2b** — scaling the corpus from 3 to 19 tax acts and measuring retrieval degradation.
-- **M3** — public demo with comparison mode and trace viewer.
-- **M4** — the same stack deployed to Azure from code (Bicep, Container Apps, PostgreSQL Flexible,
-  Azure OpenAI), deploy → evaluate → destroy.
+- **M3** ✅ public demo with comparison mode, trace viewer and streamed answers.
+- **M3b** ✅ Helm chart (API, Postgres + pgvector, LiteLLM, ingest Job, law-watch CronJob, eval Job),
+  installed and tested in kind in CI.
+- **M4** — the same chart on Azure, provisioned with Terraform: AKS, ACR, Key Vault, workload identity, state in
+  Azure Storage; GitHub Actions with OIDC (plan on PR → approval → apply → evaluate → destroy). Models stay behind
+  the LiteLLM gateway, because swapping the provider is configuration.
 
 ## License
 

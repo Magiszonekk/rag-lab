@@ -1,0 +1,134 @@
+# RAG Lab — wartości domyślne chartu.
+# Domyślnie: wszystko w klastrze (API + Postgres + LiteLLM), pytania na żywo wyłączone (bez kluczy działa
+# wyszukiwanie BM25, gotowe przykłady, wyniki i korpus). Klucze modeli trafiają do Secretu tworzonego poza
+# chartem (`secrets.existingSecret`) albo — tylko lokalnie / w CI — z `secrets.create`.
+
+image:
+  repository: ghcr.io/magiszonekk/raglab-api
+  tag: ""                 # pusty = appVersion z Chart.yaml
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+api:
+  replicas: 1             # limity dzienne i cache odpowiedzi trzymane w pamięci procesu — przy >1 replice
+                          # liczyłyby się osobno; skalowanie poziome wymaga przeniesienia ich do Postgresa
+  port: 8000
+  # embedding wyszukiwania: mmlw-base (lokalny, CPU, bez klucza) albo qwen3-8b (API, wymaga OPENROUTER_API_KEY)
+  embed: mmlw-base
+  embedFallback: false    # qwen3-8b → przy błędzie API lokalny mmlw (model jest w obrazie)
+  liveEnabled: false      # pytania na żywo (wymagają bramki LiteLLM i klucza demo)
+  perDay: 100
+  perIpHour: 10
+  corsOrigins: "http://localhost:5173"
+  resources:
+    requests: {cpu: 250m, memory: 1Gi}
+    limits: {cpu: "2", memory: 3Gi}        # torch + mmlw + macierz embeddingów; szczyt zmierzony na serwerze ~1,1 GB
+  # pierwsze pytanie liczy embeddingi korpusu, gdy nie ma ich w cache na wolumenie — stąd luźny startupProbe
+  startupProbe: {failureThreshold: 60, periodSeconds: 5}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+ingress:
+  enabled: false
+  className: nginx
+  host: api.raglab.local
+  annotations:
+    # strumień /ask/stream (NDJSON) musi iść bez buforowania
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
+  tls: []                 # np. [{secretName: raglab-tls, hosts: [api.example.com]}]
+
+# Wolumen danych: korpus (JSON z PDF-ów Sejmu), PDF-y, cache embeddingów, raport strażnika zmian w prawie.
+# ReadWriteOnce: API, Job ingestu i CronJob muszą stać na jednym węźle (klaster 1-węzłowy — kind, AKS w M4).
+data:
+  size: 2Gi
+  storageClass: ""        # pusty = domyślna klasa klastra
+  accessMode: ReadWriteOnce
+
+ingest:
+  # Job (hook post-install/post-upgrade): pobranie PDF-ów z API Sejmu (sha256 z data/sources.toml) i budowa korpusu
+  enabled: true
+  backoffLimit: 2
+  activeDeadlineSeconds: 900
+  resources:
+    requests: {cpu: 250m, memory: 512Mi}
+    limits: {cpu: "1", memory: 1536Mi}
+
+lawWatch:
+  # CronJob: czy po dacie stanu prawnego korpusu weszły zmiany ustaw (API Sejmu); raport czyta /corpus
+  enabled: true
+  schedule: "17 5 * * *"
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 384Mi}
+
+eval:
+  # Job ewaluacji odpowiedzi na żądanie (helm upgrade --set eval.enabled=true). Wymaga bramki i klucza eval.
+  enabled: false
+  variants: [simple, agentic-strict]
+  verify: [off]
+  limit: 12               # próba; 0 = cały zestaw złoty
+  answerModel: claude-sonnet-5-5
+  activeDeadlineSeconds: 3600
+  resources:
+    requests: {cpu: 250m, memory: 1Gi}
+    limits: {cpu: "2", memory: 3Gi}
+
+postgres:
+  # wbudowany Postgres z pgvector (StatefulSet). Na Azure (M4) można go wyłączyć i wskazać Postgres Flexible.
+  enabled: true
+  image: pgvector/pgvector:pg16
+  database: raglab
+  user: raglab
+  storage: 2Gi
+  storageClass: ""
+  resources:
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {cpu: "1", memory: 1Gi}
+  external:               # używane, gdy postgres.enabled=false
+    host: ""
+    port: 5432
+    sslmode: require
+
+litellm:
+  # bramka modeli (koncept D11): API woła tylko ją; upstream = endpoint zgodny z OpenAI (LLM_BASE_URL)
+  enabled: true
+  image: ghcr.io/berriai/litellm-database:v1.106.4
+  port: 4000
+  upstreamBaseUrl: ""     # np. adres bramki modeli osiągalny z klastra; pusty = bramka bez upstreamu (tylko health)
+  demoUpstreamModel: openai/claude-sonnet-5-5
+  resources:
+    requests: {cpu: 100m, memory: 384Mi}
+    limits: {cpu: "1", memory: 1Gi}
+
+secrets:
+  # Nazwa istniejącego Secretu z kluczami (zalecane; na AKS z Key Vault przez CSI / External Secrets).
+  # Klucze: POSTGRES_PASSWORD, LITELLM_MASTER_KEY, LLM_API_KEY, LLM_DEMO_API_KEY, LLM_EVAL_GATEWAY_KEY,
+  #         OPENROUTER_API_KEY (tylko gdy api.embed=qwen3-8b)
+  existingSecret: ""
+  # Tylko lokalnie / w CI: chart tworzy Secret z tych wartości (nigdy prawdziwych kluczy w pliku values).
+  create:
+    POSTGRES_PASSWORD: ""   # pusty = losowe hasło generowane przy instalacji i zachowywane przy upgrade
+    LITELLM_MASTER_KEY: ""
+    LLM_API_KEY: ""
+    LLM_DEMO_API_KEY: ""
+    LLM_EVAL_GATEWAY_KEY: ""
+    OPENROUTER_API_KEY: ""
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+  seccompProfile: {type: RuntimeDefault}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities: {drop: [ALL]}
+
+networkPolicy:
+  # tylko API przyjmuje ruch z zewnątrz; Postgres i LiteLLM wyłącznie z podów chartu
+  enabled: true

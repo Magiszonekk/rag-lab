@@ -1,0 +1,12 @@
+apiVersion: v2
+name: raglab
+description: >-
+  RAG Lab — transparent RAG over Polish tax law: API (FastAPI), Postgres + pgvector, LiteLLM gateway,
+  corpus ingest Job, law-change watch CronJob.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/Magiszonekk/rag-lab
+sources:
+  - https://github.com/Magiszonekk/rag-lab
+keywords: [rag, fastapi, pgvector, litellm]

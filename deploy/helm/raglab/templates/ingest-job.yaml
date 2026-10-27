@@ -1,0 +1,31 @@
+{{- if .Values.ingest.enabled }}
+# Ingest: PDF-y z API Sejmu (sha256 sprawdzane) → korpus JSON na wolumenie. Zwykły Job z numerem rewizji
+# w nazwie (nie hook): `helm install --wait --wait-for-jobs` czeka na niego bez zakleszczenia z gotowością API.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "raglab.fullname" . }}-ingest-{{ .Release.Revision }}
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+spec:
+  backoffLimit: {{ .Values.ingest.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.ingest.activeDeadlineSeconds }}
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels: {{- include "raglab.selector" (dict "ctx" . "component" "ingest") | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      automountServiceAccountToken: false
+      containers:
+        - name: ingest
+          image: {{ include "raglab.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # katalogi na świeżym wolumenie (dowiązania data/raw, data/corpus, data/cache w obrazie wskazują na /data)
+          command: ["sh", "-c", "mkdir -p /data/raw /data/corpus /data/cache /data/answers /data/series && python -m raglab.ingest fetch && python -m raglab.ingest build > /dev/null && ls -la /data/corpus"]
+          securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
+          resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
+          volumeMounts: {{- include "raglab.dataMounts" . | nindent 12 }}
+      volumes: {{- include "raglab.dataVolumes" . | nindent 8 }}
+{{- end }}

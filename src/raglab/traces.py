@@ -38,7 +38,9 @@ def new_id() -> str:
 def _dsn() -> str:
     load_env()
     return (
-        f"host=127.0.0.1 port={os.environ.get('RAGLAB_DB_PORT', '5436')} "
+        # w klastrze (Helm) host = usługa Postgresa; na Azure Postgres Flexible wymaga sslmode=require
+        f"host={os.environ.get('RAGLAB_DB_HOST', '127.0.0.1')} port={os.environ.get('RAGLAB_DB_PORT', '5436')} "
+        f"sslmode={os.environ.get('RAGLAB_DB_SSLMODE', 'prefer')} "
         f"dbname={os.environ.get('POSTGRES_DB', 'raglab')} user={os.environ.get('POSTGRES_USER', 'raglab')} "
         f"password={os.environ.get('POSTGRES_PASSWORD', '')} connect_timeout=3"
     )

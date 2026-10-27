@@ -213,3 +213,14 @@ def test_eval_path_does_not_stream() -> None:
     from raglab.llm import answer_stream
 
     assert answer_stream() is None
+
+
+def test_search_bm25_without_llm(api) -> None:  # type: ignore[no-untyped-def]
+    # /search: sam BM25 — działa bez kluczy i bez embeddingów (test wdrożenia w klastrze, helm test)
+    client = TestClient(api.app)
+    r = client.get("/search", params={"q": "stawka podatku na usługi", "k": 3})
+    assert r.status_code == 200
+    d = r.json()
+    assert d["mode"] == "bm25" and len(d["hits"]) == 3
+    assert all(h["id"] and h["header"] for h in d["hits"])
+    assert client.get("/search", params={"q": "a"}).status_code == 400

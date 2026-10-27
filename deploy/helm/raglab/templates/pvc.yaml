@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "raglab.fullname" . }}-data
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+spec:
+  accessModes: [{{ .Values.data.accessMode }}]
+  {{- with .Values.data.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}
+  resources:
+    requests: {storage: {{ .Values.data.size }}}

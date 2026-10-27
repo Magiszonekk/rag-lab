@@ -28,7 +28,8 @@ ENV = REPO_ROOT / ".env"
 
 def _base() -> str:
     load_env()
-    return f"http://127.0.0.1:{os.environ.get('RAGLAB_LITELLM_PORT', '3027')}"
+    # w klastrze (Helm) bramka to usługa, np. http://raglab-litellm:4000
+    return os.environ.get("RAGLAB_LITELLM_URL") or f"http://127.0.0.1:{os.environ.get('RAGLAB_LITELLM_PORT', '3027')}"
 
 
 def _admin() -> dict[str, str]:

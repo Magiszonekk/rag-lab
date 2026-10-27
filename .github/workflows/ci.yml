@@ -61,3 +61,56 @@ jobs:
           cache-dependency-path: web/package-lock.json
       - run: npm ci --no-audit --no-fund
       - run: npm run build
+
+  # M3b (koncept D17): chart Helm w prawdziwym klastrze — kind, obraz zbudowany w tym przebiegu, bez kluczy i LLM.
+  # Ingest (PDF-y Sejmu → korpus) jako Job, potem `helm test`: health + zapytanie BM25 + korpus 3 ustaw.
+  helm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint and validate chart
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash
+          helm lint deploy/helm/raglab
+          curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz | tar xz
+          helm template t deploy/helm/raglab | ./kubeconform -strict -summary
+          helm template t deploy/helm/raglab --set eval.enabled=true --set litellm.upstreamBaseUrl=http://upstream/v1 \
+            --set ingress.enabled=true | ./kubeconform -strict -summary
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Build API image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          tags: raglab-api:ci
+          load: true
+          build-args: WITH_MMLW=0     # zapasowy model wektorów niepotrzebny w teście BM25 (−0,5 GB)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.15.1
+        with:
+          cluster_name: raglab
+
+      - name: Install chart
+        run: |
+          kind load docker-image raglab-api:ci --name raglab
+          helm install raglab deploy/helm/raglab -n raglab --create-namespace \
+            --set image.repository=raglab-api --set image.tag=ci --set image.pullPolicy=Never \
+            --set api.resources.requests.memory=512Mi \
+            --wait --wait-for-jobs --timeout 15m
+
+      - name: Helm test (health + BM25 + corpus)
+        run: helm test raglab -n raglab --logs
+
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          kubectl -n raglab get pods,jobs,pvc -o wide
+          kubectl -n raglab describe pods | tail -80
+          kubectl -n raglab logs -l app.kubernetes.io/component=ingest --tail 50 || true
+          kubectl -n raglab logs -l app.kubernetes.io/component=api --all-containers --tail 50 || true

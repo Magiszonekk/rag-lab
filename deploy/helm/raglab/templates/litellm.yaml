@@ -1,0 +1,80 @@
+{{- if .Values.litellm.enabled }}
+# Bramka modeli (koncept D11): klucz demo z budżetem, RPM i listą modeli; konfiguracja wspólna z Docker Compose.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "raglab.fullname" . }}-litellm
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+data:
+  config.yaml: |-
+{{ .Files.Get "files/litellm-config.yaml" | indent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "raglab.fullname" . }}-litellm
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: litellm
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "raglab.selector" (dict "ctx" . "component" "litellm") | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "raglab.selector" (dict "ctx" . "component" "litellm") | nindent 8 }}
+      annotations:
+        checksum/config: {{ .Files.Get "files/litellm-config.yaml" | sha256sum }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: litellm
+          image: {{ .Values.litellm.image }}
+          args: ["--config", "/app/config.yaml", "--port", "{{ .Values.litellm.port }}"]
+          env:
+            - {name: LITELLM_TELEMETRY, value: "False"}
+            - {name: DEMO_UPSTREAM_MODEL, value: {{ .Values.litellm.demoUpstreamModel | quote }}}
+            - {name: LLM_BASE_URL, value: {{ .Values.litellm.upstreamBaseUrl | default "http://upstream.invalid/v1" | quote }}}
+            - name: LLM_API_KEY
+              valueFrom: {secretKeyRef: {name: {{ include "raglab.secretName" . }}, key: LLM_API_KEY, optional: true}}
+            - name: LITELLM_MASTER_KEY
+              valueFrom: {secretKeyRef: {name: {{ include "raglab.secretName" . }}, key: LITELLM_MASTER_KEY}}
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: {{ include "raglab.secretName" . }}, key: POSTGRES_PASSWORD}}
+            - name: LITELLM_DATABASE_URL
+              value: "postgresql://{{ .Values.postgres.user }}:$(PGPASSWORD)@{{ include "raglab.dbHost" . }}:{{ ternary 5432 .Values.postgres.external.port .Values.postgres.enabled }}/litellm"
+          ports: [{name: http, containerPort: {{ .Values.litellm.port }}}]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+          resources: {{- toYaml .Values.litellm.resources | nindent 12 }}
+          # migracje Prisma przy pierwszym starcie trwają ~1 min
+          startupProbe:
+            httpGet: {path: /health/liveliness, port: http}
+            failureThreshold: 60
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /health/readiness, port: http}
+            periodSeconds: 15
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health/liveliness, port: http}
+            periodSeconds: 30
+            timeoutSeconds: 10
+          volumeMounts:
+            - {name: config, mountPath: /app/config.yaml, subPath: config.yaml, readOnly: true}
+      volumes:
+        - name: config
+          configMap: {name: {{ include "raglab.fullname" . }}-litellm}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "raglab.fullname" . }}-litellm
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: litellm
+spec:
+  selector: {{- include "raglab.selector" (dict "ctx" . "component" "litellm") | nindent 4 }}
+  ports: [{name: http, port: {{ .Values.litellm.port }}, targetPort: http}]
+{{- end }}

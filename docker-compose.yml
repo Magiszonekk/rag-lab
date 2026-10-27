@@ -45,7 +45,7 @@ services:
     ports:
       - "127.0.0.1:${RAGLAB_LITELLM_PORT:-3027}:4000"
     volumes:
-      - ./deploy/litellm/config.yaml:/app/config.yaml:ro
+      - ./deploy/helm/raglab/files/litellm-config.yaml:/app/config.yaml:ro   # jedno źródło z chartem Helm
     mem_limit: 1g
 
 volumes:

@@ -23,6 +23,7 @@ import time
 from collections import defaultdict, deque
 from collections.abc import Callable
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
@@ -181,6 +182,22 @@ def health() -> dict[str, Any]:
     return {"ok": True, "live": LIVE and bool(os.environ.get("LLM_DEMO_API_KEY"))}
 
 
+@app.get("/search")
+def search(q: str, k: int = 5) -> dict[str, Any]:
+    """Wyszukiwanie BM25 bez modelu (deterministyczne, bez kosztów) — test wdrożenia w klastrze (helm test)."""
+    from raglab.rag.variants import bm25_index
+
+    q = " ".join(q.split())[:MAX_QUESTION]
+    if len(q) < 3:
+        raise HTTPException(400, "za krótkie zapytanie")
+    hits = bm25_index().search(q, max(1, min(k, 10)))
+    return {
+        "query": q,
+        "mode": "bm25",
+        "hits": [{"id": h.chunk.id, "header": h.chunk.header, "score": round(h.score, 3)} for h in hits],
+    }
+
+
 @app.get("/examples")
 def examples() -> Any:
     if not EXAMPLES.exists():
@@ -204,7 +221,9 @@ def corpus() -> list[dict[str, Any]]:
     from raglab.corpus import ACT_LABEL, load_corpus
 
     watch: dict[str, Any] = {}
-    wp = RESULTS / "law_watch.json"
+    wp = Path(os.environ.get("RAGLAB_LAW_WATCH", RESULTS / "law_watch.json"))
+    if not wp.exists():  # wolumen jeszcze bez raportu strażnika — raport z repozytorium
+        wp = RESULTS / "law_watch.json"
     if wp.exists():
         watch = json.loads(wp.read_text(encoding="utf-8")).get("acts", {})
     out = []

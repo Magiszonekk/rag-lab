@@ -84,6 +84,14 @@ class Answer:
 
 
 @lru_cache(maxsize=1)
+def bm25_index() -> BM25Index:
+    """Sam BM25 (bez embeddingów i kluczy API) — dla /search i testu chartu w klastrze."""
+    corpus = load_corpus()
+    chunks = [c for act in corpus.values() for c in structural(act)]
+    return BM25Index(chunks, get_normalizer("morfeusz2"))
+
+
+@lru_cache(maxsize=1)
 def _indexes() -> tuple[BM25Index, VectorIndex]:
     corpus = load_corpus()
     chunks = [c for act in corpus.values() for c in structural(act)]

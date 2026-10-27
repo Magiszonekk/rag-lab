@@ -17,9 +17,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import tomllib
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -27,7 +29,8 @@ import httpx
 from raglab.ingest.sources import REPO_ROOT
 
 API = "https://api.sejm.gov.pl/eli/acts"
-OUT = REPO_ROOT / "results" / "law_watch.json"
+# w klastrze CronJob zapisuje raport na wolumen danych (obraz jest tylko do odczytu); API czyta tę samą ścieżkę
+OUT = Path(os.environ.get("RAGLAB_LAW_WATCH", REPO_ROOT / "results" / "law_watch.json"))
 
 
 def _get(client: httpx.Client, eli: str) -> dict[str, Any]:

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "raglab.fullname" . }}-api
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+data:
+  RAGLAB_LIVE_ENABLED: {{ ternary "1" "0" .Values.api.liveEnabled | quote }}
+  RAGLAB_PER_DAY: {{ .Values.api.perDay | quote }}
+  RAGLAB_PER_IP_HOUR: {{ .Values.api.perIpHour | quote }}
+  RAGLAB_CORS_ORIGINS: {{ .Values.api.corsOrigins | quote }}
+  RAGLAB_EMBED_FALLBACK: {{ ternary "1" "0" .Values.api.embedFallback | quote }}

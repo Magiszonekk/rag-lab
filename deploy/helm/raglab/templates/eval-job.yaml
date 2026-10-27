@@ -1,0 +1,42 @@
+{{- if .Values.eval.enabled }}
+# Ewaluacja odpowiedzi na żądanie (helm upgrade --set eval.enabled=true): zestaw złoty → warianty → sędzia.
+# Wyniki na wolumenie (results/series, results/answers); model przez bramkę LiteLLM kluczem eval.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "raglab.fullname" . }}-eval-{{ .Release.Revision }}
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: eval
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: {{ .Values.eval.activeDeadlineSeconds }}
+  ttlSecondsAfterFinished: 604800
+  template:
+    metadata:
+      labels: {{- include "raglab.selector" (dict "ctx" . "component" "eval") | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      automountServiceAccountToken: false
+      containers:
+        - name: eval
+          image: {{ include "raglab.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["python", "-m", "raglab.rag.evaluate", "--variants", {{- range .Values.eval.variants }} {{ . | quote }},{{- end }}
+                    "--verify", {{- range .Values.eval.verify }} {{ . | quote }},{{- end }}
+                    "--limit", {{ .Values.eval.limit | quote }}, "--workers", "2"]
+          env:
+            {{- include "raglab.appEnv" . | nindent 12 }}
+            # ewaluacja woła modele po prawdziwych nazwach (seria = model × embedding × sędzia) u upstreamu, jak na
+            # serwerze domowym; nigdy kluczem demo. Jeden model na rolę, bez zapasu (zasada ewaluacji).
+            - name: LLM_BASE_URL
+              value: {{ required "eval: litellm.upstreamBaseUrl jest wymagany" .Values.litellm.upstreamBaseUrl | quote }}
+            - name: LLM_API_KEY
+              valueFrom: {secretKeyRef: {name: {{ include "raglab.secretName" . }}, key: LLM_API_KEY}}
+            - name: RAGLAB_ANSWER_MODEL
+              value: {{ .Values.eval.answerModel | quote }}
+          securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
+          resources: {{- toYaml .Values.eval.resources | nindent 12 }}
+          volumeMounts: {{- include "raglab.dataMounts" . | nindent 12 }}
+      volumes: {{- include "raglab.dataVolumes" . | nindent 8 }}
+{{- end }}

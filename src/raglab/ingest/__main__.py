@@ -77,7 +77,11 @@ def main(argv: list[str] | None = None) -> int:
             if args.keys and src.key not in args.keys:
                 continue
             act = build_act(src)
-            (CORPUS_DIR / f"{src.key}.json").write_text(act.model_dump_json(indent=1), encoding="utf-8")
+            # zapis atomowy: API w klastrze może czytać korpus w trakcie przebudowy (Job ingestu przy upgrade)
+            out = CORPUS_DIR / f"{src.key}.json"
+            tmp = out.with_suffix(".json.part")
+            tmp.write_text(act.model_dump_json(indent=1), encoding="utf-8")
+            tmp.replace(out)
             rep = report(act)
             if rep["footnotes"] != rep["footnotes_max"]:
                 print(

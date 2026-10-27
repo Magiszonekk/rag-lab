@@ -1,0 +1,36 @@
+# helm test: health + jedno zapytanie BM25 (bez modelu, bez kluczy) + korpus 3 ustaw + ślady w bazie
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "raglab.fullname" . }}-test
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: test
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  restartPolicy: Never
+  automountServiceAccountToken: false
+  securityContext: {{- toYaml .Values.podSecurityContext | nindent 4 }}
+  containers:
+    - name: test
+      image: {{ include "raglab.image" . }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      securityContext: {{- toYaml .Values.securityContext | nindent 8 }}
+      resources: {requests: {cpu: 50m, memory: 64Mi}, limits: {cpu: 500m, memory: 256Mi}}
+      env: [{name: API, value: "http://{{ include "raglab.fullname" . }}-api"}]
+      command:
+        - python
+        - -c
+        - |
+          import json, os, sys, urllib.parse, urllib.request
+          api = os.environ["API"]
+          def get(path):
+              with urllib.request.urlopen(api + path, timeout=60) as r:
+                  return json.load(r)
+          h = get("/health"); assert h["ok"] is True, h
+          q = urllib.parse.quote("stawka podatku od towarów i usług")
+          s = get(f"/search?q={q}&k=3"); assert s["mode"] == "bm25" and len(s["hits"]) == 3, s
+          acts = {c["act"] for c in get("/corpus")}; assert len(acts) == 3, acts
+          ex = get("/examples"); assert len(ex["examples"]) >= 5
+          print("OK health, BM25:", [x["id"] for x in s["hits"]], "korpus:", sorted(acts))

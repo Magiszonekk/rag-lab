@@ -1,0 +1,86 @@
+{{- if .Values.postgres.enabled }}
+# Postgres + pgvector: ślady zapytań (tabela traces) i baza bramki LiteLLM (klucze wirtualne, budżety).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "raglab.fullname" . }}-postgres-init
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+data:
+{{- range $path, $_ := .Files.Glob "files/db-init/*.sql" }}
+  {{ base $path }}: |-
+{{ $.Files.Get $path | indent 4 }}
+{{- end }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "raglab.fullname" . }}-postgres
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+spec:
+  serviceName: {{ include "raglab.fullname" . }}-postgres
+  replicas: 1
+  selector:
+    matchLabels: {{- include "raglab.selector" (dict "ctx" . "component" "postgres") | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "raglab.selector" (dict "ctx" . "component" "postgres") | nindent 8 }}
+      annotations:
+        checksum/init: {{ .Files.Glob "files/db-init/*.sql" | toString | sha256sum }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999          # użytkownik postgres w obrazie pgvector/pgvector
+        runAsGroup: 999
+        fsGroup: 999
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image }}
+          env:
+            - {name: POSTGRES_DB, value: {{ .Values.postgres.database | quote }}}
+            - {name: POSTGRES_USER, value: {{ .Values.postgres.user | quote }}}
+            - name: POSTGRES_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ include "raglab.secretName" . }}, key: POSTGRES_PASSWORD}}
+            - {name: PGDATA, value: /var/lib/postgresql/data/pgdata}
+          ports: [{name: postgres, containerPort: 5432}]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+          resources: {{- toYaml .Values.postgres.resources | nindent 12 }}
+          readinessProbe:
+            exec: {command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]}
+            periodSeconds: 5
+          livenessProbe:
+            exec: {command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]}
+            periodSeconds: 20
+            failureThreshold: 6
+          volumeMounts:
+            - {name: pgdata, mountPath: /var/lib/postgresql/data}
+            - {name: init, mountPath: /docker-entrypoint-initdb.d, readOnly: true}
+            - {name: run, mountPath: /var/run/postgresql}
+      volumes:
+        - name: init
+          configMap: {name: {{ include "raglab.fullname" . }}-postgres-init}
+        - name: run
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata: {name: pgdata}
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.postgres.storageClass }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: {requests: {storage: {{ .Values.postgres.storage }}}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "raglab.fullname" . }}-postgres
+  labels: {{- include "raglab.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+spec:
+  selector: {{- include "raglab.selector" (dict "ctx" . "component" "postgres") | nindent 4 }}
+  ports: [{name: postgres, port: 5432, targetPort: postgres}]
+{{- end }}

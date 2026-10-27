@@ -1,0 +1,21 @@
+# obraz API: kod + dane potrzebne w czasie działania; korpus (PDF → JSON) buduje Job ingestu na wolumenie
+.git
+.venv
+.env
+.env.*
+.private
+**/__pycache__
+.pytest_cache
+.ruff_cache
+.mypy_cache
+web/node_modules
+web/dist
+data/raw
+data/corpus
+data/cache
+results/answers
+results/series
+results/*.per_question.json
+deploy
+!deploy/helm/raglab/files/db-init
+tests
