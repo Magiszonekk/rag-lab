@@ -243,6 +243,9 @@ jobs:
         if: failure()
         run: |
           kubectl -n raglab get pods,jobs,pvc,ingress -o wide || true
+          # zdarzenia mówią, DLACZEGO pod stoi (np. FailedScheduling: Insufficient cpu) — describe pods tego nie pokaże w ogonie
+          kubectl -n raglab get events --sort-by=.lastTimestamp | tail -30 || true
+          kubectl describe nodes | grep -A12 "Allocated resources" || true
           kubectl -n raglab describe pods | tail -120 || true
           kubectl -n raglab logs -l app.kubernetes.io/component=api --all-containers --tail 60 || true
 

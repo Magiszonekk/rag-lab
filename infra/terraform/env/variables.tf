@@ -27,8 +27,10 @@ variable "node_vm_size" {
 }
 
 variable "node_count" {
-  type    = number
-  default = 1
+  type = number
+  # 2 węzły = 4 vCPU (cały limit triala). Na jednym 2 vCPU dodatki AKS rezerwują ~1,7 CPU (ingress nginx 2×500m,
+  # coredns, webhook workload identity, CSI…) i pody aplikacji (~0,7 CPU) dostają `Insufficient cpu` — zmierzone 2026-10-27.
+  default = 2
 }
 
 variable "api_admin_ips" {

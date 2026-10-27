@@ -80,10 +80,11 @@ resource "azurerm_kubernetes_cluster" "main" {
     node_count                   = var.node_count
     os_sku                       = "AzureLinux"
     os_disk_size_gb              = 64
-    only_critical_addons_enabled = false # jeden węzeł: system i aplikacja razem
+    only_critical_addons_enabled = false # system i aplikacja na tych samych węzłach
     temporary_name_for_rotation  = "tmpsystem"
     upgrade_settings {
-      # limit 4 vCPU na trialu: 1 węzeł 2 vCPU + 1 zapasowy na czas aktualizacji = 4 — mieści się
+      # przy 2 węzłach (4 vCPU = limit triala) zapasowy węzeł na czas aktualizacji się nie zmieści — aktualizacja
+      # węzłów padnie na limicie; środowisko żyje 1–2 h (deploy → test → destroy), więc to świadomy kompromis
       max_surge = "1"
     }
   }
