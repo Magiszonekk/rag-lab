@@ -160,9 +160,14 @@ jobs:
           # embedding wyszukiwania Qwen3-Embedding-8B (api.embed=qwen3-8b w values-azure.yaml)
           az keyvault secret set --vault-name "$TF_key_vault_name" --name OPENROUTER-API-KEY --value "$OPENROUTER_API_KEY" -o none
 
+      # budowa na runnerze GitHuba i push do ACR (tożsamość deploy ma AcrPush). Nie `az acr build`: ACR Tasks są
+      # zablokowane na subskrypcji trial (TasksOperationsNotAllowed, zmierzone 2026-10-27).
       - name: obraz API → ACR
         run: |
-          az acr build --registry "$TF_acr_name" --image "raglab-api:${GITHUB_SHA::12}" --build-arg WITH_MMLW=1 .
+          az acr login --name "$TF_acr_name"
+          img="$TF_acr_login_server/raglab-api:${GITHUB_SHA::12}"
+          docker build -t "$img" --build-arg WITH_MMLW=1 .
+          docker push "$img"
 
       # po budowie obrazu (az acr build, kilka minut) — kubelogin pobiera token AKS przez az
       - name: ponowne logowanie do Azure
