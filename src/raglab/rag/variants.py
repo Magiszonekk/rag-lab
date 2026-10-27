@@ -143,7 +143,18 @@ RETRIEVERS: dict[str, Callable[[str], list[Hit]]] = {
     "hybrid": lambda q: demote_historical(rrf(_indexes()[0].search(q, 50), _indexes()[1].search(q, 50), top=20)),
     # hybryda + HyDE: model pisze hipotetyczny fragment przepisu, szukamy pytaniem i fragmentem (search/rewrite.py)
     "hyde": lambda q: _hyde(q),
+    # bez BM25: same wektory, pytanie + hipotetyczny fragment (HyDE). Z Qwen3-8B BM25 w RRF szkodzi
+    # (złoty zestaw R@5: wektory 0,962, hybryda 0,811) — używane przez agenta „agentic-vec”
+    "hyde-vec": lambda q: _hyde_vec(q),
 }
+
+
+def _hyde_vec(q: str) -> list[Hit]:
+    from raglab.search.rewrite import rewrite
+
+    _, vec = _indexes()
+    h = rewrite(q, "hyde")
+    return demote_historical(rrf(vec.search(q, 50), vec.search(h, 50), top=20))
 
 
 def _hyde(q: str) -> list[Hit]:

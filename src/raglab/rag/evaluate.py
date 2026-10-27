@@ -37,7 +37,7 @@ CITE_REFUSAL = "Nie mogę potwierdzić tej odpowiedzi w przepisach, które mam �
 
 def _cache_key(variant: str, question: str) -> str:
     extra = ""
-    if variant in ("agentic", "agentic-strict"):
+    if variant in ("agentic", "agentic-strict", "agentic-vec"):
         from raglab.rag.agentic import BUDGET, MAX_STEPS, PLAN_PROMPT
 
         extra = f"|{PLAN_PROMPT}|{MAX_STEPS}|{BUDGET}"
@@ -130,6 +130,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--verify", nargs="*", default=["off", "cite"])
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--limit", type=int, default=0)
+    # osobny plik wyników (próba, dodatkowy wariant) — domyślny plik serii jest NADPISYWANY tym przebiegiem
+    ap.add_argument("--out", default="", help="nazwa pliku w results/series/ zamiast domyślnej nazwy serii")
     args = ap.parse_args(argv)
 
     items = [json.loads(line) for line in GOLDEN.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -158,10 +160,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{variant}: {len(todo)} odpowiedzi do wygenerowania", file=sys.stderr)
 
         def gen(it: dict[str, Any], variant: str = variant) -> tuple[str, dict[str, Any]]:
-            if variant in ("agentic", "agentic-strict"):
+            if variant in ("agentic", "agentic-strict", "agentic-vec"):
                 from raglab.rag.agentic import run
 
-                a = run(it["question"], answer_llm, strict=variant == "agentic-strict").to_json()
+                # agentic-vec = ścisły agent (tylko odesłania z kontekstu) bez BM25 w wyszukiwaniu
+                a = run(it["question"], answer_llm, strict=variant != "agentic",
+                        vec_only=variant == "agentic-vec").to_json()  # fmt: skip
                 return _cache_key(variant, it["question"]), a
             return _cache_key(variant, it["question"]), answer(it["question"], variant, answer_llm).to_json()
 
@@ -241,7 +245,7 @@ def main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
     series = f"{ANSWER_MODELS[0]}__{EMBED}__{JUDGE_MODELS[0].split('/')[-1].split(':')[0]}"
-    out = REPO_ROOT / "results" / "series" / f"answers_golden_v1.{series}.json"
+    out = REPO_ROOT / "results" / "series" / (args.out or f"answers_golden_v1.{series}.json")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     detail = out.with_suffix(".details.jsonl")

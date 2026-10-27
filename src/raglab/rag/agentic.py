@@ -107,9 +107,11 @@ def _merge(state: State, new: list[Block]) -> list[str]:
 
 
 class Agent:
-    def __init__(self, llm: LLM, *, strict: bool = False) -> None:
+    def __init__(self, llm: LLM, *, strict: bool = False, vec_only: bool = False) -> None:
         self.llm = llm
         self.strict = strict
+        # vec_only: wyszukiwanie bez BM25 (start: wektory + HyDE, „search”: same wektory) — wariant agentic-vec
+        self.first, self.again = ("hyde-vec", "simple") if vec_only else ("hyde", "hybrid")
         g = StateGraph(State)
         g.add_node("retrieve", self.retrieve)
         g.add_node("plan", self.plan)
@@ -122,7 +124,7 @@ class Agent:
 
     # --- węzły ---
     def retrieve(self, state: State) -> State:
-        hits = RETRIEVERS["hyde"](state["question"])
+        hits = RETRIEVERS[self.first](state["question"])
         state["blocks"] = build_context(hits, k=5)
         state["seen"] = {(b.act, b.article) for b in state["blocks"]}
         state["log"].append({"step": "retrieve", "added": [b.address for b in state["blocks"]]})
@@ -176,16 +178,16 @@ class Agent:
             progress("step", step="get", added=added, why=a.get("why"))
         else:
             q = str(a.get("query") or state["question"])
-            hits = RETRIEVERS["hybrid"](q)
+            hits = RETRIEVERS[self.again](q)
             added = _merge(state, build_context(hits, k=3))
             state["log"].append({"step": "search", "query": q, "added": added, "why": a.get("why")})
             progress("step", step="search", query=q, added=added, why=a.get("why"))
         return state
 
 
-def run(question: str, llm: LLM, *, strict: bool = False) -> Answer:
+def run(question: str, llm: LLM, *, strict: bool = False, vec_only: bool = False) -> Answer:
     t0 = time.monotonic()
-    agent = Agent(llm, strict=strict)
+    agent = Agent(llm, strict=strict, vec_only=vec_only)
     init: State = {"question": question, "blocks": [], "seen": set(), "log": [], "steps": 0,
                    "action": {}, "tokens": [0, 0]}  # fmt: skip
     st: State = agent.graph.invoke(init)  # type: ignore[assignment]
@@ -193,7 +195,8 @@ def run(question: str, llm: LLM, *, strict: bool = False) -> Answer:
     t1 = time.monotonic()
     user = f"PRZEPISY:\n\n{render_context(blocks)}\n\nPYTANIE UŻYTKOWNIKA:\n{question}"
     ctx = [{"address": b.address, "status": b.status, "note": b.note, "text": b.text} for b in blocks]
-    base: dict[str, Any] = dict(variant="agentic-strict" if strict else "agentic", question=question, context=ctx,
+    name = "agentic-vec" if vec_only else "agentic-strict" if strict else "agentic"
+    base: dict[str, Any] = dict(variant=name, question=question, context=ctx,
                                 retrieved=[b.address for b in blocks])  # fmt: skip
     progress("context", context=ctx)
     try:
