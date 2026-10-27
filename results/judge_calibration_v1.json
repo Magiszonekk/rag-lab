@@ -1,13 +1,15 @@
 {
- "n": 72,
- "n_pairs_both_judged": 41,
- "judge_agreement": 0.854,
- "judge_kappa": 0.522,
- "reviewed": 6,
- "disputed_j1_matches_review": "3/6",
- "disputed_j2_matches_review": "3/6",
- "agreed_sample_j1_matches_review": "0/0",
- "agreed_sample_j2_matches_review": "0/0",
- "hyde/verify=off_correct_judge1": 0.906,
- "hyde/verify=off_correct_after_review": 0.906
+ "n": 288,
+ "n_pairs_both_judged": 288,
+ "agree": 255,
+ "judge_agreement": 0.885,
+ "judge_kappa": 0.725,
+ "judge1": "nvidia/nemotron-3-ultra-550b-a55b:free",
+ "judge2": "claude-opus-5-5",
+ "self_preference_pp": {
+  "opus_answers": 0.0,
+  "sonnet_answers": 0.9
+ },
+ "reviewed": 13,
+ "note": "HyDE + agent, Sonnet 5.5 i Opus 5.5 (Qwen3-8B)"
 }

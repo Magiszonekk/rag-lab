@@ -23,8 +23,7 @@ export const RETRIEVAL_REWRITE = retrievalRewrite as unknown as RetrievalFile;
 export const GOLDEN_RETRIEVAL = goldenRetrieval as unknown as RetrievalFile;
 export const GOLDEN_REWRITE = goldenRewrite as unknown as RetrievalFile;
 export const CALIBRATION = calibration as {
-  n: number; n_pairs_both_judged: number; judge_agreement: number; judge_kappa: number; reviewed: number;
-  disputed_j1_matches_review: string; disputed_j2_matches_review: string;
+  n: number; n_pairs_both_judged: number; agree: number; judge_agreement: number; judge_kappa: number; reviewed: number;
 };
 export const LAW_WATCH = lawWatch as unknown as {
   checked: string;

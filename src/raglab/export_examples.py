@@ -17,7 +17,7 @@ from typing import Any
 from raglab.ingest.sources import REPO_ROOT
 from raglab.rag.evaluate import GOLDEN, RUNS, _cache_key, apply_verify
 from raglab.rag.judge import JUDGE_MODELS
-from raglab.rag.variants import ANSWER_MODELS
+from raglab.rag.variants import ANSWER_MODELS, EMBED
 from raglab.traces import steps_from_answer
 
 OUT = REPO_ROOT / "web" / "public" / "examples.json"
@@ -65,7 +65,12 @@ def main() -> int:
         r = json.loads(line)
         cache[r["key"]] = r["answer"]
     details: dict[tuple[str, str], dict[str, Any]] = {}
-    for line in (REPO_ROOT / "results" / "answers_golden_v1.details.jsonl").read_text(encoding="utf-8").splitlines():
+    # wyniki serii zgodnej z bieżącą konfiguracją (RAGLAB_ANSWER_MODEL / RAGLAB_EMBED), np. Opus 5.5 + Qwen3-8B
+    series = f"{ANSWER_MODELS[0]}__{EMBED}__{JUDGE_MODELS[0].split('/')[-1].split(':')[0]}"
+    det_path = REPO_ROOT / "results" / "series" / f"answers_golden_v1.{series}.details.jsonl"
+    if not det_path.exists():
+        det_path = REPO_ROOT / "results" / "answers_golden_v1.details.jsonl"
+    for line in det_path.read_text(encoding="utf-8").splitlines():
         d = json.loads(line)
         details[(d["config"], d["id"])] = d
     out = []
@@ -88,6 +93,7 @@ def main() -> int:
     meta = {
         "generated": str(date.today()),
         "answer_model": ANSWER_MODELS[0],
+        "embedding": EMBED,
         "judge_model": JUDGE_MODELS[0],
         "variants": VARIANT_LABEL,
         "disclaimer": "Demo techniczne, nie porada podatkowa. Stan prawny podany przy każdym przepisie.",

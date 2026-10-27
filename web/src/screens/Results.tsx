@@ -147,7 +147,7 @@ function AnswersTable() {
       <div className="table-wrap">
         <table className="data">
           <caption>
-            Złoty zestaw v1: 53 pytania z odpowiedzią + 19 spoza korpusu. Odpowiada {ANSWERS.answer_models[0]}, ocenia Nemotron 3 Ultra (inna rodzina modeli). Ten sam prompt i model dla każdego wariantu.
+            Złoty zestaw v1.1: 53 pytania z odpowiedzią + 19 spoza korpusu. Odpowiada {ANSWERS.answer_models[0]}, wyszukiwanie: Qwen3-Embedding-8B, ocenia Nemotron 3 Ultra (inna rodzina modeli). Ten sam prompt i model dla każdego wariantu.
           </caption>
           <thead>
             <tr>
@@ -165,7 +165,7 @@ function AnswersTable() {
             </tr>
           </thead>
           <tbody>
-            {ANS_ROWS.map((r) => {
+            {ANS_ROWS.filter((r) => ANSWERS.configs[`${r.id}/verify=${verify}`]).map((r) => {
               const c = ANSWERS.configs[`${r.id}/verify=${verify}`];
               const m = (k: string) => c[k] as Metric;
               const cr = m("correct_refusals");
@@ -201,13 +201,14 @@ function AnswersTable() {
   );
 }
 
+// seria Opus 5.5 + Qwen3-Embedding-8B (verify=off); porównanie modeli Sonnet 5.5 vs Opus 5.5 — README
 const SIGNIF: { a: string; b: string; ab: string; p: string; sig: boolean }[] = [
-  { a: "HyDE", b: "Prosty", ab: "10 : 2", p: "0,039", sig: true },
-  { a: "HyDE", b: "Hybrydowy", ab: "6 : 1", p: "0,13", sig: false },
-  { a: "Agentowy ścisły", b: "Prosty", ab: "12 : 0", p: "0,0005", sig: true },
-  { a: "Agentowy ścisły", b: "Hybrydowy", ab: "10 : 1", p: "0,012", sig: true },
-  { a: "Agentowy ścisły", b: "HyDE", ab: "4 : 0", p: "0,125", sig: false },
-  { a: "Agentowy ścisły", b: "Agentowy swobodny", ab: "1 : 1", p: "1,0", sig: false },
+  { a: "Agentowy ścisły", b: "Prosty", ab: "4 : 1", p: "0,38", sig: false },
+  { a: "Agentowy ścisły", b: "Hybrydowy", ab: "7 : 1", p: "0,070", sig: false },
+  { a: "Agentowy ścisły", b: "HyDE", ab: "6 : 1", p: "0,13", sig: false },
+  { a: "Prosty", b: "Hybrydowy", ab: "6 : 3", p: "0,51", sig: false },
+  { a: "HyDE", b: "Prosty", ab: "2 : 4", p: "0,69", sig: false },
+  { a: "Sonnet 5.5 (agent)", b: "Opus 5.5 (agent)", ab: "1 : 2", p: "1,0", sig: false },
 ];
 
 export function ResultsScreen() {
@@ -261,7 +262,9 @@ export function ResultsScreen() {
           </table>
         </div>
         <ul className="findings">
-          <li><strong>Pozostałe błędy to braki wyszukiwania, nie halucynacje.</strong> Trzy fałszywe odmowy HyDE dotyczą pytań, których kluczowy przepis (art. 86a ust. 1, art. 113 ust. 13, art. 111 ust. 1 VAT) nie trafił do top-5. Agent naprawia dokładnie te przypadki.</li>
+          <li><strong>Sonnet 5.5 i Opus 5.5 wypadają tak samo.</strong> Na tym samym embeddingu różnią się w 2–6 pytaniach z 53, w obie strony (McNemar p ≥ 0,69 w każdym wariancie). Gdy model ma tylko przeczytać podane przepisy, większy model nie daje tu mierzalnej przewagi.</li>
+          <li><strong>Lepszy embedding robi większość pracy.</strong> Z Qwen3-Embedding-8B sam wariant wektorowy jest w granicach szumu od HyDE i agenta, a dołożenie BM25 nieco szkodzi. Z lokalnym mmlw-roberta-base hybryda i HyDE dawały wyraźny zysk.</li>
+          <li><strong>Pozostałe błędy to braki wyszukiwania, nie halucynacje.</strong> Odmowy przy pytaniach, na które jest odpowiedź, dotyczą przepisów, które nie trafiły do top-5. Agent naprawia te przypadki, dociągając brakujący ustęp albo przepis, do którego tekst odsyła.</li>
           <li><strong>Agent czy pamięć modelu?</strong> W wariancie swobodnym 6 z 25 pobranych adresów pochodziło z wiedzy modelu o ustawie. Wariant ścisły może pobrać tylko inną jednostkę artykułu z kontekstu albo przepis, do którego tekst odsyła. Wynik jest ten sam (1 : 1, p = 1,0), więc zysk to nawigacja po strukturze ustawy.</li>
           <li><strong>Sprawdzanie zdanie po zdaniu nie zablokowało żadnej poprawnej odpowiedzi</strong>, przycięło 6–7 odpowiedzi na wariant i zmieniło wynik o 0 do +2 pp. Wersja deterministyczna (liczby z odpowiedzi muszą być w cytowanym tekście) szkodzi: zablokowała 6 odpowiedzi HyDE, z czego 5 poprawnych.</li>
         </ul>
@@ -272,15 +275,16 @@ export function ResultsScreen() {
         <div className="calib">
           <dl className="calib-figures">
             <div><dt>par ocenionych przez obu sędziów</dt><dd>{CALIBRATION.n_pairs_both_judged}<span> z {CALIBRATION.n}</span></dd></div>
-            <div><dt>zgodność</dt><dd>{pct(CALIBRATION.judge_agreement)}<span> 35/41</span></dd></div>
-            <div><dt>kappa Cohena</dt><dd>{CALIBRATION.judge_kappa.toFixed(2).replace(".", ",")}<span> umiarkowana</span></dd></div>
-            <div><dt>sporów przejrzanych ręcznie</dt><dd>{CALIBRATION.reviewed}<span> każdy sędzia miał rację w 3</span></dd></div>
+            <div><dt>zgodność</dt><dd>{pct(CALIBRATION.judge_agreement)}<span> {CALIBRATION.agree}/{CALIBRATION.n_pairs_both_judged}</span></dd></div>
+            <div><dt>kappa Cohena</dt><dd>{CALIBRATION.judge_kappa.toFixed(2).replace(".", ",")}<span> znaczna</span></dd></div>
+            <div><dt>sporów przejrzanych ręcznie</dt><dd>{CALIBRATION.reviewed}<span> graniczne, w obie strony</span></dd></div>
           </dl>
           <div className="calib-text">
-            <p>Drugi sędzia z trzeciej rodziny modeli (GPT-OSS-120B) ocenił te same 72 odpowiedzi HyDE; 41 par zdążyło przed jego dziennym limitem.</p>
+            <p>Drugi sędzia (Claude Opus 5.5) ocenił te same odpowiedzi HyDE i agenta obu serii (Sonnet 5.5 i Opus 5.5) co główny sędzia Nemotron 3 Ultra.</p>
             <ul className="findings">
-              <li><strong>Błąd głównego sędziego:</strong> szczere „tego przepisu nie mam w kontekście” oceniał jako słuszną odmowę, nawet gdy odpowiedź jest w korpusie. Dlatego fałszywe odmowy liczymy z treści odpowiedzi, a w przykładach takie odmowy mają osobną etykietę „odmowa (pominięty przepis)”.</li>
-              <li><strong>Błędy drugiego sędziego:</strong> karał poprawne dodatkowe szczegóły (prawdziwą przejściową stawkę 8% nazwał „rzekomą”) i był zbyt łagodny dla źle zastosowanego zwolnienia KSeF.</li>
+              <li><strong>Preferencję własnego modelu zmierzyliśmy, a nie założyliśmy:</strong> Opus jako sędzia ocenił odpowiedzi Opusa dokładnie tak jak Nemotron (0,925 i 0,925), a odpowiedzi Sonneta o 0,9 pp wyżej. Nie widać faworyzowania własnego modelu.</li>
+              <li><strong>Błąd głównego sędziego:</strong> szczere „tego przepisu nie mam w kontekście” ocenia jako słuszną odmowę, nawet gdy odpowiedź jest w korpusie. Dlatego fałszywe odmowy liczymy z treści odpowiedzi, a w przykładach takie odmowy mają osobną etykietę „odmowa (pominięty przepis)”.</li>
+              <li><strong>Przegląd sporów znalazł błąd we wzorcu, nie w modelach:</strong> wzorzec dla pytania o KSeF pomijał przepis epizodyczny (art. 145m VAT, faktury papierowe do 10 000 zł miesięcznie do końca 2026 r.). Oba modele podały go poprawnie, a sędzia trzymał się wzorca. Wzorzec poprawiony (zestaw v1.1).</li>
             </ul>
           </div>
         </div>
@@ -289,10 +293,10 @@ export function ResultsScreen() {
       <section className="result-block caveats" aria-labelledby="r5">
         <h2 id="r5"><Icon name="alert" size={20} /> Czego te liczby nie mówią</h2>
         <ul>
-          <li><strong>53 pytania to mało.</strong> Przy ~48/53 poprawnych dla HyDE złoty zestaw jest bliski nasycenia; do rozdzielenia najlepszych wariantów potrzebny jest trudniejszy zestaw (etap M2b).</li>
-          <li><strong>Recenzentem sporów był model</strong> (Claude, ta sama rodzina co model odpowiadający), sprawdzający z tekstem ustawy, a nie doradca podatkowy. κ = 0,52 to umiarkowana zgodność.</li>
-          <li><strong>Jeden realny błąd merytoryczny został:</strong> w pytaniu o KSeF model stosuje zwolnienie dla podatników z UE (art. 113a ust. 1) do polskiego freelancera. Weryfikacja go nie łapie, bo zdanie jest w przepisie; błąd polega na niedopasowaniu do faktów.</li>
-          <li><strong>Liczb z różnych par model odpowiadający / sędzia nie mieszamy.</strong> Druga seria (GPT-5.6 odpowiada, Claude ocenia) daje te same wnioski: HyDE 0,849, hybryda 0,792, prosty 0,717.</li>
+          <li><strong>53 pytania to mało.</strong> Najlepsze warianty mają 0,96–0,98 poprawnych, więc złoty zestaw jest bliski nasycenia; do rozdzielenia najlepszych wariantów potrzebny jest trudniejszy zestaw (etap M2b).</li>
+          <li><strong>Recenzentem sporów był model</strong> (Claude, ta sama rodzina co model odpowiadający), sprawdzający z tekstem ustawy, a nie doradca podatkowy.</li>
+          <li><strong>Liczb z różnych serii nie mieszamy.</strong> Tabela to seria Opus 5.5 + Qwen3-Embedding-8B; Sonnet 5.5 daje te same wnioski (agent 0,962, HyDE 0,925, prosty 0,887). Starsze serie (Sonnet 5 / GPT-5.6, embedding mmlw) są w repozytorium.</li>
+          <li><strong>Pytania na żywo w demo</strong> obsługuje darmowy model (Gemini 3 Flash z zapasem), a nie Opus — ich jakość może być niższa niż w tabeli.</li>
           <li><strong>Korpus to trzy ustawy</strong> w tekstach jednolitych z określonym stanem prawnym. Zmiany ogłoszone później nie są w nim uwzględnione (zakładka „Jak to działa”).</li>
         </ul>
       </section>
