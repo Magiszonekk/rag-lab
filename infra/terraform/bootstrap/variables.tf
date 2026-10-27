@@ -31,3 +31,9 @@ variable "alert_email" {
   type        = string
   description = "Adres alertów budżetu (podawany przy apply, nie w repo)."
 }
+
+variable "github_oidc_sub_prefix" {
+  type        = string
+  default     = "repo:Magiszonekk@97131056/rag-lab@1431095257"
+  description = "Prefiks claimu sub z GitHuba (niezmienny subject z ID właściciela i repo); pusty = repo:<github_repo>."
+}

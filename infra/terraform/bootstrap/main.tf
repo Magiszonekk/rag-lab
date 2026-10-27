@@ -78,10 +78,17 @@ resource "azurerm_user_assigned_identity" "github" {
   tags                = local.tags
 }
 
+# Prefiks claimu `sub` tokenu OIDC z GitHuba. Repozytoria z niezmiennym subjectem (domyślne dla nowych repo) wysyłają
+# `repo:<owner>@<owner_id>/<repo>@<repo_id>` zamiast `repo:<owner>/<repo>` — sprawdź:
+#   gh api repos/<owner>/<repo>/actions/oidc/customization/sub  → sub_claim_prefix
+locals {
+  oidc_sub_prefix = var.github_oidc_sub_prefix != "" ? var.github_oidc_sub_prefix : "repo:${var.github_repo}"
+}
+
 resource "azurerm_federated_identity_credential" "github" {
   for_each = {
-    plan   = "repo:${var.github_repo}:pull_request"
-    deploy = "repo:${var.github_repo}:environment:${var.github_environment}"
+    plan   = "${local.oidc_sub_prefix}:pull_request"
+    deploy = "${local.oidc_sub_prefix}:environment:${var.github_environment}"
   }
   name                      = "github-${each.key}"
   user_assigned_identity_id = azurerm_user_assigned_identity.github[each.key].id
