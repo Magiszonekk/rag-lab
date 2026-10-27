@@ -134,6 +134,15 @@ jobs:
             echo "TF_$k=$(jq -r ".${k}.value" tf.json)" >> "$GITHUB_ENV"
           done
 
+      # token OIDC z GitHuba żyje 5 min, a az nie odświeża go sam: każdy nowy zasób (Key Vault, AKS) po długim kroku
+      # (terraform apply ~12 min) kończył się AADSTS700024. Stąd ponowne logowanie przed każdą grupą kroków az.
+      - name: ponowne logowanie do Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
       # klucz bramki modeli i konfiguracja tunelu (sekrety environmentu) do Key Vault — reszta haseł z Terraformu
       - name: klucze modeli i tunel → Key Vault
         env:
@@ -154,6 +163,14 @@ jobs:
       - name: obraz API → ACR
         run: |
           az acr build --registry "$TF_acr_name" --image "raglab-api:${GITHUB_SHA::12}" --build-arg WITH_MMLW=1 .
+
+      # po budowie obrazu (az acr build, kilka minut) — kubelogin pobiera token AKS przez az
+      - name: ponowne logowanie do Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: kubeconfig (Entra ID)
         uses: azure/use-kubelogin@v1.3
@@ -176,6 +193,14 @@ jobs:
             --set ingress.host="${{ vars.API_HOST || 'raglab.invalid' }}" \
             --wait --wait-for-jobs --timeout 40m   # Job ingestu liczy wektory korpusu (Qwen przez API: minuty; mmlw na 2 vCPU: ~17 min)
           kubectl -n raglab get pods,jobs,ingress -o wide
+
+      # helm --wait trwa do 40 min; token AKS w kubelogin trzeba móc odnowić przez az
+      - name: ponowne logowanie do Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: helm test
         run: helm test raglab -n raglab --logs
@@ -241,6 +266,14 @@ jobs:
             -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}" \
             -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}"
           terraform destroy -auto-approve -lock-timeout=5m
+      # terraform destroy trwa >5 min
+      - name: ponowne logowanie do Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
       - name: nic nie zostało
         run: |
           left=$(az resource list --tag project=rag-lab --query "[?tags.stack=='env'] | length(@)" -o tsv)
