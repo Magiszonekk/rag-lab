@@ -259,12 +259,13 @@ jobs:
           import os, httpx
           base, master, demo = os.environ["RAGLAB_LITELLM_URL"], open("/mnt/secrets/LITELLM-MASTER-KEY").read(), os.environ["LLM_DEMO_API_KEY"]
           h = {"Authorization": f"Bearer {master}"}
-          r = httpx.post(f"{base}/key/info", headers=h, params={"key": demo}, timeout=30)
-          if r.status_code != 200:
-              r = httpx.post(f"{base}/key/generate", headers=h, timeout=30, json={
-                  "key": demo, "key_alias": "rag-lab-demo-azure", "models": ["demo-answer"],
-                  "max_budget": 5.0, "budget_duration": "30d", "rpm_limit": 20, "tpm_limit": 200_000})
-              r.raise_for_status()
+          limits = {"key": demo, "key_alias": "rag-lab-demo-azure", "models": ["demo-answer"],
+                    "max_budget": 5.0, "budget_duration": "30d", "rpm_limit": 20, "tpm_limit": 200_000}
+          # /key/info to GET (POST = 405, przez co klucz uznawano za brakujący i /key/generate dawał 400 przy drugim
+          # wdrożeniu); istniejący klucz → /key/update (limity zawsze jak w workflow), brak → /key/generate
+          exists = httpx.get(f"{base}/key/info", headers=h, params={"key": demo}, timeout=30).status_code == 200
+          r = httpx.post(f"{base}/key/{'update' if exists else 'generate'}", headers=h, json=limits, timeout=30)
+          r.raise_for_status()
           print("klucz demo w bramce:", r.status_code)
           EOF
 
