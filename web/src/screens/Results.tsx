@@ -296,7 +296,7 @@ export function ResultsScreen() {
           <li><strong>53 pytania to mało.</strong> Najlepsze warianty mają 0,96–0,98 poprawnych, więc złoty zestaw jest bliski nasycenia; do rozdzielenia najlepszych wariantów potrzebny jest trudniejszy zestaw (etap M2b).</li>
           <li><strong>Recenzentem sporów był model</strong> (Claude, ta sama rodzina co model odpowiadający), sprawdzający z tekstem ustawy, a nie doradca podatkowy.</li>
           <li><strong>Liczb z różnych serii nie mieszamy.</strong> Tabela to seria Opus 5.5 + Qwen3-Embedding-8B; Sonnet 5.5 daje te same wnioski (agent 0,962, HyDE 0,925, prosty 0,887). Starsze serie (Sonnet 5 / GPT-5.6, embedding mmlw) są w repozytorium.</li>
-          <li><strong>Pytania na żywo w demo</strong> obsługuje darmowy model (Gemini 3 Flash z zapasem), a nie Opus — ich jakość może być niższa niż w tabeli.</li>
+          <li><strong>Pytania na żywo w demo</strong> obsługuje Claude Sonnet 5.5 (przy jego niedostępności darmowy model zapasowy), a nie Opus — tabela wyżej pokazuje, że różnica jest w granicach szumu.</li>
           <li><strong>Korpus to trzy ustawy</strong> w tekstach jednolitych z określonym stanem prawnym. Zmiany ogłoszone później nie są w nim uwzględnione (zakładka „Jak to działa”).</li>
         </ul>
       </section>

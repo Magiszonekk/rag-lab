@@ -204,9 +204,10 @@ paragraphs as "not in context" (−2 to −4 pp for every variant); fixed before
 
 **https://rag.cikowice.pl**: ready-made examples (all variants side by side, traces, results) plus live questions.
 Live answers: retrieval with Qwen3-Embedding-8B (local `mmlw-roberta-base` as automatic fallback when the
-embedding API fails), answering with a free model behind the gateway: Gemini 3 Flash, falling back to DeepSeek
-V4.1 Flash and Nemotron 3 Ultra on errors or rate limits. Typically 15–45 s per answer; the ready-made examples
-work without the backend. The evaluated numbers above come from Claude models.
+embedding API fails), answering with Claude Sonnet 5.5 behind the gateway, falling back to free models (Gemini 3
+Flash, DeepSeek V4.1 Flash) on errors or rate limits. The default variant is the plain vector one (about 6 s);
+the agent is one click away (about 10 s typical, up to ~30 s). Limits: 100 questions a day, 10 an hour per IP,
+plus RPM/TPM and a USD budget on the gateway key. The ready-made examples work without the backend.
 
 ## Demo backend (M3)
 

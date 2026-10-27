@@ -18,7 +18,7 @@ export function liveNotice(api: ApiState): string | null {
 
 export function AskScreen({ data, api, params }: { data: ExamplesFile; api: ApiState; params: URLSearchParams }) {
   const exId = params.get("ex") ?? data.examples[1]?.id ?? data.examples[0].id;
-  const variant = (VARIANTS.includes(params.get("v") as VariantId) ? params.get("v") : "agentic-strict") as VariantId;
+  const variant = (VARIANTS.includes(params.get("v") as VariantId) ? params.get("v") : "simple") as VariantId;
   const verify = params.get("verify") !== "off";
   const live = api.kind === "live";
 

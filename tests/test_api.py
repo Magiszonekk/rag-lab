@@ -150,3 +150,17 @@ def test_embedding_fallback_to_local_when_api_fails() -> None:
     fb = FallbackVector(Broken(), [])  # type: ignore[arg-type]
     fb._backup = Local()  # type: ignore[assignment]
     assert fb.search("stawka VAT") == [] and fb.last_used.startswith("mmlw")
+
+
+def test_topic_filter_passes_every_eval_question() -> None:
+    import json
+
+    from raglab.api import looks_like_tax
+    from raglab.ingest.sources import REPO_ROOT
+
+    qs = [json.loads(x)["question"] for x in (REPO_ROOT / "data/eval/retrieval_v1.jsonl").read_text().splitlines()]
+    gold = [json.loads(x) for x in (REPO_ROOT / "data/eval/golden/golden_v1.jsonl").read_text().splitlines()]
+    qs += [g["question"] for g in gold if g["category"] != "out_of_corpus"]
+    assert [q for q in qs if not looks_like_tax(q)] == []
+    assert looks_like_tax("Czy fryzjer musi mieć kasę fiskalną?")
+    assert not looks_like_tax("Podaj przepis na sernik")

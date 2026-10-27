@@ -2,7 +2,9 @@
 # Upstream: OpenAI-compatible gateway z osobnym kluczem RAG Lab (LLM_BASE_URL / LLM_API_KEY z .env).
 #
 # Wirtualne klucze (tworzone przez /key/generate po starcie, nie w tym pliku):
-#   rag-lab-demo — budżet USD/mies., RPM/TPM, models: TYLKO grupa "demo-*" (modele z kluczy API, bez subskrypcji);
+#   rag-lab-demo — budżet USD/mies., RPM/TPM, models: TYLKO grupa "demo-answer" (od 2026-10-27 główny model to
+#     Claude Sonnet 5.5 z decyzji właściciela — świadomy wyjątek od pierwotnego D11 „tylko klucze API”;
+#     ograniczenia: 100 pytań/dzień w API, 10/h z IP, RPM/TPM i budżet USD na kluczu, zapas: modele darmowe);
 #   rag-lab-eval — ruch właściciela (ewaluacja, sędzia), models: "eval-*".
 # Testy przed ruchem publicznym (D11): demo-key → model eval-* = odmowa; przekroczony budżet = odmowa.
 
@@ -14,13 +16,22 @@ model_list:
       api_base: os.environ/LLM_BASE_URL
       api_key: os.environ/LLM_API_KEY
     # LiteLLM nie zna cen modeli za bramką OpenAI-compatible → liczy koszt 0 i budżet NIE działa (zmierzone).
-    # Ceny jawne (USD za token), konserwatywnie: rząd wielkości płatnego Gemini Flash. Budżet = limit tokenów.
+    # Ceny jawne (USD za token) = cennik API Claude Sonnet ($3 / $15 za 1M) — budżet klucza liczy realną wartość
+    # ruchu, nawet jeśli upstream rozlicza go z subskrypcji.
+    model_info:
+      input_cost_per_token: 0.000003
+      output_cost_per_token: 0.000015
+  # główny model demo: DEMO_UPSTREAM_MODEL (2026-10-27: claude-sonnet-5-5; mierzone na żywo: Gemini Flash 8–150 s na
+  # wywołanie z powodu limitów). Zapas z innych źródeł limitów: Gemini Flash (Google), DeepSeek (opencode), Nemotron (OpenRouter free).
+  - model_name: demo-answer-fallback-1
+    litellm_params:
+      model: openai/gemini-3-flash-preview
+      api_base: os.environ/LLM_BASE_URL
+      api_key: os.environ/LLM_API_KEY
     model_info:
       input_cost_per_token: 0.0000003
       output_cost_per_token: 0.0000025
-  # główny model demo: DEMO_UPSTREAM_MODEL (2026-10-27: gemini-3-flash-preview — agent p50 ~20 s; DeepSeek V4.1 Flash
-  # był 3–5× wolniejszy). Zapas z innych źródeł limitów: DeepSeek (opencode), Nemotron (OpenRouter free).
-  - model_name: demo-answer-fallback-1
+  - model_name: demo-answer-fallback-2
     litellm_params:
       model: openai/deepseek-v4.1-flash-free
       api_base: os.environ/LLM_BASE_URL
@@ -28,7 +39,7 @@ model_list:
     model_info:
       input_cost_per_token: 0.0000003
       output_cost_per_token: 0.0000025
-  - model_name: demo-answer-fallback-2
+  - model_name: demo-answer-fallback-3
     litellm_params:
       model: openai/nvidia/nemotron-3-ultra-550b-a55b:free
       api_base: os.environ/LLM_BASE_URL
@@ -58,8 +69,8 @@ litellm_settings:
   drop_params: true
   # demo: przy 429/błędzie modelu głównego — zapas (w demo liczy się dostępność; ewaluacja nie używa grupy demo)
   fallbacks:
-    - demo-answer: ["demo-answer-fallback-1", "demo-answer-fallback-2"]
-    - demo-broken-test: ["demo-answer-fallback-1", "demo-answer-fallback-2"]
+    - demo-answer: ["demo-answer-fallback-1", "demo-answer-fallback-2", "demo-answer-fallback-3"]
+    - demo-broken-test: ["demo-answer-fallback-1", "demo-answer-fallback-2", "demo-answer-fallback-3"]
   num_retries: 1
   request_timeout: 90
   # nie wysyłać nic poza bramkę (telemetria, callbacki)

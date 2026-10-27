@@ -47,6 +47,12 @@ TAX_HINTS = (
     "liniow", "skala", "amortyz", "koszt", "działalno", "dzialalno", "firm", "alimen", "spadk", "darowiz",
     "sprzeda", "najem", "wynajem", "leasing", "samoch", "mieszkan", "nieruchom", "zwrot", "korekt", "kontrol",
     "pełnomoc", "pelnomoc", "interpretac", "akcyz", "cło", "clo", "zus",
+    # odmiany i procedura (Ordynacja): rdzenie bez końcówek, bo „kasę fiskalną” ≠ „kasa fiskal”
+    "fiskal", "kas rejestr", "odwoła", "odwola", "decyzj", "postanowien", "organ", "urzęd", "urząd", "urzad", "wniosek",
+    "wniosk", "opłat", "oplat", "porozumieni", "opini", "przesył", "doręcz", "dorecz", "pismo", "pisma", "piśm",
+    "bank", "skok", "rachun", "transfer", "powiązan", "exit tax", "call-off", "magazyn", "towar", "usług", "uslug",
+    "płatnic", "platnic", "globe", "kas ", "szef kas", "egzekuc", "karn", "sankcj", "termin", "pracodaw", "wynagrodz",
+    "emeryt", "renty", "rentę", "renta", "dziec", "małżon", "eksport", "import", "wewnątrzwspól", "unii", "ue ", "nip",
 )  # fmt: skip
 
 # baza niedostępna — API działa dalej (przykłady, wyniki), ślady tylko w logu

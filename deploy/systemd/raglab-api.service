@@ -10,6 +10,7 @@ WorkingDirectory=%h/Desktop/rag-lab
 Environment=PYTHONPATH=
 Environment=HF_HUB_OFFLINE=1
 Environment=RAGLAB_LIVE_ENABLED=1
+Environment=RAGLAB_PER_DAY=100
 # wyszukiwanie: Qwen3-Embedding-8B (OpenRouter, DeepInfra przypięty); przy błędzie API zapas lokalny mmlw
 Environment=RAGLAB_EMBED=qwen3-8b
 Environment=RAGLAB_EMBED_FALLBACK=1
