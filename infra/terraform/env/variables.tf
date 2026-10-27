@@ -45,7 +45,7 @@ variable "tags" {
 }
 
 variable "web_location" {
-  type        = string
+  type = string
   # plan Free jest tylko w westeurope, centralus, eastus2, westus2, eastasia; West Europe odrzuca nowych klientów triala
   # (RequestDisallowedByAzure: region not accepting new customers, 2026-10-27), pozostałe cztery przyjmują.
   # Treść i tak idzie z globalnego CDN SWA — region dotyczy tylko zasobu zarządzającego.
