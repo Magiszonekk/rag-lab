@@ -1,5 +1,5 @@
 {
- "checked": "2026-10-26",
+ "checked": "2026-11-02",
  "acts": {
   "vat": {
    "name": "Ustawa o podatku od towarów i usług",
@@ -51,7 +51,7 @@
      "title": "Ustawa z dnia 18 września 2026 r. o podatku od nadzwyczajnych zysków osiągniętych w okresie od marca 2026 r. do marca 2027 r. ze zbycia paliw ciekłych",
      "announced": "2026-09-18",
      "in_force_from": "2026-11-01",
-     "already_in_force": false
+     "already_in_force": true
     },
     {
      "eli": "DU/2026/1371",
