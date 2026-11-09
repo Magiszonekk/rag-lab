@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-02",
+ "checked": "2026-11-09",
  "acts": {
   "vat": {
    "name": "Ustawa o podatku od towarów i usług",
@@ -8,6 +8,13 @@
    "base_act": "DU/2004/535",
    "newer_consolidated_text": [],
    "changes_after_corpus": [
+    {
+     "eli": "DU/2026/1446",
+     "title": "Ustawa z dnia 8 października 2026 r. o zmianie ustawy o podatku od towarów i usług",
+     "announced": "2026-10-08",
+     "in_force_from": "2026-11-18",
+     "already_in_force": false
+    },
     {
      "eli": "DU/2026/1270",
      "title": "Ustawa z dnia 4 września 2026 r. o zmianie ustawy o podatku od towarów i usług oraz ustawy o zasadach ewidencji i identyfikacji podatników i płatników",
@@ -58,7 +65,7 @@
      "title": "Ustawa z dnia 18 września 2026 r. o zmianie ustawy o podatku dochodowym od osób fizycznych oraz ustawy o podatku dochodowym od osób prawnych",
      "announced": "2026-09-18",
      "in_force_from": "2026-11-05",
-     "already_in_force": false
+     "already_in_force": true
     },
     {
      "eli": "DU/2026/1347",
