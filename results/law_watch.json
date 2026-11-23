@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-16",
+ "checked": "2026-11-23",
  "acts": {
   "vat": {
    "name": "Ustawa o podatku od towarów i usług",
@@ -13,6 +13,13 @@
      "title": "Ustawa z dnia 8 października 2026 r. o zmianie ustawy o podatku od towarów i usług",
      "announced": "2026-10-08",
      "in_force_from": "2026-11-18",
+     "already_in_force": true
+    },
+    {
+     "eli": "DU/2026/1509",
+     "title": "Ustawa z dnia 22 października 2026 r. o zmianie ustawy o podatku od towarów i usług oraz niektórych innych ustaw",
+     "announced": "2026-10-22",
+     "in_force_from": "2027-01-01",
      "already_in_force": false
     },
     {
@@ -23,7 +30,7 @@
      "already_in_force": false
     }
    ],
-   "stale": false
+   "stale": true
   },
   "pit": {
    "name": "Ustawa o podatku dochodowym od osób fizycznych",
